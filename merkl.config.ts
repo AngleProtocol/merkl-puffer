@@ -40,16 +40,31 @@ import hero from "src/customer/assets/images/hero.jpg?url";
 import { eip712WalletActions } from "viem/zksync";
 
 export default createConfig({
-  appName: "Merkl",
-  modes: ["dark", "light"],
-  defaultTheme: "merkl",
+  appName: "Puffer",
+  modes: ["light"],
+  defaultTheme: "puffer",
   themes: {
-    merkl: {
-      base: createColoring(["#1F2333", "#B8AAFD", "#131620"], ["#FCF8F5", "#B8AAFD", "white"]),
-      info: createColoring(["#2ABDFF", "#2ABDFF", "#131620"], ["#FFFFFF", "#40B66B", "white"]),
-      good: createColoring(["#40B66B", "#40B66B", "#131620"], ["#FFFFFF", "#40B66B", "white"]),
-      warn: createColoring(["#ff9600", "#ff9600", "#131620"], ["#FFFFFF", "#40B66B", "white"]),
-      harm: createColoring(["#d22e14", "#d22e14", "#131620"], ["#FFFFFF", "#40B66B", "white"]),
+    puffer: {
+      base: createColoring(
+        ["#F5F9FF", "#2A35BD", "#FFFFFF"],
+        ["#F5F9FF", "#2A35BD", "#FFFFFF"]
+      ),
+      info: createColoring(
+        ["#2ABDFF", "#2ABDFF", "#131620"],
+        ["#FFFFFF", "#40B66B", "white"]
+      ),
+      good: createColoring(
+        ["#40B66B", "#40B66B", "#131620"],
+        ["#FFFFFF", "#40B66B", "white"]
+      ),
+      warn: createColoring(
+        ["#ff9600", "#ff9600", "#131620"],
+        ["#FFFFFF", "#40B66B", "white"]
+      ),
+      harm: createColoring(
+        ["#d22e14", "#d22e14", "#131620"],
+        ["#FFFFFF", "#40B66B", "white"]
+      ),
     },
   },
   sizing: {
@@ -133,7 +148,10 @@ export default createConfig({
     ],
     client({ chain }) {
       if (chain.id === zksync.id)
-        return createClient({ chain, transport: custom(window.ethereum!) }).extend(eip712WalletActions());
+        return createClient({
+          chain,
+          transport: custom(window.ethereum!),
+        }).extend(eip712WalletActions());
       return createClient({ chain, transport: http() });
     },
     ssr: true,
@@ -143,7 +161,7 @@ export default createConfig({
         customStoragePrefix: "wagmi",
         projectId: "26c912aadd2132cd869a5edc00aeea0f",
         metadata: {
-          name: "Merkl Lite",
+          name: "Puffer",
           description: "Merkl Lite",
           url: "https://app.merkl.xyz.com",
           icons: [],

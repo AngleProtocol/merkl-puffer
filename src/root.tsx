@@ -1,10 +1,21 @@
 import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
-import { Links, Meta, Outlet, Scripts, ScrollRestoration, json, useLoaderData, useRouteError } from "@remix-run/react";
+
+import {
+  Links,
+  Meta,
+  Outlet,
+  Scripts,
+  ScrollRestoration,
+  json,
+  useLoaderData,
+  useRouteError,
+} from "@remix-run/react";
+
 import { DAppProvider, Group, Icon, Title } from "dappkit";
 import config from "../merkl.config";
 import dappkitStyles from "../packages/dappkit/src/style.css?url";
-import { ChainService } from "./api/services/chain.service";
 import styles from "./index.css?url";
+import { api } from "./api/index.server";
 
 export const links: LinksFunction = () => [
   {
@@ -20,7 +31,7 @@ export const links: LinksFunction = () => [
 ];
 
 export async function loader(_args: LoaderFunctionArgs) {
-  const chains = await ChainService.getAll();
+  const { data: chains } = await api.v4.chains.index.get({ query: {} });
 
   if (!chains) throw new Response("Unable to fetch chains", { status: 500 });
 
@@ -36,7 +47,8 @@ export default function App() {
       modes={config.modes}
       themes={config.themes}
       sizing={config.sizing}
-      config={config.wagmi}>
+      config={config.wagmi}
+    >
       <Outlet />
       <script
         // biome-ignore lint/security/noDangerouslySetInnerHtml: needed for browser ENV
@@ -71,9 +83,15 @@ export function ErrorBoundary() {
   console.error(error);
 
   return (
-    <DAppProvider chains={[]} modes={config.modes} themes={config.themes} sizing={config.sizing} config={config.wagmi}>
+    <DAppProvider
+      chains={[]}
+      modes={config.modes}
+      themes={config.themes}
+      sizing={config.sizing}
+      config={config.wagmi}
+    >
       <Group className="h-full flex-col justify-center m-auto w-min">
-        <Icon size="xl" className="!w-[100px] h-[100px]" remix="RiAlertFill" />
+        <Icon className="!w-[100px] h-[100px]" remix="RiAlertFill" />
         <Title h={1} className="text-nowrap">
           Service unavailable
         </Title>
