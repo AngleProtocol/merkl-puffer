@@ -105,7 +105,7 @@ export default createConfig({
   socials: {
     discord: "https://discord.com/invite/pufferfi",
     telegram: "https://t.me/puffer_fi",
-    x: "https://twitter.com/Puffer_Finance",
+    x: "https://x.com/puffer_finance",
     github: "https://github.com/PufferFinance",
   },
   links: {
