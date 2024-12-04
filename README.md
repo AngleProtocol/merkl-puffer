@@ -60,7 +60,7 @@ Now you will need to deploy the container, here are a few hosting solutions:
 - [ECS Fargate](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate.html) on AWS
 - Docker-compose on any VM
 
-Then you only need to set the PORT environment variable and it ill work! We recommend setting the PORt to 5173 (it is exposed in the Dockerfile) but feel free to change it.
+Then you only need to set the PORT environment variable and it will work! We recommend setting the port to 5173 (it is exposed in the Dockerfile) but feel free to change it.
 
 ### Host it yourself
 
