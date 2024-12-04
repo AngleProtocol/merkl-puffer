@@ -45,6 +45,25 @@ bun dev
 
 ## Deployment
 
+### Host with Docker (recommended)
+
+First you will need to build and push the image to a docker registry
+
+1. Setup a Docker registry if you don't have one (on [DockerHub](https://hub.docker.com/) for example)
+2. Go to the root of this repository
+3. Build the docker container: `docker build --tag <REGISTRY_URL>/merkl-lite:latest .`
+4. Push it to your registry: `docker push <REGISTRY_URL>/merkl-lite:latest`
+
+Now you will need to deploy the container, here are a few hosting solutions:
+
+- [Cloud Run](https://cloud.google.com/run) on Google Cloud
+- [ECS Fargate](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate.html) on AWS
+- Docker-compose on any VM
+
+Then you only need to set the PORT environment variable and it ill work! We recommend setting the PORt to 5173 (it is exposed in the Dockerfile) but feel free to change it.
+
+### Host it yourself
+
 First, build your app for production:
 
 ```sh
