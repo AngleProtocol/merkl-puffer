@@ -3,10 +3,10 @@
 
 @font-face {
   font-family: "Recoleta";
-  src: url("../assets/fonts/Recoleta-Bold.woff2") format("woff2");
-  src: url("../assets/fonts/Recoleta-Bold.woff") format("woff");
-  src: url("../assets/fonts/Recoleta-Bold.otf") format("opentype");
-  src: url("../assets/fonts/Recoleta-Bold.ttf") format("truetype");
+  src: url("../fonts/Recoleta-Bold.woff2") format("woff2");
+  src: url("../fonts/Recoleta-Bold.woff") format("woff");
+  src: url("../fonts/Recoleta-Bold.otf") format("opentype");
+  src: url("../fonts/Recoleta-Bold.ttf") format("truetype");
   font-weight: 700;
   font-style: normal;
   font-display: swap;

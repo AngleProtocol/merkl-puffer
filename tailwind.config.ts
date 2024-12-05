@@ -6,6 +6,10 @@ export default {
     "./{src,packages}/**/{**,.client,.server}/**/*.{js,jsx,ts,tsx}",
     "!./packages/**/node_modules/**/*.{html,js,jsx,ts,tsx}",
   ],
-  theme: generateTailwindConfig(),
+  theme: generateTailwindConfig({
+    text: '"Inter", sans-serif',
+    title: '"Recoleta", serif',
+    mono: '"Space Mono", sans-serif',
+  }),
   plugins: [],
 } satisfies Config;

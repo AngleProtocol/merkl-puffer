@@ -107,6 +107,7 @@ export default createConfig({
     telegram: "https://t.me/puffer_fi",
     x: "https://x.com/puffer_finance",
     github: "https://github.com/PufferFinance",
+    medium: "https://medium.com/@puffer.fi",
   },
   links: {
     merkl: "https://merkl.xyz/",
