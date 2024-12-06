@@ -93,7 +93,6 @@ export default function ClaimRewardsTokenTableRow({ reward, checkedState, ...pro
                       decimals={reward.token.decimals}
                     />
                   }
-                  claimColumn={null}
                 />
               </>
             );
