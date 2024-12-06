@@ -1,6 +1,17 @@
 import type { Opportunity } from "@merkl/api";
 import { useLocation } from "@remix-run/react";
-import { Box, Container, Divider, Group, Icon, type IconProps, Icons, Text, Title } from "dappkit";
+import {
+  Box,
+  Container,
+  Divider,
+  Group,
+  Icon,
+  type IconProps,
+  Icons,
+  OverrideTheme,
+  Text,
+  Title,
+} from "dappkit";
 import { Button } from "dappkit";
 import config from "merkl.config";
 import type { PropsWithChildren, ReactNode } from "react";
@@ -16,75 +27,91 @@ export type HeroProps = PropsWithChildren<{
   opportunity?: Opportunity;
 }>;
 
-export default function Hero({ navigation, breadcrumbs, icons, title, description, tags, tabs, children }: HeroProps) {
+export default function Hero({
+  navigation,
+  breadcrumbs,
+  icons,
+  title,
+  description,
+  tags,
+  tabs,
+  children,
+}: HeroProps) {
   const location = useLocation();
 
   return (
     <>
-      <Group
-        className="flex-row justify-between aspect-[1440/440] bg-cover bg-no-repeat xl:aspect-auto xl:min-h-[400px]"
-        style={{ backgroundImage: `url('${config.images.hero}')` }}>
-        <Container>
-          <Group className="flex-col h-full py-xl gap-xl lg:gap-xs">
-            <Group className="items-center">
-              {/* TODO: Build dynamic breadcrumbs */}
-              {/** Disabled and set invisible when undefined to preserve layout height */}
-              <Button to={navigation?.link} look="soft" size="xs">
-                Home
-              </Button>
-              {breadcrumbs?.map(breadcrumb => {
-                if (breadcrumb.component) return breadcrumb.component;
-                return (
-                  <Button key={breadcrumb.link} to={breadcrumb.link} look="soft" size="xs">
-                    <Icon remix="RiArrowRightSLine" />
-                    {breadcrumb.name}
-                  </Button>
-                );
-              })}
-            </Group>
-            <Group className="grow items-center justify-between gap-xl lg:gap-xl*4">
-              <Group className="flex-col flex-1 gap-xl lg:!gap-lg*2">
-                <Group>
-                  <Group className="items-center !gap-0 md:!gap-xl">
-                    {!!icons && (
-                      <Icons size="lg">
-                        {icons?.length > 1
-                          ? icons?.map(icon => (
-                              <Icon
-                                className="hidden md:block text-main-12 !w-lg*4 !h-lg*4"
-                                key={`${Object.values(icon)}`}
-                                {...icon}
-                              />
-                            ))
-                          : icons?.map(icon => (
-                              <Icon
-                                className="hidden md:block text-main-12 !w-xl*4 !h-xl*4"
-                                key={`${Object.values(icon)}`}
-                                {...icon}
-                              />
-                            ))}
-                      </Icons>
+      <OverrideTheme mode="dark">
+        <Group
+          className="flex-row justify-between aspect-[1440/440] bg-cover bg-no-repeat xl:aspect-auto xl:min-h-[400px]"
+          style={{ backgroundImage: `url('${config.images.hero}')` }}
+        >
+          <Container>
+            <Group className="flex-col h-full py-xl gap-xl lg:gap-xs">
+              <Group className="items-center">
+                {/* TODO: Build dynamic breadcrumbs */}
+                {/** Disabled and set invisible when undefined to preserve layout height */}
+                <Button to={navigation?.link} look="soft" size="xs">
+                  Home
+                </Button>
+                {breadcrumbs?.map((breadcrumb) => {
+                  if (breadcrumb.component) return breadcrumb.component;
+                  return (
+                    <Button
+                      key={breadcrumb.link}
+                      to={breadcrumb.link}
+                      look="soft"
+                      size="xs"
+                    >
+                      <Icon remix="RiArrowRightSLine" />
+                      {breadcrumb.name}
+                    </Button>
+                  );
+                })}
+              </Group>
+              <Group className="grow items-center justify-between gap-xl lg:gap-xl*4">
+                <Group className="flex-col flex-1 gap-xl lg:!gap-lg*2">
+                  <Group>
+                    <Group className="items-center !gap-0 md:!gap-xl">
+                      {!!icons && (
+                        <Icons size="lg">
+                          {icons?.length > 1
+                            ? icons?.map((icon) => (
+                                <Icon
+                                  className="hidden md:block text-main-12 !w-lg*4 !h-lg*4"
+                                  key={`${Object.values(icon)}`}
+                                  {...icon}
+                                />
+                              ))
+                            : icons?.map((icon) => (
+                                <Icon
+                                  className="hidden md:block text-main-12 !w-xl*4 !h-xl*4"
+                                  key={`${Object.values(icon)}`}
+                                  {...icon}
+                                />
+                              ))}
+                        </Icons>
+                      )}
+                      <Title h={1} size={2}>
+                        {title}
+                      </Title>
+                    </Group>
+                    {tags && (
+                      <Text size="xl" bold>
+                        {description}
+                      </Text>
                     )}
-                    <Title h={1} size={2}>
-                      {title}
-                    </Title>
                   </Group>
-                  {tags && (
+                  <Divider look="base" />
+                  {tags && <Group className="mb-lg">{tags}</Group>}
+                  {!tags && (
                     <Text size="xl" bold>
                       {description}
                     </Text>
                   )}
                 </Group>
-                <Divider look="base" />
-                {tags && <Group className="mb-lg">{tags}</Group>}
-                {!tags && (
-                  <Text size="xl" bold>
-                    {description}
-                  </Text>
-                )}
-              </Group>
-              {/* TODO: Move this outside the Hero component */}
-              {/* {!location?.pathname.includes("user") && (
+                {/* TODO: Move this outside the Hero component */}
+                {/* {!location?.pathname.includes("user") && (
                 <Group className="w-full lg:w-auto lg:flex-col mr-xl*2" size="xl">
                   <Group className="flex-col">
                     <Text size={3}>
@@ -115,24 +142,26 @@ export default function Hero({ navigation, breadcrumbs, icons, title, descriptio
                   </Group>
                 </Group>
               )} */}
+              </Group>
             </Group>
-          </Group>
+          </Container>
+        </Group>
+        <Container>
+          {!!tabs && (
+            <Box size="sm" look="base" className="flex-row mt-md w-min">
+              {tabs?.map((tab) => (
+                <Button
+                  look={location.pathname === tab.link ? "hype" : "base"}
+                  to={tab.link}
+                  key={`${tab.label}-${tab.link}`}
+                >
+                  {tab.label}
+                </Button>
+              ))}
+            </Box>
+          )}
         </Container>
-      </Group>
-      <Container>
-        {!!tabs && (
-          <Box size="sm" look="base" className="flex-row mt-md w-min">
-            {tabs?.map(tab => (
-              <Button
-                look={location.pathname === tab.link ? "hype" : "base"}
-                to={tab.link}
-                key={`${tab.label}-${tab.link}`}>
-                {tab.label}
-              </Button>
-            ))}
-          </Box>
-        )}
-      </Container>
+      </OverrideTheme>
       <div>{children}</div>
     </>
   );

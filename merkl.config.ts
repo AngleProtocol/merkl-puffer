@@ -46,8 +46,10 @@ export default createConfig({
   themes: {
     merkl: {
       base: createColoring(
-        ["#2A35BD", "#F5F9FF", "#FFFFFF"],
-        ["#2A35BD", "#F5F9FF", "#FFFFFF"]
+        // ["#2A35BD", "#F5F9FF", "#FFFFFF"],
+        // ["#2A35BD", "#F5F9FF", "#FFFFFF"]
+        ["#2A35BD", "#BFFF38", "#FFFFFF"],
+        ["#2A35BD", "#BFFF38", "#FFFFFF"]
       ),
       info: createColoring(
         ["#2ABDFF", "#2ABDFF", "#131620"],
@@ -110,6 +112,8 @@ export default createConfig({
   },
   links: {
     merkl: "https://merkl.xyz/",
+    merklTermsConditions: "https://app.merkl.xyz/merklTerms.pdf",
+    merklPrivacy: "https://privacy.angle.money",
   },
   wagmi: {
     chains: [
