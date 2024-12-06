@@ -1,8 +1,8 @@
-import type { Campaign } from "@merkl/api";
 import { type Component, Group, Hash, Icon, OverrideTheme, Text, Value, mergeClass } from "dappkit";
 import moment from "moment";
 import Tooltip from "packages/dappkit/src/components/primitives/Tooltip";
 import { useCallback, useMemo, useState } from "react";
+import type { Campaign } from "src/api/services/campaigns/campaign.model";
 import useCampaign from "src/hooks/resources/useCampaign";
 import { formatUnits, parseUnits } from "viem";
 import Chain from "../chain/Chain";

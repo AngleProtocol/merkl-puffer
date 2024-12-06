@@ -1,6 +1,7 @@
-import type { Chain, Opportunity } from "@merkl/api";
+import type { Chain } from "@merkl/api";
 import { Group, type Order } from "dappkit";
 import { useMemo } from "react";
+import type { Opportunity } from "src/api/services/opportunity/opportunity.model";
 import useSearchParamState from "src/hooks/filtering/useSearchParamState";
 import OpportunityFilters, { type OpportunityFilterProps } from "./OpportunityFilters";
 import OpportunityPagination from "./OpportunityPagination";
@@ -22,7 +23,7 @@ export default function OpportunityLibrary({ opportunities, count, only, exclude
     [opportunities],
   );
 
-  const sortable = ["apr", "tvl", "rewards"] as const satisfies typeof opportunityColumns;
+  const sortable = ["apy", "tvl", "rewards"] as const satisfies typeof opportunityColumns;
 
   const [sortIdAndOrder, setSortIdAndOrder] = useSearchParamState<[id: (typeof sortable)[number], order: Order]>(
     "sort",

@@ -2,6 +2,11 @@ import type { Opportunity } from "@merkl/api";
 import type { IconProps } from "dappkit";
 
 export const actions = {
+  INVALID: {
+    label: "Invalid",
+    description: "Invalid",
+    icon: { remix: "RiFileWarningLine" },
+  },
   POOL: {
     label: "Provide Liquidity",
     description: "Earn rewards by depositiong liquidity in this pool.",

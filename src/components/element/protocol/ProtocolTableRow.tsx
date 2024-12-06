@@ -12,7 +12,7 @@ export type ProtocolTableRowProps = {
   protocol: Protocol;
 } & BoxProps;
 
-export default function ProtocolTableRow({ hideTags, protocol, className, ...props }: OpportunityTableRowProps) {
+export default function ProtocolTableRow({ hideTags, protocol, className, ...props }: ProtocolTableRowProps) {
   return (
     <Link to={`/protocols/${protocol.name}`}>
       <ProtocolRow

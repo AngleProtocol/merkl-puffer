@@ -1,9 +1,9 @@
-import type { Opportunity } from "@angleprotocol/merkl-api";
 import { type LoaderFunctionArgs, type MetaFunction, json } from "@remix-run/node";
 import { Meta, Outlet, useLoaderData } from "@remix-run/react";
 import { useMemo } from "react";
 import { ChainService } from "src/api/services/chain.service";
-import { OpportunityService } from "src/api/services/opportunity.service";
+import type { OpportunityWithCampaigns } from "src/api/services/opportunity/opportunity.model";
+import { OpportunityService } from "src/api/services/opportunity/opportunity.service";
 import Hero from "src/components/composite/Hero";
 import Tag from "src/components/element/Tag";
 import { ErrorHeading } from "src/components/layout/ErrorHeading";
@@ -29,7 +29,7 @@ export const meta: MetaFunction<typeof loader> = ({ data, error }) => {
 };
 
 export type OutletContextOpportunity = {
-  opportunity: Opportunity;
+  opportunity: OpportunityWithCampaigns;
 };
 
 export default function Index() {
@@ -76,7 +76,16 @@ export default function Index() {
           { label: "Overview", link },
           { label: "Leaderboard", link: `${link}/leaderboard` },
         ]}
-        tags={tags.map(tag => <Tag key={`${tag.type}_${tag.value?.address ?? tag.value}`} {...tag} size="md" />)}
+        tags={tags.map(tag => (
+          <Tag
+            key={`${tag.type}_${
+              // biome-ignore lint/suspicious/noExplicitAny: templated type
+              (tag.value as any)?.address ?? tag.value
+            }`}
+            {...tag}
+            size="md"
+          />
+        ))}
         opportunity={opportunity}>
         <Outlet context={{ opportunity }} />
       </Hero>

@@ -1,7 +1,7 @@
 import type { Opportunity } from "@merkl/api";
 import config from "merkl.config";
-import { api } from "../index.server";
-import { fetchWithLogs } from "../utils";
+import { api } from "../../index.server";
+import { fetchWithLogs } from "../../utils";
 
 export abstract class OpportunityService {
   static async #fetch<R, T extends { data: R; status: number; response: Response }>(

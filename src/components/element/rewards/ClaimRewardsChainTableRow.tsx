@@ -54,14 +54,15 @@ export default function ClaimRewardsChainTableRow({
   const unclaimed = useMemo(() => {
     return reward.rewards.reduce(
       (sum, { amount, claimed, token: { decimals, price } }) =>
-        sum + Number.parseFloat(formatUnits(amount - claimed, decimals)) * price,
+        sum + Number.parseFloat(formatUnits(amount - claimed, decimals)) * (price ?? 0),
       0,
     );
   }, [reward]);
 
   const claimed = useMemo(() => {
     return reward.rewards.reduce(
-      (sum, { claimed, token: { decimals, price } }) => sum + Number.parseFloat(formatUnits(claimed, decimals)) * price,
+      (sum, { claimed, token: { decimals, price } }) =>
+        sum + Number.parseFloat(formatUnits(claimed, decimals)) * (price ?? 0),
       0,
     );
   }, [reward]);

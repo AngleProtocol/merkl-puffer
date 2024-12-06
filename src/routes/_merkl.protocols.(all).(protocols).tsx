@@ -4,7 +4,7 @@ import { Container, Space } from "packages/dappkit/src";
 import { ProtocolService } from "src/api/services/protocol.service";
 import ProtocolLibrary from "src/components/element/protocol/ProtocolLibrary";
 
-export async function loader({ params: { id }, request }: LoaderFunctionArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   const { protocols, count } = await ProtocolService.getManyFromRequest(request);
 
   return json({ protocols, count });
