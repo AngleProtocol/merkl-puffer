@@ -4,7 +4,7 @@ import { Container, Space } from "packages/dappkit/src";
 import { TokenService } from "src/api/services/token.service";
 import TokenLibrary from "src/components/element/token/TokenLibrary";
 
-export async function loader({ params: { id }, request }: LoaderFunctionArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   const { tokens, count } = await TokenService.getManyFromRequest(request);
 
   return json({ tokens, count });

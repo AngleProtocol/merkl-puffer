@@ -1,6 +1,5 @@
 import { type LoaderFunctionArgs, type MetaFunction, json } from "@remix-run/node";
-import { Outlet, useLoaderData, useRouteError } from "@remix-run/react";
-import { Group, Title } from "dappkit";
+import { Outlet, useLoaderData } from "@remix-run/react";
 import { ChainService } from "src/api/services/chain.service";
 import Hero from "src/components/composite/Hero";
 

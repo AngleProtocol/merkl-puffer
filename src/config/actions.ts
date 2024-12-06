@@ -5,7 +5,7 @@ export const actions = {
   INVALID: {
     label: "Invalid",
     description: "Invalid",
-    icon: { remix: "RiFileWarningLine" }
+    icon: { remix: "RiFileWarningLine" },
   },
   POOL: {
     label: "Provide Liquidity",

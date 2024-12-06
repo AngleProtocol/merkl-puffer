@@ -1,4 +1,4 @@
-import type {  Token } from "@merkl/api";
+import type { Token } from "@merkl/api";
 import type { Chain } from "@merkl/api";
 import { Button, Divider, Dropdown, Group, Hash, Icon, PrimitiveTag, Text } from "dappkit";
 import type { Component, PrimitiveTagProps } from "dappkit";

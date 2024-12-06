@@ -1,12 +1,12 @@
 import type { Chain } from "@merkl/api";
 import { Group, type Order } from "dappkit";
 import { useMemo } from "react";
+import type { Opportunity } from "src/api/services/opportunity/opportunity.model";
 import useSearchParamState from "src/hooks/filtering/useSearchParamState";
 import OpportunityFilters, { type OpportunityFilterProps } from "./OpportunityFilters";
 import OpportunityPagination from "./OpportunityPagination";
 import { OpportunityTable, type opportunityColumns } from "./OpportunityTable";
 import OpportunityTableRow from "./OpportunityTableRow";
-import type { Opportunity } from "src/api/services/opportunity/opportunity.model";
 
 export type OpportunityLibrary = {
   opportunities: Opportunity[];

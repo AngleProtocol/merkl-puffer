@@ -7,4 +7,4 @@ export type Api = ReturnType<typeof MerklApi>;
  * Type returned through a loader
  * @description helps with inconsistencies of the implicit type when returned through the remix json() loader
  */
-export type Fetched<T> = SerializeFrom<() => TypedResponse<T>>
+export type Fetched<T> = SerializeFrom<() => TypedResponse<T>>;

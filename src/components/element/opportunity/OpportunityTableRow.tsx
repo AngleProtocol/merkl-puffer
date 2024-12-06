@@ -6,10 +6,10 @@ import { Title } from "dappkit";
 import { Value } from "dappkit";
 import { Button } from "dappkit";
 import { mergeClass } from "dappkit";
+import type { Opportunity } from "src/api/services/opportunity/opportunity.model";
 import useOpportunity from "src/hooks/resources/useOpportunity";
 import Tag, { type TagTypes } from "../Tag";
 import { OpportunityRow } from "./OpportunityTable";
-import type { Opportunity } from "src/api/services/opportunity/opportunity.model";
 
 export type OpportunityTableRowProps = {
   hideTags?: (keyof TagTypes)[];

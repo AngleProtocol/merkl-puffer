@@ -4,7 +4,7 @@ import { Container, Space } from "packages/dappkit/src";
 import { ChainService } from "src/api/services/chain.service";
 import ChainLibrary from "src/components/element/chain/ChainLibrary";
 
-export async function loader({ params: { id }, request }: LoaderFunctionArgs) {
+export async function loader(_args: LoaderFunctionArgs) {
   const chains = await ChainService.getAll();
 
   return json({ chains, count: chains.length });

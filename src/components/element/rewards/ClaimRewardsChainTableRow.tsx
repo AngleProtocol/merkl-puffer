@@ -61,7 +61,8 @@ export default function ClaimRewardsChainTableRow({
 
   const claimed = useMemo(() => {
     return reward.rewards.reduce(
-      (sum, { claimed, token: { decimals, price } }) => sum + Number.parseFloat(formatUnits(claimed, decimals)) * (price ?? 0),
+      (sum, { claimed, token: { decimals, price } }) =>
+        sum + Number.parseFloat(formatUnits(claimed, decimals)) * (price ?? 0),
       0,
     );
   }, [reward]);

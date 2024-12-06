@@ -1,9 +1,9 @@
 import { Button, Group, Icon, Text } from "dappkit";
 import moment from "moment";
 import { useMemo, useState } from "react";
+import type { OpportunityWithCampaigns } from "src/api/services/opportunity/opportunity.model";
 import { CampaignTable } from "./CampaignTable";
 import CampaignTableRow from "./CampaignTableRow";
-import type { OpportunityWithCampaigns } from "src/api/services/opportunity/opportunity.model";
 
 export type IProps = {
   opportunity: OpportunityWithCampaigns;
