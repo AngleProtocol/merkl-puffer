@@ -32,6 +32,7 @@ export default function Index() {
             </>
           ),
           link: `/users/${address}`,
+          key: crypto.randomUUID(),
         },
         {
           label: (
@@ -41,6 +42,7 @@ export default function Index() {
             </>
           ),
           link: `/users/${address}/liquidity`,
+          key: crypto.randomUUID(),
         },
         {
           label: (
@@ -50,6 +52,7 @@ export default function Index() {
             </>
           ),
           link: `/users/${address}/claims`,
+          key: crypto.randomUUID(),
         },
       ]}>
       <Outlet />

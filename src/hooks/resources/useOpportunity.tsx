@@ -14,7 +14,7 @@ export default function useOpportunity(opportunity: Opportunity) {
     const chain: TagType<"chain"> = { type: "chain", value: opportunity?.chain };
     const status: TagType<"status"> = { type: "status", value: opportunity?.status };
 
-    return [chain, status, action, protocol, ...tokens].filter(a => a);
+    return [protocol, action, chain, ...tokens, status].filter(a => a);
   }, [opportunity]);
 
   const link = useMemo(

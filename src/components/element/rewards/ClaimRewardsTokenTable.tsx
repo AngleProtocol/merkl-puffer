@@ -2,26 +2,26 @@ import { createTable } from "dappkit";
 
 export const [ClaimRewardsTokenTable, ClaimRewardsTokenRow, claimRewardsTokenColumns] = createTable({
   token: {
-    name: "TOKEN",
+    name: "Token",
     size: "minmax(100px,1fr)",
     compact: "1fr",
     className: "justify-start",
     main: true,
   },
   pending: {
-    name: "PENDING",
+    name: "Pending",
     size: "minmax(min-content,150px)",
     compactSize: "minmax(min-content,200px)",
     className: "justify-end",
   },
   amount: {
-    name: "UNCLAIMED",
+    name: "Unclaimed",
     size: "minmax(min-content,150px)",
     compactSize: "minmax(min-content,200px)",
     className: "justify-end",
   },
   claimed: {
-    name: "CLAIMED",
+    name: "Claimed",
     size: "minmax(min-content,150px)",
     compactSize: "minmax(min-content,200px)",
     className: "justify-end",

@@ -25,6 +25,7 @@ export default function Index() {
         {
           label: "Opportunities",
           link: `/actions/${action.label?.toLowerCase()}`,
+          key: crypto.randomUUID(),
         },
       ]}>
       <Outlet />

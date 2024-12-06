@@ -28,14 +28,20 @@ export default function Index() {
       title={chain.name}
       description={"Lorem ipsum something cool about the chain"}
       tabs={[
-        { label: "Opportunities", link: `/chains/${label?.toLowerCase()}` },
+        {
+          label: "Opportunities",
+          link: `/chains/${label?.toLowerCase()}`,
+          key: crypto.randomUUID(),
+        },
         {
           label: "Leaderboard",
           link: `/chains/${label?.toLowerCase()}/leaderboard`,
+          key: crypto.randomUUID(),
         },
         {
           label: "Analytics",
           link: `/chains/${label?.toLowerCase()}/analytics`,
+          key: crypto.randomUUID(),
         },
       ]}>
       <Outlet />

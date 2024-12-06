@@ -36,6 +36,7 @@ export default function Index() {
         {
           label: "Opportunities",
           link: `/status/${status.label?.toLowerCase()}`,
+          key: crypto.randomUUID(),
         },
       ]}>
       <Outlet />

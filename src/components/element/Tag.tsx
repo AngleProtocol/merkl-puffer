@@ -270,7 +270,7 @@ export default function Tag<T extends keyof TagTypes>({ type, value, ...props }:
               </Group>
             </Group>
           }>
-          <PrimitiveTag look="tint" key={value} {...props}>
+          <PrimitiveTag look="bold" key={value} {...props}>
             <Icon src={protocol?.icon} />
             {value?.name}
           </PrimitiveTag>

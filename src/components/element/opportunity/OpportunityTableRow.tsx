@@ -37,7 +37,8 @@ export default function OpportunityTableRow({ hideTags, opportunity, className, 
         }
         apyColumn={
           <Group className="py-xl">
-            <Button look={(opportunity?.aprRecord?.cummulated ?? 0) > 0 ? "hype" : "soft"} className="font-mono">
+            {/* TODO: Transform in Button so we can show an APY modal */}
+            <Button look="tint" size="lg" className="font-mono">
               <Value value format="0a%">
                 {opportunity.apr / 100}
               </Value>

@@ -73,8 +73,12 @@ export default function Index() {
         title={styleName}
         description={description}
         tabs={[
-          { label: "Overview", link },
-          { label: "Leaderboard", link: `${link}/leaderboard` },
+          { label: "Overview", link, key: crypto.randomUUID() },
+          {
+            label: "Leaderboard",
+            link: `${link}/leaderboard`,
+            key: crypto.randomUUID(),
+          },
         ]}
         tags={tags.map(tag => (
           <Tag

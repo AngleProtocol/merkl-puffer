@@ -64,6 +64,7 @@ export default function Index() {
         {
           label: "Opportunities",
           link: `/tokens/${token.symbol?.toLowerCase()}`,
+          key: crypto.randomUUID(),
         },
       ]}
       tags={tags.map(tag => <Tag key={`${tag.type}_${tag.value?.address ?? tag.value}`} {...tag} size="lg" />)}>

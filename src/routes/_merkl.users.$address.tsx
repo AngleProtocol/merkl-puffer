@@ -1,9 +1,10 @@
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
-import { Outlet, json, useLoaderData, useNavigate } from "@remix-run/react";
-import { Button, Group, Hash, Icon, Input, Text, Value } from "dappkit";
-import { useMemo, useState } from "react";
+import { Outlet, json, useLoaderData } from "@remix-run/react";
+import { Button, Dropdown, Group, Icon, Text, Value } from "dappkit";
+import { useMemo } from "react";
 import { RewardService } from "src/api/services/reward.service";
 import Hero from "src/components/composite/Hero";
+import AddressEdit from "src/components/element/AddressEdit";
 import { formatUnits } from "viem";
 
 export async function loader({ params: { address } }: LoaderFunctionArgs) {
@@ -17,14 +18,15 @@ export async function loader({ params: { address } }: LoaderFunctionArgs) {
 
 export const meta: MetaFunction<typeof loader> = ({ data, error }) => {
   if (error) return [{ title: error }];
-  return [{ title: `${data?.address?.substring(0, 6)}…${data?.address.substring(data?.address.length - 4)} on Merkl` }];
+  return [
+    {
+      title: `${data?.address?.substring(0, 6)}…${data?.address.substring(data?.address.length - 4)} on Merkl`,
+    },
+  ];
 };
 
 export default function Index() {
   const { rewards, address } = useLoaderData<typeof loader>();
-  const [inputAddress, setInputAddress] = useState<string>();
-  const [_isEditingAddress, setIsEditingAddress] = useState(false);
-  const navigate = useNavigate();
 
   const { earned, unclaimed } = useMemo(() => {
     return rewards.reduce(
@@ -42,7 +44,10 @@ export default function Index() {
           return sum + value;
         }, 0);
 
-        return { earned: earned + valueEarned, unclaimed: unclaimed + valueUnclaimed };
+        return {
+          earned: earned + valueEarned,
+          unclaimed: unclaimed + valueUnclaimed,
+        };
       },
       { earned: 0, unclaimed: 0 },
     );
@@ -52,17 +57,28 @@ export default function Index() {
     <Hero
       breadcrumbs={[
         { link: "/", name: "Users" },
-        { link: `/users/${address ?? ""}`, name: address ?? "" },
+        {
+          link: `/users/${address ?? ""}`,
+          component: (
+            <Dropdown size="md" padding="xs" content={<AddressEdit />}>
+              <Button look="soft" size="xs" aria-label="Edit address">
+                <Icon remix="RiArrowRightSLine" />
+                {address}
+                <Icon remix="RiEdit2Line" />
+              </Button>
+            </Dropdown>
+          ),
+        },
       ]}
       navigation={{ label: "Back to opportunities", link: "/" }}
       title={
         <Group className="w-full gap-xl md:gap-xl*4 items-center">
-          {/* TODO: Make it dynamic this */}
+          {/* TODO: Make it dynamic */}
           <Group className="flex-col">
             <Value format="$0,0.0a" size={2} className="text-main-12">
               {earned}
             </Value>
-            <Text size="xl" bold>
+            <Text size="xl" bold className="not-italic">
               Total earned
             </Text>
           </Group>
@@ -70,7 +86,7 @@ export default function Index() {
             <Value format="$0,0.0a" size={2} className="text-main-12">
               {unclaimed}
             </Value>
-            <Text size={"xl"} bold>
+            <Text size={"xl"} bold className="not-italic">
               Claimable
             </Text>
           </Group>
@@ -81,28 +97,7 @@ export default function Index() {
           </Group>
         </Group>
       }
-      description={
-        !_isEditingAddress && address !== "" ? (
-          <Group>
-            <Hash size={4} className="text-main-12" format="short" copy>
-              {address}
-            </Hash>
-            <Button look="soft" onClick={() => setIsEditingAddress(true)}>
-              <Icon remix="RiEdit2Line" />
-            </Button>
-          </Group>
-        ) : (
-          <Group>
-            <Input state={[inputAddress, setInputAddress]} look="soft" />
-            <Button
-              onClick={() => (inputAddress ? navigate(`/users/${inputAddress}`) : setIsEditingAddress(false))}
-              size="xl"
-              look="soft">
-              <Icon remix="RiSendPlane2Fill" />
-            </Button>
-          </Group>
-        )
-      }
+      description={"Earn rewards by providing liquidity to this pool on Ethereum"}
       tabs={[
         {
           label: (
@@ -112,6 +107,7 @@ export default function Index() {
             </>
           ),
           link: `/users/${address}`,
+          key: crypto.randomUUID(),
         },
       ]}>
       <Outlet />

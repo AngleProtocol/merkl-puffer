@@ -1,5 +1,6 @@
 import { type LoaderFunctionArgs, type MetaFunction, json } from "@remix-run/node";
 import { Outlet, useLoaderData } from "@remix-run/react";
+import { Button, Group, Icon } from "dappkit";
 import { ProtocolService } from "src/api/services/protocol.service";
 import Hero from "src/components/composite/Hero";
 
@@ -21,7 +22,15 @@ export default function Index() {
   return (
     <Hero
       icons={[{ src: protocol?.icon }]}
-      title={protocol?.name}
+      title={
+        <Group className="items-center">
+          {protocol?.name}
+          {/* TODO: add the link to this button */}
+          <Button look="soft" size="xl" to={protocol?.name}>
+            <Icon remix="RiArrowRightUpLine" />
+          </Button>
+        </Group>
+      }
       breadcrumbs={[
         { link: "/protocols", name: "Protocols" },
         { link: `/protocols/${protocol.name}`, name: protocol.name },
@@ -31,6 +40,7 @@ export default function Index() {
         {
           label: "Opportunities",
           link: `/protocols/${protocol.name?.toLowerCase()}`,
+          key: crypto.randomUUID(),
         },
       ]}>
       <Outlet />

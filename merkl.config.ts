@@ -52,7 +52,7 @@ export default createConfig({
       harm: createColoring(["#d22e14", "#d22e14", "#131620"], ["#FFFFFF", "#40B66B", "white"]),
     },
     merkl: {
-      base: createColoring(["#1F2333", "#B8AAFD", "#131620"], ["#FCF8F5", "#B8AAFD", "white"]),
+      base: createColoring(["#1755F4", "#FF7900", "#0D1530"], ["#1755F4", "#FF7900", "#FFFFFF"]),
       info: createColoring(["#2ABDFF", "#2ABDFF", "#131620"], ["#FFFFFF", "#40B66B", "white"]),
       good: createColoring(["#40B66B", "#40B66B", "#131620"], ["#FFFFFF", "#40B66B", "white"]),
       warn: createColoring(["#ff9600", "#ff9600", "#131620"], ["#FFFFFF", "#40B66B", "white"]),
@@ -97,16 +97,16 @@ export default createConfig({
     //   route: "/protocols",
     //   key: crypto.randomUUID(),
     // },
-    terms: {
-      icon: "RiCompassesLine",
-      route: "/terms",
-      key: crypto.randomUUID(),
-    },
-    privacy: {
-      icon: "RiInformationFill",
-      route: "/privacy",
-      key: crypto.randomUUID(),
-    },
+    // terms: {
+    //   icon: "RiCompassesLine",
+    //   route: "/terms",
+    //   key: crypto.randomUUID(),
+    // },
+    // privacy: {
+    //   icon: "RiInformationFill",
+    //   route: "/privacy",
+    //   key: crypto.randomUUID(),
+    // },
   },
   socials: {
     discord: "",
@@ -116,6 +116,8 @@ export default createConfig({
   },
   links: {
     merkl: "https://merkl.xyz/",
+    merklTermsConditions: "https://app.merkl.xyz/merklTerms.pdf",
+    merklPrivacy: "https://privacy.angle.money",
   },
   wagmi: {
     chains: [
@@ -154,7 +156,10 @@ export default createConfig({
     ],
     client({ chain }) {
       if (chain.id === zksync.id)
-        return createClient({ chain, transport: custom(window.ethereum!) }).extend(eip712WalletActions());
+        return createClient({
+          chain,
+          transport: custom(window.ethereum!),
+        }).extend(eip712WalletActions());
       return createClient({ chain, transport: http() });
     },
     ssr: true,

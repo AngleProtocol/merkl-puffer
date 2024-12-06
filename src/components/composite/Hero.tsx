@@ -1,5 +1,5 @@
 import { useLocation } from "@remix-run/react";
-import { Box, Container, Divider, Group, Icon, type IconProps, Icons, Text, Title } from "dappkit";
+import { Container, Divider, Group, Icon, type IconProps, Icons, Tabs, Text, Title } from "dappkit";
 import { Button } from "dappkit";
 import config from "merkl.config";
 import type { PropsWithChildren, ReactNode } from "react";
@@ -8,28 +8,46 @@ import type { Opportunity } from "src/api/services/opportunity/opportunity.model
 export type HeroProps = PropsWithChildren<{
   icons?: IconProps[];
   title: ReactNode;
-  breadcrumbs?: { name: string; link: string; component?: ReactNode }[];
+  breadcrumbs?: { name?: string; link: string; component?: ReactNode }[];
   navigation?: { label: ReactNode; link: string };
   description: ReactNode;
   tags?: ReactNode[];
-  tabs?: { label: ReactNode; link: string }[];
+  sideDatas?: { data: ReactNode; label: string; key: string }[];
+  tabs?: { label: ReactNode; link: string; key: string }[];
   opportunity?: Opportunity;
 }>;
 
-export default function Hero({ navigation, breadcrumbs, icons, title, description, tags, tabs, children }: HeroProps) {
+export default function Hero({
+  navigation,
+  breadcrumbs,
+  icons,
+  title,
+  description,
+  tags,
+  sideDatas,
+  tabs,
+  children,
+}: HeroProps) {
   const location = useLocation();
-
   return (
     <>
+      {/* TODO: Align lines & descriptions on all pages  */}
+      {/* TODO: On sub-pages (all pages except Opportunities): Replace the banner by a color  */}
       <Group
-        className="flex-row justify-between aspect-[1440/440] bg-cover bg-no-repeat xl:aspect-auto xl:min-h-[400px]"
-        style={{ backgroundImage: `url('${config.images.hero}')` }}>
+        className={`${
+          location?.pathname === "/" || location?.pathname.includes("opportunities") ? "bg-cover" : "bg-main-6"
+        } flex-row justify-between bg-no-repeat xl:aspect-auto xl:min-h-[350px] aspect-[1440/350]`}
+        style={{
+          backgroundImage:
+            location?.pathname === "/" || location?.pathname.includes("opportunities")
+              ? `url('${config.images.hero}')`
+              : "none",
+        }}>
         <Container>
           <Group className="flex-col h-full py-xl gap-xl lg:gap-xs">
-            <Group className="items-center">
+            <Group className="items-center" size="sm">
               {/* TODO: Build dynamic breadcrumbs */}
-              {/** Disabled and set invisible when undefined to preserve layout height */}
-              <Button to={navigation?.link} look="soft" size="xs">
+              <Button to={navigation?.link} look="soft" bold size="xs">
                 Home
               </Button>
               {breadcrumbs?.map(breadcrumb => {
@@ -69,68 +87,37 @@ export default function Hero({ navigation, breadcrumbs, icons, title, descriptio
                       {title}
                     </Title>
                   </Group>
-                  {tags && (
-                    <Text size="xl" bold>
-                      {description}
-                    </Text>
-                  )}
                 </Group>
                 <Divider look="base" />
-                {tags && <Group className="mb-lg">{tags}</Group>}
-                {!tags && (
+                {!!description && (
                   <Text size="xl" bold>
                     {description}
                   </Text>
                 )}
+                {!!tags && <Group className="mb-lg">{tags}</Group>}
               </Group>
-              {/* TODO: Move this outside the Hero component */}
-              {/* {!location?.pathname.includes("user") && (
+              {!!sideDatas && (
                 <Group className="w-full lg:w-auto lg:flex-col mr-xl*2" size="xl">
-                  <Group className="flex-col">
-                    <Text size={3}>
-                      <Value look={totalRewards === "0" ? "soft" : "base"} format="$0,0" size={"md"}>
-                        {totalRewards}
-                      </Value>
-                    </Text>
+                  {sideDatas.map(data => (
+                    <Group key={data.key} className="flex-col">
+                      <Text size={3}>{data.data}</Text>
 
-                    <Text size="xl" className="font-bold">
-                      Daily rewards
-                    </Text>
-                  </Group>
-                  <Group className="flex-col">
-                    <Text size={3}>
-                      <Value value format="0a%">
-                        {(opportunity?.apr ?? 0) / 100}
-                      </Value>
-                    </Text>
-                    <Text size={"xl"} className="font-bold">
-                      APR
-                    </Text>
-                  </Group>
-                  <Group className="flex-col">
-                    <Text size={3}>{filteredCampaigns?.length}</Text>
-                    <Text size={"xl"} className="font-bold">
-                      Active campaigns
-                    </Text>
-                  </Group>
+                      <Text size="xl" className="font-bold not-italic">
+                        {data.label}
+                      </Text>
+                    </Group>
+                  ))}
                 </Group>
-              )} */}
+              )}
             </Group>
           </Group>
         </Container>
       </Group>
       <Container>
         {!!tabs && (
-          <Box size="sm" look="base" className="flex-row mt-md w-min">
-            {tabs?.map(tab => (
-              <Button
-                look={location.pathname === tab.link ? "hype" : "base"}
-                to={tab.link}
-                key={`${tab.label}-${tab.link}`}>
-                {tab.label}
-              </Button>
-            ))}
-          </Box>
+          <Group size="xl" className="my-lg">
+            <Tabs tabs={tabs} look="base" size="lg" />
+          </Group>
         )}
       </Container>
       <div>{children}</div>

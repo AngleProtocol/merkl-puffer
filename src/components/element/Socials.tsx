@@ -24,6 +24,11 @@ export default function Socials() {
           <Icon remix="RiDiscordFill" />
         </Button>
       )}
+      {!!config.socials.medium && (
+        <Button look="base" size="lg" external to={config.socials.medium}>
+          <Icon remix="RiMediumFill" />
+        </Button>
+      )}
     </Group>
   );
 }

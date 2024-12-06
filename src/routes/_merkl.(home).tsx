@@ -12,7 +12,7 @@ export default function Index() {
       icons={[{ remix: "RiPlanetFill" }]}
       navigation={{ label: "Back to opportunities", link: "/" }}
       title={"Opportunities"}
-      description={"Lorem ipsum something cool"}>
+      description={"Compare campaigns, find the best opportunities and earn tokens"}>
       <Outlet />
     </Hero>
   );

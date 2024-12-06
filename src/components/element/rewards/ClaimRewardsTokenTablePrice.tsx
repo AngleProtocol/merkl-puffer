@@ -12,10 +12,10 @@ export default function ClaimRewardsTokenTablePrice({ amount, price, decimals }:
   const value = formatUnits(amount, decimals);
 
   return (
-    <Group size="sm">
+    <Group size="xs" className="flex-col items-end">
       <Value
-        fallback={v => (v as string).includes("0.000") && "<0.001"}
-        className="text-right"
+        fallback={v => (v as string).includes("0.000") && "< 0.001"}
+        className="text-right items-center flex"
         look={"bold"}
         format="0,0.###">
         {value}
@@ -23,9 +23,9 @@ export default function ClaimRewardsTokenTablePrice({ amount, price, decimals }:
       <Value
         fallback={v => {
           if (price === 0) return "-";
-          return (v.toString() as string).includes("0.0") && "$<0.1";
+          return (v.toString() as string).includes("0.0") && "< $0.1";
         }}
-        className="text-right"
+        className="text-right items-center flex"
         look={"soft"}
         format="$0,0.#">
         {Number.parseFloat(value) * (price ?? 0)}

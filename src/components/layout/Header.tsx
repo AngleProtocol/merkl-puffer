@@ -86,7 +86,7 @@ export default function Header() {
             <Group className="items-center" size="xl">
               <Group className="hidden lg:flex items-center" size="xl">
                 {Object.entries(routes)
-                  .filter(([key]) => !["homepage", "privacy", "terms"].includes(key))
+                  .filter(([key]) => !["homepage"].includes(key))
                   .map(([key, { route }]) => {
                     return (
                       <Button className="capitalize" look="soft" size="lg" key={`${key}-link`} to={route}>

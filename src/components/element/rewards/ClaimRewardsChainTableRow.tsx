@@ -132,7 +132,7 @@ export default function ClaimRewardsChainTableRow({
         <ClaimRewardsTokenTable
           tokenHeader={
             <Text size="xs" className="pl-md">
-              TOKEN
+              Token
             </Text>
           }
           size="sm"
