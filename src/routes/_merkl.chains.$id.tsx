@@ -43,16 +43,3 @@ export default function Index() {
     </Hero>
   );
 }
-
-export function ErrorBoundary() {
-  const error = useRouteError();
-
-  return (
-    <>
-      <Group className="mx-auto my-auto flex-col p-xl*2 [&>*]:text-center max-w-fit justify-center">
-        <Title h={3}>{error?.message ?? "Error"}</Title>
-        {/* <Text h={3}>We don't support this chain</Text> */}
-      </Group>
-    </>
-  );
-}

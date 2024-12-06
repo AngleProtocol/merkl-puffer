@@ -101,7 +101,7 @@ export default function OpportunityFilters({ only, exclude, chains }: Opportunit
           <Input
             name="search"
             value={innerSearch}
-            state={[innerSearch, setInnerSearch]}
+            state={[innerSearch, v => setInnerSearch(v)]}
             suffix={<Icon remix="RiSearchLine" />}
             onClick={onSearchSubmit}
             placeholder="Search"

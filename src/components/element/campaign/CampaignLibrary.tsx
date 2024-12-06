@@ -1,12 +1,12 @@
-import type { Opportunity } from "@merkl/api";
 import { Button, Group, Icon, Text } from "dappkit";
 import moment from "moment";
 import { useMemo, useState } from "react";
 import { CampaignTable } from "./CampaignTable";
 import CampaignTableRow from "./CampaignTableRow";
+import type { OpportunityWithCampaigns } from "src/api/services/opportunity/opportunity.model";
 
 export type IProps = {
-  opportunity: Opportunity;
+  opportunity: OpportunityWithCampaigns;
 };
 
 export default function CampaignLibrary(props: IProps) {

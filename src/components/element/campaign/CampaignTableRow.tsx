@@ -1,4 +1,3 @@
-import type { Campaign } from "@merkl/api";
 import { type Component, Group, Hash, Icon, OverrideTheme, Text, Value, mergeClass } from "dappkit";
 import moment from "moment";
 import Tooltip from "packages/dappkit/src/components/primitives/Tooltip";
@@ -9,6 +8,7 @@ import Chain from "../chain/Chain";
 import Token from "../token/Token";
 import { CampaignRow } from "./CampaignTable";
 import RestrictionsCollumn from "./tableCollumns/RestrictionsCollumn";
+import type { Campaign } from "src/api/services/campaigns/campaign.model";
 
 export type CampaignTableRowProps = Component<{
   campaign: Campaign;

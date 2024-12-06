@@ -2,7 +2,7 @@ import { type LoaderFunctionArgs, json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { Container, Space } from "dappkit/src";
 import { ChainService } from "src/api/services/chain.service";
-import { OpportunityService } from "src/api/services/opportunity.service";
+import { OpportunityService } from "src/api/services/opportunity/opportunity.service";
 import { ProtocolService } from "src/api/services/protocol.service";
 import OpportunityLibrary from "src/components/element/opportunity/OpportunityLibrary";
 
