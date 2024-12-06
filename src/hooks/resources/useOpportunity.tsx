@@ -1,13 +1,13 @@
-import type { Opportunity } from "@merkl/api";
 import { Icon } from "dappkit";
 import { useMemo } from "react";
+import type { Opportunity } from "src/api/services/opportunity/opportunity.model";
 import type { TagType } from "src/components/element/Tag";
 
 export default function useOpportunity(opportunity: Opportunity) {
   const tags = useMemo(() => {
     const tokens: TagType<"token">[] = opportunity.tokens.map(t => ({ type: "token", value: t }));
     const action: TagType<"action"> = { type: "action", value: opportunity.action };
-    const protocol: TagType<"protocol"> = opportunity?.protocol && { type: "protocol", value: opportunity?.protocol };
+    const protocol: TagType<"protocol"> = { type: "protocol", value: opportunity.protocol };
     const chain: TagType<"chain"> = { type: "chain", value: opportunity?.chain };
     const status: TagType<"status"> = { type: "status", value: opportunity?.status };
 

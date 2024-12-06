@@ -1,4 +1,3 @@
-import type { Opportunity } from "@merkl/api";
 import { Link } from "@remix-run/react";
 import { Group } from "dappkit";
 import { Icons } from "dappkit";
@@ -10,6 +9,7 @@ import { mergeClass } from "dappkit";
 import useOpportunity from "src/hooks/resources/useOpportunity";
 import Tag, { type TagTypes } from "../Tag";
 import { OpportunityRow } from "./OpportunityTable";
+import type { Opportunity } from "src/api/services/opportunity/opportunity.model";
 
 export type OpportunityTableRowProps = {
   hideTags?: (keyof TagTypes)[];

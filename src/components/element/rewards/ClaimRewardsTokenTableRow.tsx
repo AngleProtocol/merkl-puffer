@@ -1,16 +1,16 @@
 import type { Reward } from "@merkl/api";
-import { Checkbox, Divider, type GetSet, Group, Icon, Space } from "dappkit";
+import { Checkbox, type Component, Divider, type GetSet, Group, Icon, Space } from "dappkit";
 import Collapsible from "packages/dappkit/src/components/primitives/Collapsible";
-import { type PropsWithChildren, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import Tag from "../Tag";
 import OpportuntiyButton from "../opportunity/OpportunityButton";
 import { ClaimRewardsTokenRow } from "./ClaimRewardsTokenTable";
 import ClaimRewardsTokenTablePrice from "./ClaimRewardsTokenTablePrice";
 
-export type ClaimRewardsTokenTableRowProps = PropsWithChildren & {
+export type ClaimRewardsTokenTableRowProps = Component<{
   reward: Reward["rewards"][number];
   checkedState?: GetSet<boolean>;
-};
+}>;
 
 export default function ClaimRewardsTokenTableRow({ reward, checkedState, ...props }: ClaimRewardsTokenTableRowProps) {
   const [open, setOpen] = useState(false);
@@ -19,7 +19,6 @@ export default function ClaimRewardsTokenTableRow({ reward, checkedState, ...pro
 
   return (
     <ClaimRewardsTokenRow
-      data-look={props?.look ?? "none"}
       {...props}
       onClick={() => setOpen(o => !o)}
       tokenColumn={

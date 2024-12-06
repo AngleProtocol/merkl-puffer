@@ -1,9 +1,9 @@
-import type { Opportunity } from "@merkl/api";
 import { useLocation } from "@remix-run/react";
 import { Box, Container, Divider, Group, Icon, type IconProps, Icons, Text, Title } from "dappkit";
 import { Button } from "dappkit";
 import config from "merkl.config";
 import type { PropsWithChildren, ReactNode } from "react";
+import type { Opportunity } from "src/api/services/opportunity/opportunity.model";
 
 export type HeroProps = PropsWithChildren<{
   icons?: IconProps[];

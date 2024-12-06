@@ -3,7 +3,7 @@ import type { PropsWithChildren } from "react";
 import { formatUnits } from "viem";
 
 export type ClaimRewardsTokenTablePriceProps = PropsWithChildren & {
-  price: number;
+  price: number | null;
   amount: bigint;
   decimals: number;
 };
@@ -28,7 +28,7 @@ export default function ClaimRewardsTokenTablePrice({ amount, price, decimals }:
         className="text-right"
         look={"soft"}
         format="$0,0.#">
-        {Number.parseFloat(value) * price}
+        {Number.parseFloat(value) * (price ?? 0)}
       </Value>
     </Group>
   );

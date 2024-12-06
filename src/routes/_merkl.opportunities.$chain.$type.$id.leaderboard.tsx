@@ -4,7 +4,7 @@ import { Container, Group, Space, Text, Value } from "packages/dappkit/src";
 import Tooltip from "packages/dappkit/src/components/primitives/Tooltip";
 import { useMemo } from "react";
 import { ChainService } from "src/api/services/chain.service";
-import { OpportunityService } from "src/api/services/opportunity.service";
+import { OpportunityService } from "src/api/services/opportunity/opportunity.service";
 import { RewardService } from "src/api/services/reward.service";
 import LeaderboardLibrary from "src/components/element/leaderboard/LeaderboardLibrary";
 import { formatUnits, parseUnits } from "viem";

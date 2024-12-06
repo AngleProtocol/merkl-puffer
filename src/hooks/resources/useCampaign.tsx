@@ -1,9 +1,10 @@
-import type { Campaign, Opportunity } from "@merkl/api";
 import { Bar } from "dappkit";
 import moment from "moment";
 import { Group, Text, Value } from "packages/dappkit/src";
 import Time from "packages/dappkit/src/components/primitives/Time";
 import { type ReactNode, useMemo } from "react";
+import type { Campaign } from "src/api/services/campaigns/campaign.model";
+import type { Opportunity } from "src/api/services/opportunity/opportunity.model";
 import { formatUnits } from "viem";
 
 export default function useCampaign(campaign: Campaign) {

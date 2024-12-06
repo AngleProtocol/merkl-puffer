@@ -1,18 +1,18 @@
-import type { Opportunity, Token } from "@merkl/api";
+import type {  Token } from "@merkl/api";
 import type { Chain } from "@merkl/api";
 import { Button, Divider, Dropdown, Group, Hash, Icon, PrimitiveTag, Text } from "dappkit";
 import type { Component, PrimitiveTagProps } from "dappkit";
 import { useWalletContext } from "packages/dappkit/src/context/Wallet.context";
-import { type Action, actions } from "src/config/actions";
-import type { Protocol } from "src/config/protocols";
+import type { Opportunity } from "src/api/services/opportunity/opportunity.model";
+import { actions } from "src/config/actions";
 import { statuses } from "src/config/status";
 
 export type TagTypes = {
   chain: Opportunity["chain"];
   token: Token;
   tokenChain: Token & { chain?: Chain };
-  protocol: Protocol;
-  action: Action;
+  protocol: Opportunity["protocol"] | undefined;
+  action: Opportunity["action"];
   status: Opportunity["status"];
 };
 
