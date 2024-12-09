@@ -3,7 +3,6 @@ import { Container, Divider, Group, Icon, type IconProps, Icons, Tabs, Text, Tit
 import { Button } from "dappkit";
 import config from "merkl.config";
 import type { PropsWithChildren, ReactNode } from "react";
-import type { Opportunity } from "src/api/services/opportunity/opportunity.model";
 
 export type HeroProps = PropsWithChildren<{
   icons?: IconProps[];
@@ -14,7 +13,6 @@ export type HeroProps = PropsWithChildren<{
   tags?: ReactNode[];
   sideDatas?: { data: ReactNode; label: string; key: string }[];
   tabs?: { label: ReactNode; link: string; key: string }[];
-  opportunity?: Opportunity;
 }>;
 
 export default function Hero({

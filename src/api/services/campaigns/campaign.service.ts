@@ -1,7 +1,20 @@
 import type { Campaign } from "@merkl/api";
+import { fetchWithLogs } from "src/api/utils";
 import { api } from "../../index.server";
 
 export abstract class CampaignService {
+  static async #fetch<R, T extends { data: R; status: number; response: Response }>(
+    call: () => Promise<T>,
+    resource = "Opportunity",
+  ): Promise<NonNullable<T["data"]>> {
+    const { data, status } = await fetchWithLogs(call);
+
+    if (status === 404) throw new Response(`${resource} not found`, { status });
+    if (status === 500) throw new Response(`${resource} unavailable`, { status });
+    if (data == null) throw new Response(`${resource} unavailable`, { status });
+    return data;
+  }
+
   /**
    * Retrieves opportunities query params from page request
    * @param request request containing query params such as chains, status, pagination...
@@ -43,8 +56,7 @@ export abstract class CampaignService {
   }
 
   static async getByParams(query: Parameters<typeof api.v4.campaigns.index.get>[0]["query"]) {
-    const { data } = await api.v4.campaigns.index.get({ query });
-    return data;
+    return await CampaignService.#fetch(async () => api.v4.campaigns.index.get({ query }));
   }
 
   // ------ Fetch a campaign by ID

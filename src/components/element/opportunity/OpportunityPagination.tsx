@@ -19,7 +19,7 @@ export default function OpportunityPagination({ count }: OpportunityPaginationPr
     v => Number.parseInt(v),
   );
 
-  const pages = useMemo(() => Math.round((count ?? 0) / (itemsFilter ?? 20)) - 1, [count, itemsFilter]);
+  const pages = useMemo(() => Math.ceil((count ?? 0) / (itemsFilter ?? 20)), [count, itemsFilter]);
   const pageOptions = useMemo(() => {
     return [...Array(Math.max(Math.round(pages ?? 0), 1)).fill(0)]
       .map((_, index) => index + 1)

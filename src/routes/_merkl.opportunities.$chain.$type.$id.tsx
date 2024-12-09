@@ -61,6 +61,8 @@ export default function Index() {
       .flatMap((str, index, arr) => [str, index !== arr.length - 1 && " "]);
   }, [opportunity]);
 
+  const currentLiveCampaign = opportunity.campaigns?.[0];
+
   return (
     <>
       <Meta />
@@ -76,7 +78,7 @@ export default function Index() {
           { label: "Overview", link, key: crypto.randomUUID() },
           {
             label: "Leaderboard",
-            link: `${link}/leaderboard`,
+            link: `${link}/leaderboard?campaignId=${currentLiveCampaign?.campaignId}`,
             key: crypto.randomUUID(),
           },
         ]}
@@ -89,8 +91,7 @@ export default function Index() {
             {...tag}
             size="md"
           />
-        ))}
-        opportunity={opportunity}>
+        ))}>
         <Outlet context={{ opportunity }} />
       </Hero>
     </>

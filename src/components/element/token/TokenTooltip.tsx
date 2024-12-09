@@ -3,7 +3,6 @@ import { Button, Divider, Group, Hash, Icon, Text, Title } from "packages/dappki
 
 export type TokenTooltipProps = {
   token: Token;
-  amount?: number;
 };
 
 export default function TokenTooltip({ token }: TokenTooltipProps) {

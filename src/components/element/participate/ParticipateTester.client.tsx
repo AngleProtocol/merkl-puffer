@@ -75,7 +75,7 @@ export default function ParticipateTester({ chains }: ParticipateTesterProps) {
                   {/* <Icon size="sm" src={target.icon} /> */}
                   {/* {target.name} */}
                   {target?.tokens.map(tkn => (
-                    <Token key={tkn.address} value token={tkn} />
+                    <Token key={tkn.address} value token={tkn} format="amount" />
                   ))}
                 </>
               ),

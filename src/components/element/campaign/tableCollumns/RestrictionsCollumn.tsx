@@ -1,4 +1,4 @@
-import type { Campaign } from "@angleprotocol/merkl-api";
+import type { Campaign } from "@merkl/api";
 import { Button, Dropdown } from "packages/dappkit/src";
 
 type IProps = {

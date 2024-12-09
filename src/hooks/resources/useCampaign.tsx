@@ -1,23 +1,55 @@
+import type { Campaign, Opportunity } from "@merkl/api";
 import { Bar } from "dappkit";
 import moment from "moment";
 import { Group, Text, Value } from "packages/dappkit/src";
 import Time from "packages/dappkit/src/components/primitives/Time";
 import { type ReactNode, useMemo } from "react";
-import type { Campaign } from "src/api/services/campaigns/campaign.model";
-import type { Opportunity } from "src/api/services/opportunity/opportunity.model";
-import { formatUnits } from "viem";
+import { formatUnits, parseUnits } from "viem";
 
-export default function useCampaign(campaign: Campaign) {
+export default function useCampaign(campaign?: Campaign) {
+  if (!campaign)
+    return {
+      amount: undefined,
+      time: undefined,
+      profile: undefined,
+      dailyRewards: undefined,
+      progressBar: undefined,
+      active: undefined,
+    };
+
+  // ─── Campaign Amount Prices ──────────────────────────────────
+
   const amount = useMemo(() => {
-    return Number.parseFloat(formatUnits(BigInt(campaign.amount), campaign.rewardToken.decimals));
-  }, [campaign?.amount, campaign?.rewardToken?.decimals]);
+    return parseUnits(campaign.amount, 0);
+  }, [campaign?.amount]);
+
+  const dailyRewards = useMemo(() => {
+    const duration = campaign.endTimestamp - campaign.startTimestamp;
+    const oneDayInSeconds = BigInt(3600 * 24);
+    const dayspan = BigInt(duration) / BigInt(oneDayInSeconds) || BigInt(1);
+    const amountInUnits = parseUnits(amount.toString(), 0);
+    const dailyReward = amountInUnits / dayspan;
+
+    return dailyReward;
+  }, [campaign, amount]);
+
+  const dailyRewardsUsd = useMemo(() => {
+    return formatUnits(
+      parseUnits(dailyRewards.toString(), 0) * parseUnits(campaign.rewardToken.price?.toString() ?? "0", 18),
+      18,
+    );
+  }, [campaign, dailyRewards]);
+
+  // ─── Campaign Amount Time displaying ──────────────────────────────────
 
   const time = useMemo(() => {
     return <Time timestamp={Number(campaign.endTimestamp) * 1000} />;
   }, [campaign.endTimestamp]);
 
   const profile = useMemo(() => {
-    type ProfileReducer = { [C in Opportunity["type"]]?: (_campaign: Campaign<C>) => ReactNode };
+    type ProfileReducer = {
+      [C in Opportunity["type"]]?: (_campaign: Campaign<C>) => ReactNode;
+    };
 
     const reducer: ProfileReducer = {
       CLAMM: ({ params }) => {
@@ -25,8 +57,14 @@ export default function useCampaign(campaign: Campaign) {
           <Group size="xl" className="flex-nowrap [&>*]:flex-col [&>*]:justify-center">
             {[
               { label: "Fees", value: params.weightFees / 10000 },
-              { label: params.symbolToken0, value: params.weightToken0 / 10000 },
-              { label: params.symbolToken1, value: params.weightToken1 / 10000 },
+              {
+                label: params.symbolToken0,
+                value: params.weightToken0 / 10000,
+              },
+              {
+                label: params.symbolToken1,
+                value: params.weightToken1 / 10000,
+              },
             ].map(({ label, value }) => {
               return (
                 <Group key={`${label}:${value}`} size="sm" className="justify-center gap-0">
@@ -41,8 +79,7 @@ export default function useCampaign(campaign: Campaign) {
         );
       },
     };
-
-    return reducer[campaign.type]?.(campaign) ?? <Text>NONE</Text>;
+    return reducer[campaign.type]?.(campaign);
   }, [campaign]);
 
   const progressBar = useMemo(() => {
@@ -79,16 +116,17 @@ export default function useCampaign(campaign: Campaign) {
     );
   }, [campaign.startTimestamp, campaign.endTimestamp]);
 
-  const dailyRewards = useMemo(() => {
-    const duration = Number(campaign.endTimestamp - campaign.startTimestamp);
-    const dayspan = Math.max(duration / (3600 * 24), 1);
-
-    return amount / dayspan;
-  }, [campaign, amount]);
-
   const active = useMemo(() => {
     return Number(campaign.endTimestamp) > moment().unix();
   }, [campaign.endTimestamp]);
 
-  return { amount, time, profile, dailyRewards, progressBar, active };
+  return {
+    amount,
+    dailyRewards,
+    dailyRewardsUsd,
+    time,
+    profile,
+    progressBar,
+    active,
+  };
 }

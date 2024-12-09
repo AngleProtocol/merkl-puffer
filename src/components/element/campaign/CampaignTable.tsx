@@ -9,19 +9,19 @@ export const [CampaignTable, CampaignRow, CampaignColumns] = createTable({
     main: true,
   },
   restrictions: {
-    name: "Conditions",
+    name: "",
     size: "minmax(170px,1fr)",
     compactSize: "1fr",
     className: "justify-start",
   },
   chain: {
-    name: "chain",
+    name: "Chain",
     size: "minmax(30px,150px)",
     compactSize: "minmax(20px,1fr)",
     className: "justify-start",
   },
   timeRemaining: {
-    name: "Time Left",
+    name: "End",
     size: "minmax(30px,150px)",
     compactSize: "minmax(20px,1fr)",
     className: "justify-center",

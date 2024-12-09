@@ -50,6 +50,35 @@ export abstract class RewardService {
     return data;
   }
 
+  /**
+   * Retrieves opportunities query params from page request
+   * @param request request containing query params such as chains, status, pagination...
+   * @param override params for which to override value
+   * @returns query
+   */
+  static #getQueryFromRequest(request: Request, override?: Parameters<typeof api.v4.rewards.index.get>[0]["query"]) {
+    const campaignId = new URL(request.url).searchParams.get("campaignId");
+    const page = new URL(request.url).searchParams.get("page");
+    const items = new URL(request.url).searchParams.get("items");
+
+    const filters = Object.assign(
+      {
+        campaignId,
+        items: items ?? 50,
+        page,
+      },
+      override ?? {},
+      page !== null && { page: Number(page) - 1 },
+    );
+
+    const query = Object.entries(filters).reduce(
+      (_query, [key, filter]) => Object.assign(_query, filter == null ? {} : { [key]: filter }),
+      {},
+    );
+
+    return query;
+  }
+
   static async getForUser(address: string): Promise<Reward[]> {
     const rewards = await RewardService.#fetch(async () => api.v4.users({ address }).rewards.full.get());
 
@@ -57,33 +86,34 @@ export abstract class RewardService {
     return rewards;
   }
 
-  static async getByParams(query: {
-    items?: number;
-    page?: number;
-    chainId: number;
-    campaignIds: string[];
-  }) {
+  static async getManyFromRequest(
+    request: Request,
+    overrides?: Parameters<typeof api.v4.rewards.index.get>[0]["query"],
+  ) {
+    return RewardService.getByParams(Object.assign(RewardService.#getQueryFromRequest(request), overrides ?? {}));
+  }
+
+  static async getByParams(query: Parameters<typeof api.v4.rewards.index.get>[0]["query"]) {
     const rewards = await RewardService.#fetch(async () =>
       api.v4.rewards.index.get({
-        query: {
-          ...query,
-          campaignIds: query.campaignIds.join(","),
-        },
+        query,
       }),
     );
 
-    return rewards as unknown as IRewards[];
+    const count = await RewardService.#fetch(async () => api.v4.rewards.count.get({ query }));
+
+    return { count, rewards };
   }
 
   static async total(query: {
     chainId: number;
-    campaignIds: string[];
+    campaignId: string;
   }): Promise<ITotalRewards> {
     const total = await RewardService.#fetch(async () =>
       api.v4.rewards.total.get({
         query: {
           ...query,
-          campaignIds: query.campaignIds.join(","),
+          campaignId: query.campaignId,
         },
       }),
     );

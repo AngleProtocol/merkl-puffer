@@ -1,29 +1,31 @@
-import { type Component, Hash, Text, Value, mergeClass } from "dappkit";
-import { useMemo } from "react";
+import type { Campaign } from "@merkl/api";
+import { type Component, Hash, Text, mergeClass } from "dappkit";
 import type { IRewards } from "src/api/services/reward.service";
-import { formatUnits, parseUnits } from "viem";
+import { parseUnits } from "viem";
+import Token from "../token/Token";
 import { LeaderboardRow } from "./LeaderboardTable";
 
 export type CampaignTableRowProps = Component<{
   row: IRewards;
   rank: number;
+  campaign: Campaign;
 }>;
 
 export default function LeaderboardTableRow({ row, rank, className, ...props }: CampaignTableRowProps) {
-  const rewardAmount = useMemo(() => formatUnits(parseUnits(row?.amount, 0), row?.Token?.decimals), [row]);
+  const { campaign } = props;
 
   return (
     <LeaderboardRow
       {...props}
       className={mergeClass("cursor-pointer", className)}
       rankColumn={<Text>#{rank}</Text>}
-      addressColumn={<Hash format="short">{row?.recipient}</Hash>}
-      rewardsColumn={
-        <Value className="text-right" look={rewardAmount === "0" ? "soft" : "base"} format="$0,0.#">
-          {rewardAmount}
-        </Value>
+      addressColumn={
+        <Hash format="short" copy>
+          {row?.recipient}
+        </Hash>
       }
-      protocolColumn={<Text>{row?.reason.split("_")[0]}</Text>}
+      rewardsColumn={<Token token={campaign.rewardToken} format="amount_price" amount={parseUnits(row?.amount, 0)} />}
+      protocolColumn={<Text>{row?.reason?.split("_")[0]}</Text>}
     />
   );
 }
