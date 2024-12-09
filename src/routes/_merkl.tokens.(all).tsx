@@ -13,10 +13,17 @@ export default function Index() {
       title={"Tokens"}
       breadcrumbs={[{ link: "/tokens", name: "Tokens" }]}
       description={"Tokens indexed by Merkl"}
+      // TODO: Make this dynamic
       sideDatas={[
-        { data: "8%", label: "Total opportunities", key: crypto.randomUUID() },
-        { data: "99.999", label: "Price", key: crypto.randomUUID() },
-      ]}>
+        {
+          data: "25",
+          label: "Live opportunities",
+          key: crypto.randomUUID(),
+        },
+        { data: "400%", label: "Max APR", key: crypto.randomUUID() },
+        { data: "$4k", label: "Daily rewards", key: crypto.randomUUID() },
+      ]}
+    >
       <Outlet />
     </Hero>
   );

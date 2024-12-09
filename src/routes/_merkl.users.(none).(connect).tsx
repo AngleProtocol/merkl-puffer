@@ -1,7 +1,7 @@
 import { useNavigate } from "@remix-run/react";
 import { Button, Connected, Container, Group, Icon, Input, Space, Text } from "dappkit";
 import { useWalletContext } from "packages/dappkit/src/context/Wallet.context";
-import { Format } from "packages/dappkit/src/utils/format";
+import { Fmt } from "packages/dappkit/src/utils/formatter.service";
 import { useState } from "react";
 
 export default function Index() {
@@ -18,7 +18,7 @@ export default function Index() {
           <Space size="xl" />
           <Connected>
             <Button onClick={() => navigate(`/users/${address}`)} look="hype">
-              Open {Format.address(address, "short")}
+              Open {Fmt.address(address, "short")}
             </Button>
           </Connected>
         </Group>

@@ -26,15 +26,6 @@ export default function OpportunityTableRow({ hideTags, opportunity, className, 
         content="sm"
         className={mergeClass("", className)}
         {...props}
-        actionsColumn={
-          <Group className="py-xl">
-            {tags
-              ?.filter(({ type }) => !hideTags || hideTags.includes(type))
-              .map(tag => {
-                return <Tag key={`${tag.type}_${tag.value?.address ?? tag.value}`} {...tag} size="lg" />;
-              })}
-          </Group>
-        }
         apyColumn={
           <Group className="py-xl">
             {/* TODO: Transform in Button so we can show an APY modal */}

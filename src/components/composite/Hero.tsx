@@ -34,7 +34,7 @@ export default function Hero({
       <Group
         className={`${
           location?.pathname === "/" || location?.pathname.includes("opportunities") ? "bg-cover" : "bg-main-6"
-        } flex-row justify-between bg-no-repeat xl:aspect-auto xl:min-h-[350px] aspect-[1440/350]`}
+        } flex-row justify-between bg-no-repeat xl:aspect-auto xl:min-h-[350px] aspect-[1440/300]`}
         style={{
           backgroundImage:
             location?.pathname === "/" || location?.pathname.includes("opportunities")
@@ -44,7 +44,6 @@ export default function Hero({
         <Container>
           <Group className="flex-col h-full py-xl gap-xl lg:gap-xs">
             <Group className="items-center" size="sm">
-              {/* TODO: Build dynamic breadcrumbs */}
               <Button to={navigation?.link} look="soft" bold size="xs">
                 Home
               </Button>
@@ -59,9 +58,9 @@ export default function Hero({
               })}
             </Group>
             <Group className="grow items-center justify-between gap-xl lg:gap-xl*4">
-              <Group className="flex-col flex-1 gap-xl lg:!gap-lg*2">
+              <Group className="flex-col flex-1 gap-xl lg:gap-lg">
                 <Group>
-                  <Group className="items-center !gap-0 md:!gap-xl">
+                  <Group className="items-center gap-0 md:gap-lg">
                     {!!icons && (
                       <Icons size="lg">
                         {icons?.length > 1
@@ -88,19 +87,21 @@ export default function Hero({
                 </Group>
                 <Divider look="base" />
                 {!!description && (
-                  <Text size="xl" bold>
+                  <Text size="lg" bold>
                     {description}
                   </Text>
                 )}
                 {!!tags && <Group className="mb-lg">{tags}</Group>}
               </Group>
               {!!sideDatas && (
-                <Group className="w-full lg:w-auto lg:flex-col mr-xl*2" size="xl">
+                <Group className="w-full lg:w-auto lg:flex-col mr-xl*2" size="lg">
                   {sideDatas.map(data => (
-                    <Group key={data.key} className="flex-col">
-                      <Text size={3}>{data.data}</Text>
+                    <Group key={data.key} className="flex-col" size="xs">
+                      <Text size={4} className="!text-main-12">
+                        {data.data}
+                      </Text>
 
-                      <Text size="xl" className="font-bold not-italic">
+                      <Text size="md" bold>
                         {data.label}
                       </Text>
                     </Group>
@@ -111,13 +112,9 @@ export default function Hero({
           </Group>
         </Container>
       </Group>
-      <Container>
-        {!!tabs && (
-          <Group size="xl" className="my-lg">
-            <Tabs tabs={tabs} look="base" size="lg" />
-          </Group>
-        )}
-      </Container>
+
+      {!!tabs && <Tabs tabs={tabs} look="base" size="lg" />}
+
       <div>{children}</div>
     </>
   );

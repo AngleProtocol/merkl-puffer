@@ -121,7 +121,7 @@ export default function Tag<T extends keyof TagTypes>({ type, value, ...props }:
               </Button>
             </Group>
           }>
-          <PrimitiveTag look="bold" key={value} {...props}>
+          <PrimitiveTag look="tint" key={value} {...props}>
             <Icon size={props?.size} {...action.icon} />
             {action?.label}
           </PrimitiveTag>

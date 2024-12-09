@@ -12,7 +12,18 @@ export default function Index() {
       icons={[{ remix: "RiContactsBook2Line" }]}
       title={"Protocols"}
       breadcrumbs={[{ link: "/protocols", name: "Protocols" }]}
-      description={"Protocols integrated by Merkl"}>
+      description={"Protocols integrated by Merkl"}
+      // TODO: Make this dynamic
+      sideDatas={[
+        {
+          data: "25",
+          label: "Live opportunities",
+          key: crypto.randomUUID(),
+        },
+        { data: "400%", label: "Max APR", key: crypto.randomUUID() },
+        { data: "$4k", label: "Daily rewards", key: crypto.randomUUID() },
+      ]}
+    >
       <Outlet />
     </Hero>
   );

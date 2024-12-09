@@ -84,14 +84,25 @@ export default function Index() {
         ]}
         tags={tags.map(tag => (
           <Tag
-            key={`${tag.type}_${
+            key={`${tag?.type}_${
               // biome-ignore lint/suspicious/noExplicitAny: templated type
-              (tag.value as any)?.address ?? tag.value
+              (tag?.value as any)?.address ?? tag?.value
             }`}
             {...tag}
-            size="md"
+            size="sm"
           />
-        ))}>
+        ))}
+        // TODO: Make this dynamic
+        sideDatas={[
+          {
+            data: "25",
+            label: "Live opportunities",
+            key: crypto.randomUUID(),
+          },
+          { data: "400%", label: "Max APR", key: crypto.randomUUID() },
+          { data: "$4k", label: "Daily rewards", key: crypto.randomUUID() },
+        ]}
+      >
         <Outlet context={{ opportunity }} />
       </Hero>
     </>

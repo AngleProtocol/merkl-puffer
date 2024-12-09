@@ -67,6 +67,16 @@ export default function Index() {
           key: crypto.randomUUID(),
         },
       ]}
+      // TODO: Make this dynamic
+      sideDatas={[
+        {
+          data: "25",
+          label: "Live opportunities",
+          key: crypto.randomUUID(),
+        },
+        { data: "400%", label: "Max APR", key: crypto.randomUUID() },
+        { data: "$4k", label: "Daily rewards", key: crypto.randomUUID() },
+      ]}
       tags={tags.map(tag => <Tag key={`${tag.type}_${tag.value?.address ?? tag.value}`} {...tag} size="lg" />)}>
       <Outlet />
     </Hero>

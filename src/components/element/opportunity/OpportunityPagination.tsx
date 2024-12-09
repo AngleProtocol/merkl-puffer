@@ -1,4 +1,4 @@
-import { Button, Group, Icon, List, Select } from "dappkit/src";
+import { Button, Group, Icon, Select } from "dappkit/src";
 import { useMemo } from "react";
 import useSearchParamState from "src/hooks/filtering/useSearchParamState";
 
@@ -28,30 +28,32 @@ export default function OpportunityPagination({ count }: OpportunityPaginationPr
 
   return (
     <Group className="justify-between">
-      <List flex="row">
+      <Group>
+        <Button look="soft" size="xs" onClick={() => setItemsFilter(Math.min(50, (itemsFilter ?? 0) + 10))}>
+          More <Icon remix="RiArrowDownLine" />
+        </Button>
+        <Select state={[itemsFilter, setItemsFilter]} look="base" size="xs" options={{ 50: "50", 100: "100" }} />
+        <Button look="soft" size="xs" onClick={() => setItemsFilter(Math.max(10, (itemsFilter ?? 0) - 10))}>
+          Less <Icon remix="RiArrowUpLine" />
+        </Button>
+      </Group>
+      <Group>
         <Button
-          look="soft"
+          look="base"
+          size="xs"
           disabled={(pageFilter ?? 0) <= 1}
           onClick={() => setPageFilter(Math.max(1, (pageFilter ?? 0) - 1))}>
           <Icon remix="RiArrowLeftLine" />
         </Button>
-        <Select state={[pageFilter, setPageFilter]} look="soft" options={pageOptions} />
+        <Select state={[pageFilter, setPageFilter]} look="base" size="xs" options={pageOptions} />
         <Button
-          look="soft"
+          look="base"
+          size="xs"
           disabled={(pageFilter ?? 0) >= pages}
           onClick={() => setPageFilter(Math.min(pages, (pageFilter ?? 0) + 1))}>
           <Icon remix="RiArrowRightLine" />
         </Button>
-      </List>
-      <List flex="row">
-        <Button onClick={() => setItemsFilter(Math.min(50, (itemsFilter ?? 0) + 10))}>
-          More <Icon remix="RiArrowDownLine" />
-        </Button>
-        <Select state={[itemsFilter, setItemsFilter]} look="soft" options={{ 50: "50", 100: "100" }} />
-        <Button look="soft" onClick={() => setItemsFilter(Math.max(10, (itemsFilter ?? 0) - 10))}>
-          Less <Icon remix="RiArrowUpLine" />
-        </Button>
-      </List>
+      </Group>
     </Group>
   );
 }

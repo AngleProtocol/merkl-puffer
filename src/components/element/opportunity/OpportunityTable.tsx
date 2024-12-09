@@ -8,12 +8,6 @@ export const [OpportunityTable, OpportunityRow, opportunityColumns] = createTabl
     className: "justify-start",
     main: true,
   },
-  actions: {
-    name: "Actions",
-    size: "minmax(min-content,150px)",
-    compactSize: "minmax(min-content,1fr)",
-    className: "justify-center",
-  },
   apy: {
     name: "APY",
     size: "minmax(min-content,150px)",
