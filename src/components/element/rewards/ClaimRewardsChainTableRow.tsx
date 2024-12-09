@@ -1,5 +1,5 @@
 import type { Reward } from "@merkl/api";
-import { Button, type Component, Icon, Space, Text, Value, mergeClass } from "dappkit";
+import { Button, type Component, Icon, Space, Value, mergeClass } from "dappkit";
 import TransactionButton from "packages/dappkit/src/components/dapp/TransactionButton";
 import Collapsible from "packages/dappkit/src/components/primitives/Collapsible";
 import EventBlocker from "packages/dappkit/src/components/primitives/EventBlocker";
@@ -59,6 +59,14 @@ export default function ClaimRewardsChainTableRow({
     );
   }, [reward]);
 
+  const pending = useMemo(() => {
+    return reward.rewards.reduce(
+      (sum, { pending, token: { decimals, price } }) =>
+        sum + Number.parseFloat(formatUnits(pending, decimals)) * (price ?? 0),
+      0,
+    );
+  }, [reward]);
+
   const claimed = useMemo(() => {
     return reward.rewards.reduce(
       (sum, { claimed, token: { decimals, price } }) =>
@@ -73,6 +81,7 @@ export default function ClaimRewardsChainTableRow({
         .sort((a, b) => Number(b.amount - b.claimed - (a.amount - a.claimed)))
         .map(_reward => (
           <ClaimRewardsTokenTableRow
+            key={_reward.token.address}
             className="cursor-pointer [&>*>*]:cursor-auto"
             checkedState={[
               selectedTokens.has(_reward.token.address),
@@ -85,7 +94,6 @@ export default function ClaimRewardsChainTableRow({
                 });
               },
             ]}
-            key={_reward.token.address}
             reward={_reward}
           />
         )),
@@ -112,31 +120,38 @@ export default function ClaimRewardsChainTableRow({
                   Claim
                 </TransactionButton>
               ) : (
-                <Button onClick={() => switchChain(reward.chain.id)}>Switch</Button>
+                <Button className="ml-xl" onClick={() => switchChain(reward.chain.id)}>
+                  Switch
+                </Button>
               ))}
           </EventBlocker>
         </>
       }
+      pendingColumn={
+        pending === 0 ? undefined : (
+          <Value size="lg" format="$0,0" look="bold" className="font-title">
+            {pending}
+          </Value>
+        )
+      }
       unclaimedColumn={
-        <Value size="lg" format="$0,0">
-          {unclaimed}
-        </Value>
+        unclaimed === 0 ? undefined : (
+          <Value size="lg" format="$0,0" look="bold" className="font-title">
+            {unclaimed}
+          </Value>
+        )
       }
       claimedColumn={
-        <Value size="lg" format="$0,0">
-          {claimed}
-        </Value>
+        claimed === 0 ? undefined : (
+          <Value size="lg" format="$0,0" look="bold" className="font-title">
+            {claimed}
+          </Value>
+        )
       }>
       <Collapsible state={[open, setOpen]}>
         <Space size="md" />
-        <ClaimRewardsTokenTable
-          tokenHeader={
-            <Text size="xs" className="pl-md">
-              Token
-            </Text>
-          }
-          size="sm"
-          look="soft">
+        {/* <List size="md" dividerClassName={() => "bg-main-8"}>{renderTokenRewards}</List> */}
+        <ClaimRewardsTokenTable size="sm" dividerClassName={() => "!bg-main-8"} className="[&>*]:bg-main-4" look="soft">
           {renderTokenRewards}
         </ClaimRewardsTokenTable>
       </Collapsible>

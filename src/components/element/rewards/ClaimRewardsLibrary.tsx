@@ -11,7 +11,7 @@ export type ClaimRewardsLibraryProps = {
 export default function ClaimRewardsLibrary({ from, rewards }: ClaimRewardsLibraryProps) {
   return (
     <Group className="flex-row w-full [&>*]:flex-grow">
-      <ClaimRewardsChainTable>
+      <ClaimRewardsChainTable dividerClassName={index => (index === 1 ? "bg-accent-10" : "bg-main-7")}>
         {rewards?.map((reward, index) => (
           <ClaimRewardsChainTableRow {...{ from, reward }} key={reward.chain?.id ?? index} />
         ))}

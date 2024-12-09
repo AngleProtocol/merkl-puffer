@@ -56,7 +56,7 @@ export default function Index() {
   return (
     <Hero
       breadcrumbs={[
-        { link: "/", name: "Users" },
+        { link: "/users/", name: "Users" },
         {
           link: `/users/${address ?? ""}`,
           component: (

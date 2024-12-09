@@ -65,7 +65,7 @@ export default function ClaimRewardsTokenTableRow({ reward, checkedState, ...pro
                   {...props}
                   key={b.opportunity.identifier}
                   data-look={props?.look ?? "none"}
-                  className="!px-0  !m-0 border-none"
+                  className="!px-0 py-xl  !m-0 border-none bg-main-0"
                   onClick={() => setOpen(o => !o)}
                   tokenColumn={
                     <Group className="flex-col justify-center">

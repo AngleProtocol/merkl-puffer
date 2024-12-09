@@ -8,21 +8,21 @@ export const [ClaimRewardsTokenTable, ClaimRewardsTokenRow, claimRewardsTokenCol
     className: "justify-start",
     main: true,
   },
-  pending: {
-    name: "Pending",
-    size: "minmax(min-content,150px)",
+  amount: {
+    name: "Claimable Now",
+    size: "minmax(min-content,200px)",
     compactSize: "minmax(min-content,200px)",
     className: "justify-end",
   },
-  amount: {
-    name: "Unclaimed",
-    size: "minmax(min-content,150px)",
+  pending: {
+    name: "Claimable Soon",
+    size: "minmax(min-content,200px)",
     compactSize: "minmax(min-content,200px)",
     className: "justify-end",
   },
   claimed: {
     name: "Claimed",
-    size: "minmax(min-content,150px)",
+    size: "minmax(min-content,200px)",
     compactSize: "minmax(min-content,200px)",
     className: "justify-end",
   },
