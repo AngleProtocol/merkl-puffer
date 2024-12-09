@@ -3,7 +3,7 @@ import { createTable } from "dappkit";
 export const [LeaderboardTable, LeaderboardRow, LeaderboardColumns] = createTable({
   rank: {
     name: "Rank",
-    size: "minmax(30px,60px)",
+    size: "minmax(120px,150px)",
     compact: "1fr",
     className: "justify-start",
     main: true,
@@ -24,6 +24,6 @@ export const [LeaderboardTable, LeaderboardRow, LeaderboardColumns] = createTabl
     name: "Reason",
     size: "minmax(30px,0.5fr)",
     compactSize: "minmax(20px,1fr)",
-    className: "justify-center",
+    className: "justify-end",
   },
 });

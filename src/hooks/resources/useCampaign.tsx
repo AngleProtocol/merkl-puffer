@@ -1,12 +1,16 @@
-import type { Campaign, Opportunity } from "@merkl/api";
-import { Bar } from "dappkit";
+import type { Campaign as CampaignFromApi } from "@merkl/api";
+import { Bar, Icon } from "dappkit";
 import moment from "moment";
 import { Group, Text, Value } from "packages/dappkit/src";
 import Time from "packages/dappkit/src/components/primitives/Time";
 import { type ReactNode, useMemo } from "react";
-import { formatUnits, parseUnits } from "viem";
+import type { Campaign } from "src/api/services/campaigns/campaign.model";
+import type { Opportunity } from "src/api/services/opportunity/opportunity.model";
+import type { RuleType } from "src/components/element/campaign/rules/Rule";
+import Token from "src/components/element/token/Token";
+import { parseUnits } from "viem";
 
-export default function useCampaign(campaign?: Campaign) {
+export default function useCampaign(campaign?: Campaign, opportunity?: Opportunity) {
   if (!campaign)
     return {
       amount: undefined,
@@ -33,22 +37,112 @@ export default function useCampaign(campaign?: Campaign) {
     return dailyReward;
   }, [campaign, amount]);
 
-  const dailyRewardsUsd = useMemo(() => {
-    return formatUnits(
-      parseUnits(dailyRewards.toString(), 0) * parseUnits(campaign.rewardToken.price?.toString() ?? "0", 18),
-      18,
-    );
-  }, [campaign, dailyRewards]);
-
   // ─── Campaign Amount Time displaying ──────────────────────────────────
 
   const time = useMemo(() => {
-    return <Time timestamp={Number(campaign.endTimestamp) * 1000} />;
+    const live = campaign.endTimestamp > moment.now();
+
+    return (
+      <>
+        {!live && "Ended "}
+        <Time prefix={live ? "Live for" : "Past since"} timestamp={Number(campaign.endTimestamp) * 1000} />
+      </>
+    );
   }, [campaign.endTimestamp]);
+
+  const rules = useMemo(() => {
+    const typeSpecificRule: { [C in CampaignFromApi["type"]]?: (scopedCampaign: Campaign<C>) => RuleType[] } = {
+      CLAMM: c =>
+        (
+          [
+            {
+              type: "liquidity" as const,
+              value: {
+                label: (
+                  <>
+                    <Icon remix="RiDiscountPercentFill" />
+                    Fees
+                  </>
+                ),
+                percentage: c.params.weightFees,
+              },
+            },
+            !!opportunity && {
+              type: "liquidity" as const,
+              value: { label: <Token value token={opportunity.tokens?.[0]} />, percentage: c.params.weightToken0 },
+            },
+            !!opportunity && {
+              type: "liquidity" as const,
+              value: { label: <Token value token={opportunity.tokens?.[1]} />, percentage: c.params.weightToken1 },
+            },
+            !c.params.isOutOfRangeIncentivized && {
+              type: "boolean",
+              value: {
+                description: <>Positions that are out of range won't earn rewards</>,
+                label: (
+                  <>
+                    <Icon remix="RiStockFill" />
+                    In Range
+                  </>
+                ),
+              },
+            },
+          ] as const
+        ).filter(a => !!a),
+    };
+
+    const noListTypes = ["JSON_AIRDROP", "ERC20_SNAPSHOT", "INVALID"] as const satisfies Campaign["type"][];
+    type WithList = Exclude<Campaign["type"], (typeof noListTypes)[number]>;
+
+    const blacklist: RuleType<"address"> | undefined = !noListTypes.includes(
+      campaign.type as (typeof noListTypes)[number],
+    )
+      ? (campaign as Campaign<WithList>).params.blacklist.length
+        ? {
+            type: "address",
+            value: {
+              label: (
+                <>
+                  <Icon remix="RiSpam3Fill" />
+                  Blacklist
+                </>
+              ),
+              addresses: (campaign as Campaign<WithList>).params.blacklist,
+            },
+          }
+        : undefined
+      : undefined;
+
+    const whitelist: RuleType<"address"> | undefined = !noListTypes.includes(
+      campaign.type as (typeof noListTypes)[number],
+    )
+      ? (campaign as Campaign<WithList>).params.whitelist.length
+        ? {
+            type: "address",
+            value: {
+              label: (
+                <>
+                  <Icon remix="RiProhibitedFill" />
+                  Whitelist
+                </>
+              ),
+              addresses: (campaign as Campaign<WithList>).params.whitelist,
+            },
+          }
+        : undefined
+      : undefined;
+
+    return (
+      ([] as RuleType[])
+        // biome-ignore lint/suspicious/noExplicitAny: type is enforced above
+        .concat(typeSpecificRule?.[campaign.type]?.(campaign as any) ?? [])
+        .concat([blacklist, whitelist].filter(a => !!a))
+    );
+  }, [campaign, opportunity]);
 
   const profile = useMemo(() => {
     type ProfileReducer = {
-      [C in Opportunity["type"]]?: (_campaign: Campaign<C>) => ReactNode;
+      [C in Opportunity["type"]]?: (_campaign: CampaignFromApi<C>) => ReactNode;
     };
 
     const reducer: ProfileReducer = {
@@ -123,9 +217,9 @@ export default function useCampaign(campaign?: Campaign) {
   return {
     amount,
     dailyRewards,
-    dailyRewardsUsd,
     time,
     profile,
+    rules,
     progressBar,
     active,
   };

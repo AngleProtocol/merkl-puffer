@@ -1,9 +1,8 @@
 import type { Campaign } from "@merkl/api";
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json, useLoaderData } from "@remix-run/react";
+import { Box, Container, Group, Hash, Icon, OverrideTheme, Select, Space, Title, Value } from "dappkit";
 import moment from "moment";
-import { Container, Group, Hash, Icon, OverrideTheme, Select, Space, Text, Value } from "packages/dappkit/src";
-import Tooltip from "packages/dappkit/src/components/primitives/Tooltip";
 import { useCallback, useMemo } from "react";
 import { CampaignService } from "src/api/services/campaigns/campaign.service";
 import { ChainService } from "src/api/services/chain.service";
@@ -31,19 +30,20 @@ export async function loader({ params: { id, type, chain: chainId }, request }: 
     mainParameter: id,
   });
 
-  const { rewards, count } = await RewardService.getManyFromRequest(request, {
+  const { rewards, count, total } = await RewardService.getManyFromRequest(request, {
     chainId: chain.id,
   });
 
   return json({
     rewards,
     campaigns,
-    count: count,
+    count,
+    total,
   });
 }
 
 export default function Index() {
-  const { rewards, campaigns, count } = useLoaderData<typeof loader>();
+  const { rewards, campaigns, count, total } = useLoaderData<typeof loader>();
 
   const [campaignId, setCampaignIds] = useSearchParamState<string>(
     "campaignId",
@@ -59,10 +59,8 @@ export default function Index() {
   const totalRewardsAllCampaigns = useMemo(() => {
     if (!selectedCampaign) return "0";
 
-    return formatUnits(
-      parseUnits(selectedCampaign?.amount, 0) * parseUnits(selectedCampaign?.rewardToken.price?.toString() ?? "0", 0),
-      selectedCampaign?.rewardToken?.decimals,
-    );
+    const amountUSD = formatUnits(BigInt(selectedCampaign?.amount ?? "0n"), selectedCampaign?.rewardToken.decimals);
+    return Number.parseFloat(amountUSD) * (selectedCampaign?.rewardToken?.price ?? 0);
   }, [selectedCampaign]);
 
   // --------------- Campaign utils ---------------
@@ -99,33 +97,59 @@ export default function Index() {
     {} as Record<string, React.ReactNode>,
   );
 
+  const metrics = useMemo(
+    () =>
+      (
+        [
+          [
+            "Total Rewarded Users",
+            <Value value key="users" format="0">
+              {count?.count}
+            </Value>,
+          ],
+          [
+            "Total Rewards Distributed",
+            <Value value key="users" format="$0a">
+              {totalRewardsAllCampaigns}
+            </Value>,
+          ],
+        ] as const
+      ).map(([label, value]) => (
+        <Box
+          key={label}
+          look="soft"
+          size="lg"
+          content="xs"
+          className="justify-between !p-xl items-center flex-row border-2 bg-main-0 border-main-8 flex-1">
+          <Title h={3} size="lg" className="!text-main-11 uppercase font-bold">
+            {label}
+          </Title>
+          {/* Probably a count from api */}
+          <Title h={3}>{value}</Title>
+        </Box>
+      )),
+    [totalRewardsAllCampaigns, count],
+  );
+
+  console.log("T", totalRewardsAllCampaigns);
+
   return (
     <Container>
-      <Select
-        options={campaignsOptions}
-        state={[campaignId, id => setCampaignIds(id as string)]}
-        placeholder={!!campaignId ? "Campaign Selected" : "Please select a campaign"}
-      />
+      <Box content="xl" size="md">
+        <Select
+          size="xl"
+          look="bold"
+          options={campaignsOptions}
+          state={[campaignId, id => setCampaignIds(id as string)]}
+          placeholder={!!campaignId ? "Campaign Selected" : "Please select a campaign"}
+        />
+      </Box>
       <Space size="lg" />
-      <Group size="lg">
-        <Group className="flex-col border-2 flex-1">
-          <Tooltip helper={null}>
-            <Text>Total rewarded users</Text>
-          </Tooltip>
-          {/* Probably a count from api */}
-          <Text size={"xl"}>{count?.count}</Text>
-        </Group>
-        <Group className="flex-col border-2 flex-1">
-          <Tooltip helper={null}>
-            <Text>Total reward distributed</Text>
-          </Tooltip>
-          <Value size={"xl"} look={totalRewardsAllCampaigns === "0" ? "soft" : "base"} format="$0,0.#">
-            {totalRewardsAllCampaigns}
-          </Value>
-        </Group>
-      </Group>
+      <Group size="lg">{metrics}</Group>
       <Space size="lg" />
-      <LeaderboardLibrary leaderboard={rewards} campaign={selectedCampaign} count={count?.count ?? 0} />
+      {selectedCampaign && (
+        <LeaderboardLibrary leaderboard={rewards} campaign={selectedCampaign} count={count?.count ?? 0} total={total} />
+      )}
     </Container>
   );
 }

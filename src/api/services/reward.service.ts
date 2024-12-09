@@ -101,8 +101,9 @@ export abstract class RewardService {
     );
 
     const count = await RewardService.#fetch(async () => api.v4.rewards.count.get({ query }));
+    const { amount } = await RewardService.#fetch(async () => api.v4.rewards.total.get({ query }));
 
-    return { count, rewards };
+    return { count, rewards, total: amount };
   }
 
   static async total(query: {
