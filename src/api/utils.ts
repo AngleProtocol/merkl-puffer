@@ -26,8 +26,10 @@ export async function fetchWithLogs<R, T extends { data: R; status: number; resp
   const end = performance.now() - start;
 
   process.env.NODE_ENV === "development" &&
-    console.log(
-      `${logStatus(response.status)}${logPerformance(end)}${logSize(+(response.response.headers.get("content-length") ?? 0))}: ${response.response.url}`,
+    console.info(
+      `${logStatus(response.status)}${logPerformance(end)}${logSize(
+        +(response.response.headers.get("content-length") ?? 0),
+      )}: ${response.response.url}`,
     );
 
   return response;

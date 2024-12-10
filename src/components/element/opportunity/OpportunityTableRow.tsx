@@ -1,14 +1,15 @@
+import type { Opportunity } from "@merkl/api";
 import { Link } from "@remix-run/react";
-import { Group } from "dappkit";
+import { Dropdown, Group } from "dappkit";
 import { Icons } from "dappkit";
 import type { BoxProps } from "dappkit";
 import { Title } from "dappkit";
 import { Value } from "dappkit";
 import { Button } from "dappkit";
 import { mergeClass } from "dappkit";
-import type { Opportunity } from "src/api/services/opportunity/opportunity.model";
 import useOpportunity from "src/hooks/resources/useOpportunity";
 import Tag, { type TagTypes } from "../Tag";
+import AprModal from "../apr/AprModal";
 import { OpportunityRow } from "./OpportunityTable";
 
 export type OpportunityTableRowProps = {
@@ -27,23 +28,22 @@ export default function OpportunityTableRow({ hideTags, opportunity, className, 
         className={mergeClass("", className)}
         {...props}
         apyColumn={
-          <Group className="py-xl">
-            {/* TODO: Transform in Button so we can show an APY modal */}
+          <Dropdown size="lg" content={<AprModal opportunity={opportunity} />}>
             <Button look="tint" size="lg" className="font-mono">
               <Value value format="0a%">
                 {opportunity.apr / 100}
               </Value>
             </Button>
-          </Group>
+          </Dropdown>
         }
         tvlColumn={
-          <Group className="py-xl">
+          <Dropdown className="py-xl" content={<AprModal opportunity={opportunity} />}>
             <Button look={(opportunity?.tvlRecord?.total ?? 0) > 0 ? "soft" : "soft"} className="font-mono">
               <Value value format="$0,0.0a">
                 {opportunity.tvl ?? 0}
               </Value>
             </Button>
-          </Group>
+          </Dropdown>
         }
         rewardsColumn={
           <Group className="py-xl">
