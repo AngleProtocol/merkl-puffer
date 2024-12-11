@@ -39,11 +39,11 @@ export default function Hero({
       {/* TODO: On sub-pages (all pages except Opportunities): Replace the banner by a color  */}
       <Group
         className={`${
-          location?.pathname === "/" || location?.pathname.includes("opportunities") ? "bg-cover" : "bg-main-6"
+          location?.pathname === "/" || location?.pathname === "/opportunities" ? "bg-cover" : "bg-main-6"
         } flex-row justify-between bg-no-repeat xl:aspect-auto xl:min-h-[350px] aspect-[1440/300]`}
         style={{
           backgroundImage:
-            location?.pathname === "/" || location?.pathname.includes("opportunities")
+            location?.pathname === "/" || location?.pathname === "/opportunities"
               ? `url('${config.images.hero}')`
               : "none",
         }}>

@@ -1,8 +1,8 @@
 import type { Opportunity } from "@merkl/api";
-import { Divider, Group, Text, Value } from "packages/dappkit/src";
-import TvlLibrary from "../tvl/TvlLibrary";
+import { Group, PrimitiveTag, Title, Value } from "packages/dappkit/src";
 import TvlRowAllocation from "../tvl/TvlRowAllocation";
-import AprLibrary from "./AprLibrary";
+import TvlSection from "../tvl/TvlSection";
+import AprSection from "./AprSection";
 
 type IProps = {
   opportunity: Opportunity;
@@ -12,19 +12,22 @@ export default function AprModal(props: IProps) {
   const { opportunity } = props;
 
   return (
-    <Group className="flex-col">
-      <Group className="flex-col gap-l">
-        <Group className="justify-between">
-          <Text>AVERAGE APR</Text>
-          <Value value format="0a%">
-            {opportunity.apr / 100}
-          </Value>
+    <>
+      <Group className="flex-col -my-md">
+        <Group className="justify-between items-center">
+          <Title look="soft" h={5}>
+            AVERAGE APR
+          </Title>
+          <PrimitiveTag noClick look="bold" size="lg">
+            <Value value format="0a%">
+              {opportunity.apr / 100}
+            </Value>
+          </PrimitiveTag>
         </Group>
-        <Divider horizontal />
         <TvlRowAllocation opportunity={opportunity} />
+        <AprSection opportunity={opportunity} />
+        <TvlSection opportunity={opportunity} />
       </Group>
-      <AprLibrary opportunity={opportunity} />
-      <TvlLibrary opportunity={opportunity} />
-    </Group>
+    </>
   );
 }

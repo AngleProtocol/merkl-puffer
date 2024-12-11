@@ -1,0 +1,114 @@
+import type { Opportunity } from "@merkl/api";
+import { Button, Divider, Group, Hash, Icon, PrimitiveTag, Text, Value } from "packages/dappkit/src";
+import { Fragment, useMemo, useState } from "react";
+
+interface TvlSectionProps {
+  opportunity: Opportunity;
+}
+
+const DEFAULT_ARRAY_SIZE = 3;
+
+export default function TvlSection({ opportunity }: TvlSectionProps) {
+  const [isShowingMore, setIsShowingMore] = useState(false);
+
+  const tvlFiltered = useMemo(() => {
+    return opportunity.tvlRecord.breakdowns
+      .filter(breakdown => breakdown.type === "PROTOCOL")
+      .sort((a, b) => b.value - a.value)
+      .slice(0, isShowingMore ? opportunity.tvlRecord.breakdowns.length : 3);
+  }, [opportunity, isShowingMore]);
+
+  const aprFiltered = useMemo(() => {
+    return opportunity.aprRecord.breakdowns.filter(breakdown => breakdown.type === "PROTOCOL");
+  }, [opportunity]);
+
+  const getTvlName = (breakdown: Opportunity["tvlRecord"]["breakdowns"][number]) => {
+    if (!breakdown?.identifier) return null;
+
+    switch (breakdown?.type) {
+      case "PROTOCOL":
+        return (
+          <Group className="items-center">
+            <Text look="bold" size="sm">
+              {breakdown.identifier.split(" ")[0]}
+            </Text>
+            <Hash format="short" copy size="sm">
+              {breakdown.identifier.split(" ")[1]}
+            </Hash>
+          </Group>
+        );
+      default:
+        return (
+          <Hash format="short" copy>
+            {breakdown.identifier}
+          </Hash>
+        );
+    }
+  };
+
+  const hasForwarders = tvlFiltered.length > 0;
+
+  return (
+    <>
+      {hasForwarders && (
+        <>
+          <Divider className="-mx-xl w-[calc(100%+2*var(--spacing-xl))]" />
+          <Group
+            className="grid"
+            style={{
+              gridTemplateColumns: "minmax(350px, 1fr) minmax(min-content, 100px) minmax(min-content, 100px)",
+            }}>
+            <Text size="sm">Forwarder details</Text>
+            <Text size="sm" className="inline-flex justify-end">
+              APR
+            </Text>
+            <Text size="sm" className="inline-flex justify-end">
+              TVL
+            </Text>
+          </Group>
+          <Divider className="-mx-xl w-[calc(100%+2*var(--spacing-xl))]" />
+        </>
+      )}
+      <Group className="flex-col" size="sm">
+        {tvlFiltered.map(breakdown => {
+          const aprBreakdown = aprFiltered.find(b => b.identifier === breakdown.identifier);
+          return (
+            <Fragment key={breakdown.id}>
+              <Group
+                className="grid"
+                style={{
+                  gridTemplateColumns: "minmax(350px, 1fr) minmax(min-content, 100px) minmax(min-content, 100px)",
+                }}
+                size="md">
+                <Text size="sm" look="bold">
+                  {getTvlName(breakdown)}
+                </Text>
+
+                {aprBreakdown && (
+                  <PrimitiveTag className="w-fit ml-auto" noClick look="bold" size="sm">
+                    <Value value format="0a%">
+                      {aprBreakdown.value / 100}
+                    </Value>
+                  </PrimitiveTag>
+                )}
+                <Text look="bold" className="inline-flex justify-end" size="sm">
+                  <Value value format="0a">
+                    {breakdown.value}
+                  </Value>
+                </Text>
+              </Group>
+              <Divider className="last:hidden" look="tint" />
+            </Fragment>
+          );
+        })}
+      </Group>
+
+      {tvlFiltered.length >= DEFAULT_ARRAY_SIZE && (
+        <Button size="sm" className="mx-auto my-sm" look="soft" onClick={() => setIsShowingMore(!isShowingMore)}>
+          Show {isShowingMore ? "Less" : "More"}
+          <Icon remix={isShowingMore ? "RiArrowUpLine" : "RiArrowDownLine"} />
+        </Button>
+      )}
+    </>
+  );
+}

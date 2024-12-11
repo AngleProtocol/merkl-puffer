@@ -16,20 +16,22 @@ export default function TvlRowAllocation({ opportunity }: IProps) {
       const tvlBreakdownToken1 = tokenTvl?.find(b => b.identifier === opportunity?.tokens[1]?.address);
 
       content = (
-        <Group className="flex-col">
-          <Group className="items-center ">
+        <Group className="flex-col" size="sm">
+          <Group className="items-center" size="sm">
             <Icon src={opportunity.tokens[0].icon} />
             <Value value format="0.0a">
               {tvlBreakdownToken0?.value}
             </Value>
-            <Text look="bold">{token0.name}</Text>
+            <Text size="sm" look="bold">
+              {token0.name}
+            </Text>
 
             {!!tvlBreakdownToken0?.value && !!token0?.price && (
-              <Text>
+              <Text size="sm">
                 <Value value format="$0.0a">
                   {tvlBreakdownToken0.value * token0.price}
                 </Value>
-                {" - "}
+                {" ~ "}
                 <Value value format="0a%">
                   {(tvlBreakdownToken0?.value * token0.price) / opportunity.tvlRecord.total}
                 </Value>
@@ -37,19 +39,21 @@ export default function TvlRowAllocation({ opportunity }: IProps) {
               </Text>
             )}
           </Group>
-          <Group className="items-center">
+          <Group className="items-center" size="sm">
             <Icon src={opportunity.tokens[1].icon} />
             <Value value format="0.0a">
               {tvlBreakdownToken1?.value}
             </Value>
-            <Text look="bold">{token1.name}</Text>
+            <Text size="sm" look="bold">
+              {token1.name}
+            </Text>
 
             {!!tvlBreakdownToken1?.value && !!token1?.price && (
-              <Text>
+              <Text size="sm">
                 <Value value format="$0.0a">
                   {tvlBreakdownToken1.value * token1.price}
                 </Value>
-                {" - "}
+                {" ~ "}
                 <Value value format="0a%">
                   {(tvlBreakdownToken1?.value * token1.price) / opportunity.tvlRecord.total}
                 </Value>
@@ -67,9 +71,10 @@ export default function TvlRowAllocation({ opportunity }: IProps) {
   if (!content) return null;
   return (
     <>
-      <Text>Tvl Allocation</Text>
+      <Divider className="-mx-xl w-[calc(100%+2*var(--spacing-xl))]" />
+      <Text size="sm">TVL allocation</Text>
+      <Divider className="-mx-xl w-[calc(100%+2*var(--spacing-xl))]" />
       {content}
-      <Divider horizontal />
     </>
   );
 }

@@ -25,8 +25,8 @@ export default function OpportunityTableRow({ hideTags, opportunity, className, 
         className={mergeClass("dim", className)}
         {...props}
         apyColumn={
-          <Dropdown size="lg" content={<AprModal opportunity={opportunity} />}>
-            <PrimitiveTag look="tint" size="lg" className="font-mono">
+          <Dropdown size="xl" content={<AprModal opportunity={opportunity} />}>
+            <PrimitiveTag look="tint" size="lg">
               <Value value format="0a%">
                 {opportunity.apr / 100}
               </Value>
