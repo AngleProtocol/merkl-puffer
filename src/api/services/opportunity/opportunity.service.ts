@@ -4,6 +4,47 @@ import { api } from "../../index.server";
 import { fetchWithLogs } from "../../utils";
 
 export abstract class OpportunityService {
+  static async getManyFromRequest(
+    request: Request,
+    overrides?: Parameters<typeof api.v4.opportunities.index.get>[0]["query"],
+  ) {
+    return OpportunityService.getMany(Object.assign(OpportunityService.#getQueryFromRequest(request), overrides ?? {}));
+  }
+  // ─── Get Many Opportunities ──────────────────────────────────────────────
+
+  static async getMany(
+    query: Parameters<typeof api.v4.opportunities.index.get>[0]["query"],
+  ): Promise<{ opportunities: Opportunity[]; count: number }> {
+    //TODO: updates tags to take an array
+    const opportunities = await OpportunityService.#fetch(async () =>
+      api.v4.opportunities.index.get({
+        query: Object.assign({ ...query }, config.tags?.[0] ? { tags: config.tags?.[0] } : {}),
+      }),
+    );
+    const count = await OpportunityService.#fetch(async () => api.v4.opportunities.count.get({ query }));
+
+    return { opportunities: opportunities.filter(o => o !== null), count };
+  }
+
+  // ─── Get Opportunities with campaign ──────────────────────────────────────────────
+
+  static async getCampaignsByParams(query: {
+    chainId: number;
+    type: string;
+    identifier: string;
+  }) {
+    const { chainId, type, identifier } = query;
+    const opportunityWithCampaigns = await OpportunityService.#fetch(async () =>
+      api.v4.opportunities({ id: `${chainId}-${type}-${identifier}` }).campaigns.get(),
+    );
+
+    //TODO: updates tags to take an array
+    if (config.tags && !opportunityWithCampaigns.tags.includes(config.tags?.[0]))
+      throw new Response("Opportunity inacessible", { status: 403 });
+
+    return opportunityWithCampaigns;
+  }
+
   static async #fetch<R, T extends { data: R; status: number; response: Response }>(
     call: () => Promise<T>,
     resource = "Opportunity",
@@ -22,94 +63,33 @@ export abstract class OpportunityService {
    * @param override params for which to override value
    * @returns query
    */
+  /**
+   * Retrieves opportunities query params from page request
+   * @param request request containing query params such as chains, status, pagination...
+   * @param override params for which to override value
+   * @returns query
+   */
   static #getQueryFromRequest(
     request: Request,
     override?: Parameters<typeof api.v4.opportunities.index.get>[0]["query"],
   ) {
-    const status = new URL(request.url).searchParams.get("status");
-    const action = new URL(request.url).searchParams.get("action");
-    const chainId = new URL(request.url).searchParams.get("chain");
-    const page = new URL(request.url).searchParams.get("page");
+    const url = new URL(request.url);
 
-    const items = new URL(request.url).searchParams.get("items");
-    const search = new URL(request.url).searchParams.get("search");
-    const [sort, order] = new URL(request.url).searchParams.get("sort")?.split("-") ?? [];
+    const filters = {
+      status: url.searchParams.get("status") ?? undefined,
+      action: url.searchParams.get("action") ?? undefined,
+      chainId: url.searchParams.get("chain") ?? undefined,
+      items: url.searchParams.get("items") ? Number(url.searchParams.get("items")) : 50,
+      sort: url.searchParams.get("sort")?.split("-")[0],
+      order: url.searchParams.get("sort")?.split("-")[1],
+      name: url.searchParams.get("search") ?? undefined,
+      page: url.searchParams.get("page") ? Math.max(Number(url.searchParams.get("page")) - 1, 0) : undefined,
+      ...override,
+    };
 
-    const filters = Object.assign(
-      {
-        status,
-        action,
-        chainId: chainId !== "" ? chainId : undefined,
-        items: items ?? 50,
-        sort,
-        order,
-        name: search,
-        page,
-      },
-      override ?? {},
-      page !== null && { page: Number(page) - 1 },
-    );
-
-    const query = Object.entries(filters).reduce(
-      (_query, [key, filter]) => Object.assign(_query, filter == null ? {} : { [key]: filter }),
-      {},
-    );
+    // Remove null/undefined values
+    const query = Object.fromEntries(Object.entries(filters).filter(([, value]) => value != null));
 
     return query;
-  }
-
-  static async getManyFromRequest(
-    request: Request,
-    overrides?: Parameters<typeof api.v4.opportunities.index.get>[0]["query"],
-  ) {
-    return OpportunityService.getMany(Object.assign(OpportunityService.#getQueryFromRequest(request), overrides ?? {}));
-  }
-
-  static async getMany(
-    query: Parameters<typeof api.v4.opportunities.index.get>[0]["query"],
-  ): Promise<{ opportunities: Opportunity[]; count: number }> {
-    //TODO: updates tags to take an array
-    const opportunities = await OpportunityService.#fetch(async () =>
-      api.v4.opportunities.index.get({
-        query: Object.assign({ ...query }, config.tags?.[0] ? { tags: config.tags?.[0] } : {}),
-      }),
-    );
-    const count = await OpportunityService.#fetch(async () => api.v4.opportunities.count.get({ query }));
-
-    return { opportunities: opportunities.filter(o => o !== null), count };
-  }
-
-  static async get(query: {
-    chainId: number;
-    type: string;
-    identifier: string;
-  }): Promise<Opportunity> {
-    const { chainId, type, identifier } = query;
-    const opportunity = await OpportunityService.#fetch(async () =>
-      api.v4.opportunities({ id: `${chainId}-${type}-${identifier}` }).get(),
-    );
-
-    //TODO: updates tags to take an array
-    if (config.tags && !opportunity.tags.includes(config.tags?.[0]))
-      throw new Response("Opportunity inacessible", { status: 403 });
-
-    return opportunity;
-  }
-
-  static async getCampaignsByParams(query: {
-    chainId: number;
-    type: string;
-    identifier: string;
-  }) {
-    const { chainId, type, identifier } = query;
-    const opportunityWithCampaigns = await OpportunityService.#fetch(async () =>
-      api.v4.opportunities({ id: `${chainId}-${type}-${identifier}` }).campaigns.get(),
-    );
-
-    //TODO: updates tags to take an array
-    if (config.tags && !opportunityWithCampaigns.tags.includes(config.tags?.[0]))
-      throw new Response("Opportunity inacessible", { status: 403 });
-
-    return opportunityWithCampaigns;
   }
 }

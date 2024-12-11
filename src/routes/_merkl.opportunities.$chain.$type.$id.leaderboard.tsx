@@ -131,8 +131,6 @@ export default function Index() {
     [totalRewardsAllCampaigns, count],
   );
 
-  console.log("T", totalRewardsAllCampaigns);
-
   return (
     <Container>
       <Box content="xl" size="md">

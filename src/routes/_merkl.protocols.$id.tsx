@@ -1,23 +1,65 @@
+import type { Opportunity } from "@merkl/api";
 import { type LoaderFunctionArgs, type MetaFunction, json } from "@remix-run/node";
 import { Outlet, useLoaderData } from "@remix-run/react";
-import { Button, Group, Icon } from "dappkit";
+import { Group, Value } from "dappkit";
+import { OpportunityService } from "src/api/services/opportunity/opportunity.service";
 import { ProtocolService } from "src/api/services/protocol.service";
 import Hero from "src/components/composite/Hero";
 
-export async function loader({ params: { id } }: LoaderFunctionArgs) {
-  const protocol = await ProtocolService.get({ id: id ?? "" });
+export async function loader({ params: { id }, request }: LoaderFunctionArgs) {
+  const protocol = (await ProtocolService.get({ id: id ?? "" }))?.[0];
+  const { opportunities, count } = await OpportunityService.getManyFromRequest(request, { mainProtocolId: id });
 
-  return json({ protocol });
+  const { opportunities: opportunitiesByApr, count: liveCount } = await OpportunityService.getMany({
+    mainProtocolId: id,
+    status: "LIVE",
+    sort: "apr",
+    order: "desc",
+  });
+
+  return json({
+    opportunities,
+    count,
+    protocol,
+    liveOpportunityCount: liveCount,
+    maxApr: opportunitiesByApr?.[0]?.apr,
+  });
 }
 
-export const meta: MetaFunction<typeof loader> = ({ data }) => {
-  if (!data?.protocol) return [{ title: "Merkl" }];
-
-  return [{ title: `${data?.protocol?.name} on Merkl` }];
+export type OutletContextProtocol = {
+  opportunities: Opportunity[];
+  count: number;
 };
 
 export default function Index() {
-  const { protocol } = useLoaderData<typeof loader>();
+  const { opportunities, count, protocol, liveOpportunityCount, maxApr } = useLoaderData<typeof loader>();
+
+  const herosData = [
+    {
+      label: "Live opportunities",
+      data: (
+        <Value format="0" size={4} className="!text-main-12">
+          {liveOpportunityCount}
+        </Value>
+      ),
+      key: crypto.randomUUID(),
+    },
+    {
+      // need a call api here
+      label: "Daily rewards",
+      data: "todo",
+      key: crypto.randomUUID(),
+    },
+    {
+      label: "Max APR",
+      data: (
+        <Value format="0a%" size={4} className="!text-main-12">
+          {maxApr / 100}
+        </Value>
+      ),
+      key: crypto.randomUUID(),
+    },
+  ];
 
   return (
     <Hero
@@ -26,9 +68,9 @@ export default function Index() {
         <Group className="items-center">
           {protocol?.name}
           {/* TODO: add the link to this button */}
-          <Button look="soft" size="xl" to={protocol?.name}>
+          {/* <Button look="soft" size="xl" to={protocol?.name}>
             <Icon remix="RiArrowRightUpLine" />
-          </Button>
+          </Button> */}
         </Group>
       }
       breadcrumbs={[
@@ -36,25 +78,14 @@ export default function Index() {
         { link: `/protocols/${protocol.name}`, name: protocol.name },
       ]}
       description={"Protocol"}
-      tabs={[
-        {
-          label: "Opportunities",
-          link: `/protocols/${protocol.name?.toLowerCase()}`,
-          key: crypto.randomUUID(),
-        },
-      ]}
-      // TODO: Make this dynamic
-      sideDatas={[
-        {
-          data: "25",
-          label: "Live opportunities",
-          key: crypto.randomUUID(),
-        },
-        { data: "400%", label: "Max APR", key: crypto.randomUUID() },
-        { data: "$4k", label: "Daily rewards", key: crypto.randomUUID() },
-      ]}
-    >
-      <Outlet />
+      sideDatas={herosData}>
+      <Outlet context={{ opportunities, count }} />
     </Hero>
   );
 }
+
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
+  if (!data?.protocol) return [{ title: "Merkl" }];
+
+  return [{ title: `${data?.protocol?.name} on Merkl` }];
+};

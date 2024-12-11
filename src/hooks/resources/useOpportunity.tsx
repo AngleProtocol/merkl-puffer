@@ -1,6 +1,6 @@
-import { Icon } from "dappkit";
+import type { Opportunity } from "@merkl/api";
+import { Icon, Value } from "dappkit";
 import { useMemo } from "react";
-import type { Opportunity } from "src/api/services/opportunity/opportunity.model";
 import type { TagType } from "src/components/element/Tag";
 
 export default function useOpportunity(opportunity: Opportunity) {
@@ -63,5 +63,42 @@ export default function useOpportunity(opportunity: Opportunity) {
     }
   }, [opportunity]);
 
-  return { link, icons, description, ...opportunity, tags };
+  const herosData = useMemo(() => {
+    switch (opportunity.type) {
+      case "CLAMM":
+        return [
+          {
+            label: "Daily rewards",
+            data: (
+              <Value format="$0.00a" size={4} className="!text-main-12">
+                {opportunity.dailyRewards}
+              </Value>
+            ),
+            key: crypto.randomUUID(),
+          },
+          {
+            label: "Max APR",
+            data: (
+              <Value format="0.00%" size={4} className="!text-main-12">
+                {opportunity.apr / 100}
+              </Value>
+            ),
+            key: crypto.randomUUID(),
+          },
+          {
+            label: "Total value locked",
+            data: (
+              <Value format="$0.00a" size={4} className="!text-main-12">
+                {opportunity.tvl}
+              </Value>
+            ),
+            key: crypto.randomUUID(),
+          },
+        ];
+      default:
+        return;
+    }
+  }, [opportunity]);
+
+  return { link, icons, description, ...opportunity, tags, herosData };
 }

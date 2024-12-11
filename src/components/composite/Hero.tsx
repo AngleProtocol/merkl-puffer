@@ -11,9 +11,15 @@ export type HeroProps = PropsWithChildren<{
   navigation?: { label: ReactNode; link: string };
   description: ReactNode;
   tags?: ReactNode[];
-  sideDatas?: { data: ReactNode; label: string; key: string }[];
+  sideDatas?: HeroInformations[];
   tabs?: { label: ReactNode; link: string; key: string }[];
 }>;
+
+export type HeroInformations = {
+  data: React.ReactNode;
+  label: string;
+  key: string;
+};
 
 export default function Hero({
   navigation,

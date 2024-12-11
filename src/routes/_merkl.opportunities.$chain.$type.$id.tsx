@@ -34,7 +34,7 @@ export type OutletContextOpportunity = {
 
 export default function Index() {
   const { opportunity } = useLoaderData<typeof loader>();
-  const { tags, description, link } = useOpportunity(opportunity);
+  const { tags, description, link, herosData } = useOpportunity(opportunity);
 
   const styleName = useMemo(() => {
     const spaced = opportunity?.name.split(" ");
@@ -92,17 +92,7 @@ export default function Index() {
             size="sm"
           />
         ))}
-        // TODO: Make this dynamic
-        sideDatas={[
-          {
-            data: "25",
-            label: "Live opportunities",
-            key: crypto.randomUUID(),
-          },
-          { data: "400%", label: "Max APR", key: crypto.randomUUID() },
-          { data: "$4k", label: "Daily rewards", key: crypto.randomUUID() },
-        ]}
-      >
+        sideDatas={herosData}>
         <Outlet context={{ opportunity }} />
       </Hero>
     </>
