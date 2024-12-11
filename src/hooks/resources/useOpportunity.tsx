@@ -1,4 +1,5 @@
 import type { Opportunity } from "@merkl/api";
+import type { Token } from "@merkl/api";
 import { Icon, Value } from "dappkit";
 import { useMemo } from "react";
 import type { TagType } from "src/components/element/Tag";
@@ -100,5 +101,20 @@ export default function useOpportunity(opportunity: Opportunity) {
     }
   }, [opportunity]);
 
-  return { link, icons, description, ...opportunity, tags, herosData };
+  const rewardsBreakdown = useMemo(() => {
+    if (!opportunity?.rewardsRecord?.breakdowns) return [];
+
+    const tokenAddresses = opportunity.rewardsRecord.breakdowns.reduce((addresses, breakdown) => {
+      return addresses.add(breakdown.token.address);
+    }, new Set<string>());
+
+    return Array.from(tokenAddresses).map(address => {
+      const breakdowns = opportunity.rewardsRecord.breakdowns.filter(({ token: t }) => t.address === address);
+      const amount = breakdowns?.reduce((sum, breakdown) => sum + BigInt(breakdown.amount), 0n);
+
+      return { token: breakdowns?.[0]?.token, amount } satisfies { token: Token; amount: bigint };
+    });
+  }, [opportunity]);
+
+  return { link, icons, description, rewardsBreakdown, ...opportunity, tags, herosData };
 }

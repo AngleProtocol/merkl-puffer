@@ -1,5 +1,5 @@
 import type { Chain } from "@merkl/api";
-import { Group, type Order } from "dappkit";
+import { Box, Group, type Order, Title } from "dappkit";
 import { useMemo } from "react";
 import type { Opportunity } from "src/api/services/opportunity/opportunity.model";
 import useSearchParamState from "src/hooks/filtering/useSearchParamState";
@@ -14,7 +14,14 @@ export type OpportunityLibrary = {
   chains?: Chain[];
 } & OpportunityFilterProps;
 
-export default function OpportunityLibrary({ opportunities, count, only, exclude, chains }: OpportunityLibrary) {
+export default function OpportunityLibrary({
+  opportunities,
+  count,
+  only,
+  exclude,
+  chains,
+  protocols,
+}: OpportunityLibrary) {
   const rows = useMemo(
     () =>
       opportunities?.map(o => <OpportunityTableRow key={`${o.chainId}_${o.type}_${o.identifier}`} opportunity={o} />),
@@ -36,18 +43,24 @@ export default function OpportunityLibrary({ opportunities, count, only, exclude
   }
 
   return (
-    <OpportunityTable
-      sortable={sortable}
-      order={(sortIdAndOrder ?? [])?.[1]}
-      sort={(sortIdAndOrder ?? [])?.[0] ?? "rewards"}
-      onSort={onSort}
-      footer={count !== undefined && <OpportunityPagination count={count} />}
-      header={
-        <Group className="justify-between w-full">
-          <OpportunityFilters {...{ only, exclude, chains }} />
-        </Group>
-      }>
-      {rows}
-    </OpportunityTable>
+    <Group className="flex-col">
+      <Box content="sm" className="justify-between w-full">
+        <OpportunityFilters {...{ only, exclude, chains, protocols }} />
+      </Box>
+      <OpportunityTable
+        opportunityHeader={
+          <Title className="!text-main-11" h={5}>
+            Opportunities
+          </Title>
+        }
+        dividerClassName={index => (index < 2 ? "bg-accent-8" : "bg-main-8")}
+        sortable={sortable}
+        order={(sortIdAndOrder ?? [])?.[1]}
+        sort={(sortIdAndOrder ?? [])?.[0] ?? "rewards"}
+        onSort={onSort}
+        footer={count !== undefined && <OpportunityPagination count={count} />}>
+        {rows}
+      </OpportunityTable>
+    </Group>
   );
 }

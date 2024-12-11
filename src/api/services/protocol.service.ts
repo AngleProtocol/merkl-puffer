@@ -59,4 +59,11 @@ export abstract class ProtocolService {
 
     return query;
   }
+
+  static async getAll() {
+    const protocols = await ProtocolService.#fetch(async () => api.v4.protocols.index.get({ query: { items: 10000 } }));
+
+    //TODO: add some cache here
+    return protocols;
+  }
 }

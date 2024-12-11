@@ -1,7 +1,9 @@
 import type { Token } from "@merkl/api";
 import type { Chain } from "@merkl/api";
+import { useSearchParams } from "@remix-run/react";
 import { Button, Divider, Dropdown, Group, Hash, Icon, PrimitiveTag, Text } from "dappkit";
 import type { Component, PrimitiveTagProps } from "dappkit";
+import EventBlocker from "packages/dappkit/src/components/primitives/EventBlocker";
 import { useWalletContext } from "packages/dappkit/src/context/Wallet.context";
 import type { Opportunity } from "src/api/services/opportunity/opportunity.model";
 import { actions } from "src/config/actions";
@@ -23,44 +25,33 @@ export type TagType<T extends keyof TagTypes = keyof TagTypes> = {
 export type TagProps<T extends keyof TagTypes> = {
   type: T;
   value: TagTypes[T];
+  filter?: boolean;
   size?: PrimitiveTagProps["size"];
 };
 
-export default function Tag<T extends keyof TagTypes>({ type, value, ...props }: Component<TagProps<T>>) {
+export default function Tag<T extends keyof TagTypes>({ type, filter, value, ...props }: Component<TagProps<T>>) {
   const { chains } = useWalletContext();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   switch (type) {
     case "status": {
       const status = statuses[value as TagTypes["status"]] ?? statuses.LIVE;
       return (
-        <Dropdown
-          size="lg"
-          padding="xs"
-          content={
-            <Group className="flex-col">
-              <Group size="xs" className="flex-col">
-                <Group size="sm">
-                  <Icon {...status.icon} />
-                  <Text size="sm" className="text-main-12" bold>
-                    {status?.label}
-                  </Text>
-                </Group>
-              </Group>
-              <Divider look="soft" horizontal />
-              <Group className="flex-col">
-                <Text size="xs">{status?.description}</Text>
-                <Button to={`/status/${status?.label}`} size="xs" look="soft">
-                  <Icon remix="RiArrowRightLine" />
-                  Open
-                </Button>
-              </Group>
-            </Group>
-          }>
-          <PrimitiveTag look="soft" {...props}>
+        <EventBlocker>
+          <PrimitiveTag
+            className={!filter && "pointer-events-none"}
+            onClick={() =>
+              setSearchParams(s => {
+                s.set("status", value as TagTypes["status"]);
+                return s;
+              })
+            }
+            look="soft"
+            {...props}>
             <Icon size={props?.size} {...status.icon} />
             {status?.label}
           </PrimitiveTag>
-        </Dropdown>
+        </EventBlocker>
       );
     }
     case "chain": {
@@ -100,32 +91,22 @@ export default function Tag<T extends keyof TagTypes>({ type, value, ...props }:
       const action = actions[value as TagTypes["action"]];
       if (!action) return <Button {...props}>{value}</Button>;
       return (
-        <Dropdown
-          size="lg"
-          padding="xs"
-          content={
-            <Group className="flex-col">
-              <Group size="xs" className="flex-col">
-                <Group size="sm">
-                  <Icon {...action.icon} />
-                  <Text size="sm" className="text-main-12" bold>
-                    {action?.label}
-                  </Text>
-                </Group>
-              </Group>
-              <Divider look="soft" horizontal />
-              <Text size="xs">{action?.description}</Text>
-              <Button to={`/actions/${action?.label}`} size="xs" look="soft">
-                <Icon remix="RiArrowRightLine" />
-                Open
-              </Button>
-            </Group>
-          }>
-          <PrimitiveTag look="tint" key={value} {...props}>
+        <EventBlocker>
+          <PrimitiveTag
+            className={!filter && "pointer-events-none"}
+            onClick={() =>
+              setSearchParams(s => {
+                s.set("action", value as TagTypes["action"]);
+                return s;
+              })
+            }
+            look="tint"
+            key={value}
+            {...props}>
             <Icon size={props?.size} {...action.icon} />
             {action?.label}
           </PrimitiveTag>
-        </Dropdown>
+        </EventBlocker>
       );
     }
     case "token": {

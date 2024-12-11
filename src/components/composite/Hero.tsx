@@ -54,7 +54,7 @@ export default function Hero({
                 Home
               </Button>
               {breadcrumbs?.map(breadcrumb => {
-                if (breadcrumb.component) return breadcrumb.component;
+                if (breadcrumb.component) return <>{breadcrumb.component}</>;
                 return (
                   <Button key={breadcrumb.link} to={breadcrumb.link} look="soft" size="xs">
                     <Icon remix="RiArrowRightSLine" />

@@ -88,6 +88,7 @@ export abstract class OpportunityService {
 
     const filters = {
       status: url.searchParams.get("status") ?? undefined,
+      mainProtocolId: url.searchParams.get("protocol") ?? undefined,
       action: url.searchParams.get("action") ?? undefined,
       chainId: url.searchParams.get("chain") ?? undefined,
       items: url.searchParams.get("items") ? Number(url.searchParams.get("items")) : 50,

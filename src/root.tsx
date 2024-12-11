@@ -4,6 +4,7 @@ import { DAppProvider, Group, Icon, Title } from "dappkit";
 import config from "../merkl.config";
 import dappkitStyles from "../packages/dappkit/src/style.css?url";
 import { ChainService } from "./api/services/chain.service";
+import LoadingIndicator from "./components/layout/LoadingIndicator";
 import styles from "./index.css?url";
 
 export const links: LinksFunction = () => [
@@ -37,6 +38,7 @@ export default function App() {
       themes={config.themes}
       sizing={config.sizing}
       config={config.wagmi}>
+      <LoadingIndicator />
       <Outlet />
       <script
         // biome-ignore lint/security/noDangerouslySetInnerHtml: needed for browser ENV
