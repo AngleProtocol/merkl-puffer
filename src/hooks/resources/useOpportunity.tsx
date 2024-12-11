@@ -26,7 +26,7 @@ export default function useOpportunity(opportunity: Opportunity) {
       value: opportunity?.status,
     };
 
-    return [protocol, action, chain, ...tokens, status].filter(a => a);
+    return [protocol, chain, action, ...tokens, status].filter(a => a);
   }, [opportunity]);
 
   const link = useMemo(

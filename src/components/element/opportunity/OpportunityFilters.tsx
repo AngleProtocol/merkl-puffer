@@ -1,20 +1,22 @@
 import type { Chain } from "@merkl/api";
 import { Form } from "@remix-run/react";
-import { Group, Icon, Input, Select } from "dappkit/src";
+import { Button, Group, Icon, Input, Select } from "dappkit/src";
 import { useMemo, useState } from "react";
 import { actions } from "src/config/actions";
 import useSearchParamState from "src/hooks/filtering/useSearchParamState";
 
-const filters = ["search", "action", "status", "chain"] as const;
+const filters = ["search", "action", "status", "chain", "protocol", "tvl"] as const;
 type OpportunityFilter = (typeof filters)[number];
 
 export type OpportunityFilterProps = {
   only?: OpportunityFilter[];
   chains?: Chain[];
+  // TODO: Type this
+  protocols?: Protocol[];
   exclude?: OpportunityFilter[];
 };
 
-export default function OpportunityFilters({ only, exclude, chains }: OpportunityFilterProps) {
+export default function OpportunityFilters({ only, exclude, chains, protocols }: OpportunityFilterProps) {
   //TODO: componentify theses
   const actionOptions = Object.entries(actions).reduce(
     (obj, [action, { icon, label }]) =>
@@ -59,6 +61,21 @@ export default function OpportunityFilters({ only, exclude, chains }: Opportunit
       {},
     ) ?? [];
 
+  // TODO: Write protocolOptions
+  const protocolOptions =
+    protocols?.reduce(
+      (obj, chain) =>
+        Object.assign(obj, {
+          [chain.id]: (
+            <>
+              <Icon size="sm" src={chain?.icon} />
+              {chain.name}
+            </>
+          ),
+        }),
+      {},
+    ) ?? [];
+
   const [actionsFilter, setActions] = useSearchParamState<string[]>(
     "action",
     v => v?.join(","),
@@ -71,6 +88,11 @@ export default function OpportunityFilters({ only, exclude, chains }: Opportunit
   );
   const [chainIdsFilter, setChainIds] = useSearchParamState<string[]>(
     "chain",
+    v => v?.join(","),
+    v => v?.split(","),
+  );
+  const [protocolIdsFilter, setProtocolIdsFilter] = useSearchParamState<string[]>(
+    "protocol",
     v => v?.join(","),
     v => v?.split(","),
   );
@@ -99,10 +121,12 @@ export default function OpportunityFilters({ only, exclude, chains }: Opportunit
       {fields.includes("search") && (
         <Form>
           <Input
+            look="soft"
             name="search"
             value={innerSearch}
             state={[innerSearch, v => setInnerSearch(v)]}
             suffix={<Icon remix="RiSearchLine" />}
+            size="md"
             onClick={onSearchSubmit}
             placeholder="Search"
           />
@@ -114,7 +138,7 @@ export default function OpportunityFilters({ only, exclude, chains }: Opportunit
           allOption={"All actions"}
           multiple
           options={actionOptions}
-          look="bold"
+          look="tint"
           placeholder="Actions"
         />
       )}
@@ -124,7 +148,7 @@ export default function OpportunityFilters({ only, exclude, chains }: Opportunit
           allOption={"All status"}
           multiple
           options={statusOptions}
-          look="bold"
+          look="tint"
           placeholder="Status"
         />
       )}
@@ -135,10 +159,42 @@ export default function OpportunityFilters({ only, exclude, chains }: Opportunit
           multiple
           search
           options={chainOptions}
-          look="bold"
+          look="tint"
           placeholder="Chains"
         />
       )}
+      {fields.includes("protocol") && (
+        <Select
+          state={[protocolIdsFilter, c => setProtocolIdsFilter(c as string[])]}
+          allOption={"All protocols"}
+          multiple
+          search
+          options={protocolOptions}
+          look="tint"
+          placeholder="Protocols"
+        />
+      )}
+
+      {/* TODO: TVL filter */}
+      {fields.includes("tvl") && (
+        <Form>
+          <Input
+            look="soft"
+            name="search"
+            value={innerSearch}
+            state={[innerSearch, v => setInnerSearch(v)]}
+            suffix={<Icon remix="RiFilterFill" />}
+            size="md"
+            onClick={onSearchSubmit}
+            placeholder="Filter above a min TVL"
+          />
+        </Form>
+      )}
+
+      {/* TODO: Reset filters */}
+      <Button look="soft" size="xs" className="ml-lg">
+        Clear all filters <Icon remix="RiCloseLine" />
+      </Button>
     </Group>
   );
 }

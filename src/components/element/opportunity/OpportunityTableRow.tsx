@@ -1,11 +1,7 @@
 import type { Opportunity } from "@merkl/api";
 import { Link } from "@remix-run/react";
-import { Dropdown, Group } from "dappkit";
-import { Icons } from "dappkit";
 import type { BoxProps } from "dappkit";
-import { Title } from "dappkit";
-import { Value } from "dappkit";
-import { Button } from "dappkit";
+import { Dropdown, Group, Icons, PrimitiveTag, Text, Title, Value } from "dappkit";
 import { mergeClass } from "dappkit";
 import useOpportunity from "src/hooks/resources/useOpportunity";
 import Tag, { type TagTypes } from "../Tag";
@@ -20,44 +16,47 @@ export type OpportunityTableRowProps = {
 export default function OpportunityTableRow({ hideTags, opportunity, className, ...props }: OpportunityTableRowProps) {
   const { tags, link, icons } = useOpportunity(opportunity);
 
+  console.log(opportunity);
+
   return (
     <Link to={link}>
       <OpportunityRow
         size="lg"
         content="sm"
-        className={mergeClass("", className)}
+        className={mergeClass("dim", className)}
         {...props}
         apyColumn={
           <Dropdown size="lg" content={<AprModal opportunity={opportunity} />}>
-            <Button look="tint" size="lg" className="font-mono">
+            <PrimitiveTag look="tint" size="lg">
               <Value value format="0a%">
                 {opportunity.apr / 100}
               </Value>
-            </Button>
+            </PrimitiveTag>
           </Dropdown>
         }
         tvlColumn={
           <Dropdown className="py-xl" content={<AprModal opportunity={opportunity} />}>
-            <Button look={(opportunity?.tvlRecord?.total ?? 0) > 0 ? "soft" : "soft"} className="font-mono">
+            <PrimitiveTag look="base">
               <Value value format="$0,0.0a">
                 {opportunity.tvl ?? 0}
               </Value>
-            </Button>
+            </PrimitiveTag>
           </Dropdown>
         }
         rewardsColumn={
-          <Group className="py-xl">
-            <Button look={(opportunity?.rewardsRecord?.total ?? 0) > 0 ? "soft" : "soft"} className="font-mono">
-              <Value value format="$0,0.0a">
-                {opportunity.dailyRewards ?? 0}
-              </Value>
-            </Button>
-          </Group>
+          <PrimitiveTag look="base">
+            <Value value format="$0,0.0a">
+              {opportunity.dailyRewards ?? 0}
+            </Value>
+            <Icons size="xl">{icons}</Icons>
+          </PrimitiveTag>
         }
         opportunityColumn={
-          <Group className="py-xl flex-col w-full text-nowrap whitespace-nowrap text-ellipsis">
+          <Group className="flex-col w-full text-nowrap whitespace-nowrap text-ellipsis">
             <Group className="text-nowrap whitespace-nowrap text-ellipsis min-w-0 flex-nowrap overflow-hidden max-w-full">
-              <Icons>{icons}</Icons>
+              <Text className="text-xl">
+                <Icons>{icons}</Icons>
+              </Text>
               <Title
                 h={3}
                 size={4}

@@ -5,24 +5,38 @@ export const statuses = {
   LIVE: {
     label: "Live",
     description: "Opportunity on which campaigns are distributing",
-    icon: { remix: "RiFlashlightLine" },
+    icon: {
+      remix: "RiFlashlightFill",
+      className: "text-accent-11",
+      accent: "good",
+    },
   },
   PAST: {
     label: "Past",
     description: "Earn rewards by depositiong liquidity in this pool.",
-    icon: { remix: "RiHistoryLine" },
+    icon: { remix: "RiTimerFill", className: "text-accent-9", accent: "harm" },
   },
   SOON: {
-    label: "Soon",
+    label: "Upcoming",
     description: "Earn rewards by depositiong liquidity in this pool.",
-    icon: { remix: "RiTimerLine" },
+    icon: {
+      remix: "RiTimer2Fill",
+      className: "text-accent-9",
+      accent: "warn",
+    },
   },
   NONE: {
     label: "None",
     description: "Earn rewards by depositiong liquidity in this pool.",
-    icon: { remix: "RiTimerLine" },
+    icon: { remix: "RiTimerLine", className: "text-accent-11", accent: "good" },
   },
-} satisfies { [S in Opportunity["status"]]: { label: string; icon: IconProps; description: string } };
+} satisfies {
+  [S in Opportunity["status"]]: {
+    label: string;
+    icon: IconProps;
+    description: string;
+  };
+};
 
 export type Status = keyof typeof statuses;
 

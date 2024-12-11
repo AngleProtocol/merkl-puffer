@@ -39,6 +39,13 @@ export default function Footer() {
               </Button>
             </Group>
 
+            {config.footerLinks.length > 0 &&
+              config.footerLinks.map(link => (
+                <Button key={link.key} look="soft" size="sm" to={link.link} external>
+                  <Image className="w-[8rem] max-h-[2.5rem]" alt="Footer link" src={link.image} />
+                </Button>
+              ))}
+
             <Button to={config.links.merkl} external look="soft">
               <Image className="w-[80px]" alt="Merkl Footer logo" src={mode !== "dark" ? merklDarkLogo : merklLogo} />
             </Button>

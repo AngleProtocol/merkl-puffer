@@ -1,8 +1,12 @@
-import { createTable } from "dappkit";
+import { Title, createTable } from "dappkit";
 
 export const [OpportunityTable, OpportunityRow, opportunityColumns] = createTable({
   opportunity: {
-    name: "Opportunities",
+    name: (
+      <Title h={5} look="soft">
+        Opportunities
+      </Title>
+    ),
     size: "minmax(350px,1fr)",
     compact: "1fr",
     className: "justify-start",

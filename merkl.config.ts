@@ -119,6 +119,7 @@ export default createConfig({
     merklTermsConditions: "https://app.merkl.xyz/merklTerms.pdf",
     merklPrivacy: "https://privacy.angle.money",
   },
+  footerLinks: [],
   wagmi: {
     chains: [
       mainnet,
