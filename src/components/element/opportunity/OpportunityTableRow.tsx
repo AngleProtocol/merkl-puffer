@@ -16,8 +16,6 @@ export type OpportunityTableRowProps = {
 export default function OpportunityTableRow({ hideTags, opportunity, className, ...props }: OpportunityTableRowProps) {
   const { tags, link, icons } = useOpportunity(opportunity);
 
-  console.log(opportunity);
-
   return (
     <Link to={link}>
       <OpportunityRow

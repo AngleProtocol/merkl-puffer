@@ -45,6 +45,17 @@ export abstract class OpportunityService {
     return opportunityWithCampaigns;
   }
 
+  // ─── Get Aggregate ──────────────────────────────────────────────
+
+  static async getAggregate(
+    query: Parameters<typeof api.v4.opportunities.index.get>[0]["query"],
+    params: "dailyRewards",
+  ) {
+    return await OpportunityService.#fetch(async () =>
+      api.v4.opportunities.aggregate({ field: params }).get({ query }),
+    );
+  }
+
   static async #fetch<R, T extends { data: R; status: number; response: Response }>(
     call: () => Promise<T>,
     resource = "Opportunity",

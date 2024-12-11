@@ -13,9 +13,9 @@ export async function loader({ params: { id }, request }: LoaderFunctionArgs) {
   const { opportunities: opportunitiesByApr, count: liveCount } = await OpportunityService.getMany({
     mainProtocolId: id,
     status: "LIVE",
-    sort: "apr",
-    order: "desc",
   });
+
+  const { sum } = await OpportunityService.getAggregate({ mainProtocolId: id }, "dailyRewards");
 
   return json({
     opportunities,
@@ -23,6 +23,7 @@ export async function loader({ params: { id }, request }: LoaderFunctionArgs) {
     protocol,
     liveOpportunityCount: liveCount,
     maxApr: opportunitiesByApr?.[0]?.apr,
+    sumDailyRewards: sum,
   });
 }
 
@@ -32,7 +33,8 @@ export type OutletContextProtocol = {
 };
 
 export default function Index() {
-  const { opportunities, count, protocol, liveOpportunityCount, maxApr } = useLoaderData<typeof loader>();
+  const { opportunities, count, protocol, liveOpportunityCount, maxApr, sumDailyRewards } =
+    useLoaderData<typeof loader>();
 
   const herosData = [
     {
@@ -47,7 +49,11 @@ export default function Index() {
     {
       // need a call api here
       label: "Daily rewards",
-      data: "todo",
+      data: (
+        <Value format="$0.00a" size={4} className="!text-main-12">
+          {sumDailyRewards}
+        </Value>
+      ),
       key: crypto.randomUUID(),
     },
     {
