@@ -1,3 +1,4 @@
+import type { Chain } from "@merkl/api";
 import { type LoaderFunctionArgs, type MetaFunction, json } from "@remix-run/node";
 import { Meta, Outlet, useLoaderData } from "@remix-run/react";
 import { useMemo } from "react";
@@ -20,7 +21,7 @@ export async function loader({ params: { id, type, chain: chainId } }: LoaderFun
     identifier: id,
   });
 
-  return json({ opportunity });
+  return json({ opportunity, chain });
 }
 
 export const meta: MetaFunction<typeof loader> = ({ data, error }) => {
@@ -30,10 +31,11 @@ export const meta: MetaFunction<typeof loader> = ({ data, error }) => {
 
 export type OutletContextOpportunity = {
   opportunity: OpportunityWithCampaigns;
+  chain: Chain;
 };
 
 export default function Index() {
-  const { opportunity } = useLoaderData<typeof loader>();
+  const { opportunity, chain } = useLoaderData<typeof loader>();
   const { tags, description, link, herosData } = useOpportunity(opportunity);
 
   const styleName = useMemo(() => {
@@ -93,7 +95,7 @@ export default function Index() {
           />
         ))}
         sideDatas={herosData}>
-        <Outlet context={{ opportunity }} />
+        <Outlet context={{ opportunity, chain }} />
       </Hero>
     </>
   );

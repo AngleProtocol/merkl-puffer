@@ -1,4 +1,4 @@
-import type { Token as TokenType } from "@merkl/api";
+import type { Chain, Token as TokenType } from "@merkl/api";
 import { Button, Dropdown, Group, Icon, type IconProps, PrimitiveTag, Value, sizeScale } from "packages/dappkit/src";
 import { useMemo } from "react";
 import { formatUnits } from "viem";
@@ -12,6 +12,7 @@ export type TokenProps = {
   symbol?: boolean;
   icon?: boolean;
   size?: IconProps["size"];
+  chain?: Chain;
 };
 
 export default function Token({
@@ -22,6 +23,7 @@ export default function Token({
   value,
   icon = true,
   symbol = true,
+  chain,
 }: TokenProps) {
   const amoutFormated = amount ? formatUnits(amount, token.decimals) : undefined;
   const amountUSD = !amount ? 0 : (token.price ?? 0) * Number.parseFloat(amoutFormated ?? "0");
@@ -64,7 +66,7 @@ export default function Token({
   if (value) return display;
 
   return (
-    <Dropdown content={<TokenTooltip {...{ token, amount }} />}>
+    <Dropdown content={<TokenTooltip {...{ token, amount, chain, size }} />}>
       <Button size={size} look="soft">
         {display}
       </Button>

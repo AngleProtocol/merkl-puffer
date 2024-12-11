@@ -1,4 +1,4 @@
-import type { Campaign } from "@merkl/api";
+import type { Campaign, Chain as ChainType } from "@merkl/api";
 import {
   Box,
   type Component,
@@ -28,6 +28,7 @@ export type CampaignTableRowProps = Component<{
   campaign: Campaign;
   opportunity?: Opportunity;
   startsOpen?: boolean;
+  chain: ChainType;
 }>;
 
 export default function CampaignTableRow({
@@ -35,6 +36,7 @@ export default function CampaignTableRow({
   opportunity,
   startsOpen,
   className,
+  chain,
   ...props
 }: CampaignTableRowProps) {
   const { time, dailyRewards, active, amount, rules } = useCampaign(campaign, opportunity);
@@ -48,7 +50,6 @@ export default function CampaignTableRow({
         "Total",
         <Token
           key="token"
-          icon={false}
           symbol={false}
           size="md"
           token={campaign.rewardToken}
@@ -73,7 +74,7 @@ export default function CampaignTableRow({
         </Hash>,
       ],
       [
-        "Campaign Id",
+        "Merkl Campaign Id",
         <Hash key="id" size="sm" format="short" copy>
           {campaign.campaignId}
         </Hash>,
@@ -112,7 +113,7 @@ export default function CampaignTableRow({
           <OverrideTheme accent={"good"}>
             <Icon className={active ? "text-accent-10" : "text-main-10"} remix="RiCircleFill" />
           </OverrideTheme>
-          <Token size="xl" token={campaign.rewardToken} amount={dailyRewards} format="amount_price" />
+          <Token size="xl" token={campaign.rewardToken} amount={dailyRewards} format="amount_price" chain={chain} />
           <Icon
             data-state={!isOpen ? "closed" : "opened"}
             className="transition duration-150 ease-out data-[state=opened]:rotate-180"

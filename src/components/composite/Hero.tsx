@@ -50,7 +50,7 @@ export default function Hero({
         <Container>
           <Group className="flex-col h-full py-xl gap-xl lg:gap-xs">
             <Group className="items-center" size="sm">
-              <Button to={navigation?.link} look="soft" bold size="xs">
+              <Button to={navigation?.link ?? "/"} look="soft" bold size="xs">
                 Home
               </Button>
               {breadcrumbs?.map(breadcrumb => {

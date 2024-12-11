@@ -1,3 +1,4 @@
+import type { Chain } from "@merkl/api";
 import { Box, Button, Group, Icon, Text, Title } from "dappkit";
 import moment from "moment";
 import { useMemo, useState } from "react";
@@ -7,10 +8,10 @@ import CampaignTableRow from "./CampaignTableRow";
 
 export type IProps = {
   opportunity: OpportunityWithCampaigns;
+  chain: Chain;
 };
 
-export default function CampaignLibrary(props: IProps) {
-  const { opportunity } = props;
+export default function CampaignLibrary({ opportunity, chain }: IProps) {
   const [showInactive, setShowInactive] = useState(false);
 
   const rows = useMemo(() => {
@@ -21,9 +22,9 @@ export default function CampaignLibrary(props: IProps) {
 
     const campaignsSorted = shownCampaigns.sort((a, b) => Number(b.endTimestamp) - Number(a.endTimestamp));
     return campaignsSorted?.map(c => (
-      <CampaignTableRow key={c.id} campaign={c} opportunity={opportunity} startsOpen={startsOpen} />
+      <CampaignTableRow key={c.id} campaign={c} opportunity={opportunity} startsOpen={startsOpen} chain={chain} />
     ));
-  }, [opportunity, showInactive]);
+  }, [opportunity, showInactive, chain]);
 
   return (
     <CampaignTable
@@ -46,7 +47,7 @@ export default function CampaignLibrary(props: IProps) {
         rows
       ) : (
         <Box look="base" className="py-xl*2 flex-col text-center">
-          <Text>No active campaigns</Text>
+          <Text>No active campaign</Text>
           <div className="w-full">
             <Button onClick={() => setShowInactive(r => !r)} look="soft" className="m-auto">
               <Icon remix={showInactive ? "RiEyeLine" : "RiEyeOffLine"} />

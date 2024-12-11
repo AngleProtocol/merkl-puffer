@@ -1,36 +1,49 @@
-import type { Token } from "@merkl/api";
-import { Button, Divider, Group, Hash, Icon, Text, Title } from "packages/dappkit/src";
+import type { Chain, Explorer, Token } from "@merkl/api";
+import { Button, Divider, Group, Hash, Icon, Text } from "packages/dappkit/src";
 
 export type TokenTooltipProps = {
   token: Token;
+  size?: "sm" | "md" | "lg" | "xl" | "xs";
+  chain?: Chain & { explorers: Explorer[] };
 };
 
-export default function TokenTooltip({ token }: TokenTooltipProps) {
+export default function TokenTooltip({ token, size, chain }: TokenTooltipProps) {
   return (
     <>
-      <Group size="xs" className="flex-col">
-        <Group className="justify-between">
-          <Text size="xs">Token</Text>
-          <Hash format="short" size="xs">
-            {token.address}
-          </Hash>
+      <Group className="flex-col">
+        <Group className="w-full justify-between items-center" size="xl">
+          <Group size="sm">
+            <Icon size={size} src={token.icon} />
+            <Text size="sm" className="text-main-12" bold>
+              {token?.name}
+            </Text>
+          </Group>
+          <Text size="xs">
+            <Hash copy format="short" size="xs">
+              {token.address}
+            </Hash>
+          </Text>
         </Group>
-        <Group size="sm">
-          <Icon size={"sm"} src={token.icon} />
-          <Title h={4} size={"lg"}>
-            {token?.name}
-          </Title>
+        <Divider look="soft" horizontal />
+        <Group className="flex-col" size="md">
+          <Button to={`/tokens/${token?.symbol}`} size="xs" look="soft">
+            <Icon remix="RiArrowRightLine" />
+            {token?.symbol} on Merkl
+          </Button>
+          {chain?.explorers?.map(explorer => {
+            return (
+              <Button
+                key={`${explorer.url}`}
+                to={`${explorer.url}/token/${token.address}`}
+                external
+                size="xs"
+                look="soft">
+                <Icon remix="RiArrowRightLine" />
+                {token?.symbol} on Etherscan
+              </Button>
+            );
+          })}
         </Group>
-      </Group>
-      <Divider look="soft" horizontal />
-      {/* <Text size="xs">{token?.description}</Text> */}
-      <Group className="flex-col" size="sm">
-        <Button to={`/token/${token?.symbol}`} size="sm" look="bold">
-          {token?.symbol} on Merkl
-        </Button>
-        <Button size="sm" look="bold">
-          {token?.symbol} on Etherscan
-        </Button>
       </Group>
     </>
   );

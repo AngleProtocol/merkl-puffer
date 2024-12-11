@@ -21,7 +21,7 @@ export const [LeaderboardTable, LeaderboardRow, LeaderboardColumns] = createTabl
     className: "justify-start",
   },
   protocol: {
-    name: "Reason",
+    name: "Via",
     size: "minmax(30px,0.5fr)",
     compactSize: "minmax(20px,1fr)",
     className: "justify-end",
