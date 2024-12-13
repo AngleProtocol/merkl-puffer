@@ -1,10 +1,11 @@
 import type { Campaign } from "@merkl/api";
-import { Link } from "@remix-run/react";
-import { type Component, Group, Hash, PrimitiveTag, Text, Value, mergeClass } from "dappkit";
+import { type Component, Group, PrimitiveTag, Text, Value, mergeClass } from "dappkit";
+import { useWalletContext } from "packages/dappkit/src/context/Wallet.context";
 import { useMemo } from "react";
 import type { IRewards } from "src/api/services/reward.service";
 import { formatUnits, parseUnits } from "viem";
 import Token from "../token/Token";
+import User from "../user/User";
 import { LeaderboardRow } from "./LeaderboardTable";
 
 export type CampaignTableRowProps = Component<{
@@ -16,6 +17,7 @@ export type CampaignTableRowProps = Component<{
 
 export default function LeaderboardTableRow({ row, rank, total, className, ...props }: CampaignTableRowProps) {
   const { campaign } = props;
+  const { chains } = useWalletContext();
 
   const share = useMemo(() => {
     const amount = formatUnits(BigInt(row?.amount), campaign.rewardToken.decimals);
@@ -23,6 +25,10 @@ export default function LeaderboardTableRow({ row, rank, total, className, ...pr
 
     return Number.parseFloat(amount) / Number.parseFloat(all);
   }, [row, total, campaign]);
+
+  const chain = useMemo(() => {
+    return chains?.find(c => c.id === campaign.computeChainId);
+  }, [chains, campaign]);
 
   return (
     <LeaderboardRow
@@ -38,13 +44,7 @@ export default function LeaderboardTableRow({ row, rank, total, className, ...pr
           </PrimitiveTag>
         </Group>
       }
-      addressColumn={
-        <Link to={`/users/${row?.recipient}`}>
-          <Hash format="short" className="dim" look="bold">
-            {row?.recipient}
-          </Hash>
-        </Link>
-      }
+      addressColumn={<User chain={chain} address={row.recipient} />}
       rewardsColumn={<Token token={campaign.rewardToken} format="amount_price" amount={parseUnits(row?.amount, 0)} />}
       protocolColumn={<Text>{row?.reason?.split("_")[0]}</Text>}
     />

@@ -6,7 +6,6 @@ import { TokenService } from "src/api/services/token.service";
 import Hero from "src/components/composite/Hero";
 import Tag, { type TagType } from "src/components/element/Tag";
 import { chainIdOrder } from "src/constants/chain";
-import config from "../../merkl.config";
 
 export async function loader({ params: { symbol } }: LoaderFunctionArgs) {
   const tokens = await TokenService.getSymbol(symbol);
@@ -59,7 +58,7 @@ export default function Index() {
           {token.name} <span className="font-mono text-main-8">({token.symbol})</span>
         </>
       }
-      description={`Deposit or earn ${token.symbol} on ${config.appName}.`}
+      description={`Earn rewards by using ${token.symbol} as liquidity, or directly earn ${token.symbol} as rewards`}
       tabs={[
         {
           label: "Opportunities",

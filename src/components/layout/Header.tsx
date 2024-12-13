@@ -31,8 +31,12 @@ const item = {
 
 export default function Header() {
   const { mode } = useTheme();
-  const { address: user } = useWalletContext();
+  const { chainId, address: user, chains } = useWalletContext();
   const [open, setOpen] = useState<boolean>(false);
+
+  const chain = useMemo(() => {
+    return chains?.find(c => c.id === chainId);
+  }, [chains, chainId]);
 
   const routes = useMemo(() => {
     const { homepage, ...rest } = config.routes;
@@ -40,7 +44,7 @@ export default function Header() {
     return Object.assign(
       { homepage },
       {
-        dashboard: {
+        claims: {
           icon: "RiPlanetFill",
           route: user ? `/users/${user}` : "/users",
           key: crypto.randomUUID(),
@@ -102,7 +106,16 @@ export default function Header() {
               </Group>
 
               <Group className="hidden md:flex">
-                <WalletButton />
+                <WalletButton>
+                  <Button to={`/users/${user}`} size="sm" look="soft">
+                    <Icon remix="RiArrowRightLine" /> Check claims
+                  </Button>
+                  {chain?.explorers?.map(explorer => (
+                    <Button external key={explorer.url} to={`${explorer.url}/address/${user}`} size="sm" look="soft">
+                      <Icon remix="RiArrowRightLine" /> Visit explorer
+                    </Button>
+                  ))}
+                </WalletButton>
               </Group>
             </Group>
           </motion.div>

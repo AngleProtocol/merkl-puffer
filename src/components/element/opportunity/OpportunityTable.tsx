@@ -12,7 +12,7 @@ export const [OpportunityTable, OpportunityRow, opportunityColumns] = createTabl
     className: "justify-start",
     main: true,
   },
-  apy: {
+  apr: {
     name: "APR",
     size: "minmax(min-content,150px)",
     compactSize: "minmax(min-content,1fr)",

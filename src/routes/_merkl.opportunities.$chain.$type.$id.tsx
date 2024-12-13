@@ -2,6 +2,7 @@ import type { Chain } from "@merkl/api";
 import { type LoaderFunctionArgs, type MetaFunction, json } from "@remix-run/node";
 import { Meta, Outlet, useLoaderData } from "@remix-run/react";
 import { useMemo } from "react";
+import { Cache } from "src/api/services/cache.service";
 import { ChainService } from "src/api/services/chain.service";
 import type { OpportunityWithCampaigns } from "src/api/services/opportunity/opportunity.model";
 import { OpportunityService } from "src/api/services/opportunity/opportunity.service";
@@ -23,6 +24,9 @@ export async function loader({ params: { id, type, chain: chainId } }: LoaderFun
 
   return json({ opportunity, chain });
 }
+
+export const clientLoader = Cache.wrap("opportunities", 300);
+clientLoader.hydrate = true;
 
 export const meta: MetaFunction<typeof loader> = ({ data, error }) => {
   if (error) return [{ title: error }];

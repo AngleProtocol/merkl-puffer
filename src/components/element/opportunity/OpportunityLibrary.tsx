@@ -28,7 +28,7 @@ export default function OpportunityLibrary({
     [opportunities],
   );
 
-  const sortable = ["apy", "tvl", "rewards"] as const satisfies typeof opportunityColumns;
+  const sortable = ["apr", "tvl", "rewards"] as const satisfies typeof opportunityColumns;
 
   const [sortIdAndOrder, setSortIdAndOrder] = useSearchParamState<[id: (typeof sortable)[number], order: Order]>(
     "sort",
@@ -44,7 +44,7 @@ export default function OpportunityLibrary({
 
   return (
     <Group className="flex-col">
-      <Box content="sm" className="justify-between w-full">
+      <Box content="sm" className="justify-between w-full overflow-x-scroll">
         <OpportunityFilters {...{ only, exclude, chains, protocols }} />
       </Box>
       <OpportunityTable

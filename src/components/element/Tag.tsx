@@ -31,7 +31,7 @@ export type TagProps<T extends keyof TagTypes> = {
 
 export default function Tag<T extends keyof TagTypes>({ type, filter, value, ...props }: Component<TagProps<T>>) {
   const { chains } = useWalletContext();
-  const [, setSearchParams] = useSearchParams();
+  const [_, setSearchParams] = useSearchParams();
 
   switch (type) {
     case "status": {
@@ -69,13 +69,18 @@ export default function Tag<T extends keyof TagTypes>({ type, filter, value, ...
                     {chain?.name}
                   </Text>
                 </Group>
-                <Text size="xs">id: {chain?.id}</Text>
+                <Text size="xs">
+                  Chain ID:{" "}
+                  <Hash size="xs" format="full" copy>
+                    {chain?.id?.toString()}
+                  </Hash>
+                </Text>
               </Group>
 
               <Divider look="soft" horizontal />
               <Group className="flex-col">
                 <Button to={`/chains/${chain?.name}`} size="xs" look="soft">
-                  <Icon remix="RiArrowRightLine" /> Open
+                  <Icon remix="RiArrowRightLine" /> Check opportunities on {chain.name}
                 </Button>
               </Group>
             </Group>
@@ -133,10 +138,9 @@ export default function Tag<T extends keyof TagTypes>({ type, filter, value, ...
               </Group>
               <Divider look="soft" horizontal />
               <Group className="flex-col" size="md">
-                {/* <Text size="xs">{token?.description}</Text> */}
                 <Button to={`/tokens/${token?.symbol}`} size="xs" look="soft">
                   <Icon remix="RiArrowRightLine" />
-                  {token?.symbol} on Merkl
+                  Check opportunities with {token?.symbol}
                 </Button>
                 {chains
                   .find(c => c.id === token.chainId)
@@ -149,7 +153,7 @@ export default function Tag<T extends keyof TagTypes>({ type, filter, value, ...
                         size="xs"
                         look="soft">
                         <Icon remix="RiArrowRightLine" />
-                        {token?.symbol} on Etherscan
+                        Visit explorer
                       </Button>
                     );
                   })}
@@ -180,7 +184,7 @@ export default function Tag<T extends keyof TagTypes>({ type, filter, value, ...
                   </Hash>
                 </Group>
                 <Group size="sm">
-                  <Icon size={props?.size} src={token.logoURI} />
+                  <Icon size={props?.size} src={token.icon} />
                   <Text size="sm" className="text-main-12" bold>
                     {token?.name}
                   </Text>
@@ -188,14 +192,12 @@ export default function Tag<T extends keyof TagTypes>({ type, filter, value, ...
               </Group>
               <Divider look="soft" horizontal />
               <Group className="flex-col" size="md">
-                {/* <Text size="xs">{token?.description}</Text> */}
-                <Button to={`/chains/${token.chain?.name}`} size="sm" look="soft">
-                  <Icon remix="RiArrowRightLine" />
-                  {token.chain?.name} on Merkl
-                </Button>
                 <Button to={`/tokens/${token?.symbol}`} size="xs" look="soft">
                   <Icon remix="RiArrowRightLine" />
-                  {token?.symbol} on Merkl
+                  Check opportunities with {token?.symbol}
+                </Button>
+                <Button to={`/chains/${token.chain?.name}`} size="xs" look="soft">
+                  <Icon remix="RiArrowRightLine" /> Check opportunities on {token.chain?.name}
                 </Button>
                 {chains
                   .find(c => c.id === token.chainId)
@@ -208,7 +210,7 @@ export default function Tag<T extends keyof TagTypes>({ type, filter, value, ...
                         size="xs"
                         look="soft">
                         <Icon remix="RiArrowRightLine" />
-                        {token?.symbol} on Etherscan
+                        Visit explorer
                       </Button>
                     );
                   })}
@@ -223,7 +225,8 @@ export default function Tag<T extends keyof TagTypes>({ type, filter, value, ...
       );
     }
     case "protocol": {
-      const protocol = value;
+      const protocol = value as TagTypes["protocol"];
+
       if (!protocol) return <Button {...props}>{value}</Button>;
       return (
         <Dropdown
@@ -242,12 +245,14 @@ export default function Tag<T extends keyof TagTypes>({ type, filter, value, ...
               <Group className="flex-col" size="md">
                 <Button to={`/protocols/${protocol?.id}`} size="xs" look="soft">
                   <Icon remix="RiArrowRightLine" />
-                  {protocol?.name} on Merkl
+                  Check opportunities on {protocol?.name}
                 </Button>
-                <Button size="xs" look="soft">
-                  <Icon remix="RiArrowRightLine" />
-                  {protocol?.name}
-                </Button>
+                {protocol.url && (
+                  <Button external to={protocol.url} size="xs" look="soft">
+                    <Icon remix="RiArrowRightLine" />
+                    Visit {protocol?.name}
+                  </Button>
+                )}
               </Group>
             </Group>
           }>

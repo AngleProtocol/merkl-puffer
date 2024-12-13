@@ -70,20 +70,12 @@ export default function Index() {
   return (
     <Hero
       icons={[{ src: protocol?.icon }]}
-      title={
-        <Group className="items-center">
-          {protocol?.name}
-          {/* TODO: add the link to this button */}
-          {/* <Button look="soft" size="xl" to={protocol?.name}>
-            <Icon remix="RiArrowRightUpLine" />
-          </Button> */}
-        </Group>
-      }
+      title={<Group className="items-center">{protocol?.name}</Group>}
       breadcrumbs={[
         { link: "/protocols", name: "Protocols" },
         { link: `/protocols/${protocol.name}`, name: protocol.name },
       ]}
-      description={"Protocol"}
+      description={protocol.description ?? `Earn rewards by supplying liquidity on ${protocol.name}`}
       sideDatas={herosData}>
       <Outlet context={{ opportunities, count }} />
     </Hero>

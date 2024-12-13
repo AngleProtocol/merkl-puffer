@@ -18,7 +18,7 @@ export type OpportunityFilterProps = {
 
 //TODO: burn this to the ground and rebuild it with a deeper comprehension of search param states
 export default function OpportunityFilters({ only, protocols, exclude, chains }: OpportunityFilterProps) {
-  const [setSearchParams] = useSearchParams();
+  const [_, setSearchParams] = useSearchParams();
   const navigation = useNavigation();
   const navigate = useNavigate();
   const location = useLocation();
@@ -114,6 +114,14 @@ export default function OpportunityFilters({ only, protocols, exclude, chains }:
 
   const [innerSearch, setInnerSearch] = useState<string>(search ?? "");
 
+  const [tvlFilter] = useSearchParamState<string>(
+    "tvl",
+    v => v,
+    v => v,
+  );
+
+  const [tvlInput, setTvlInput] = useState<string>(tvlFilter ?? "");
+
   const [protocolFilter] = useSearchParamState<string[]>(
     "protocol",
     v => v?.join(","),
@@ -151,15 +159,18 @@ export default function OpportunityFilters({ only, protocols, exclude, chains }:
     const sameActions = isSameArray(actionsInput, actionsFilter);
     const sameStatus = isSameArray(statusInput, statusFilter);
     const sameProtocols = isSameArray(protocolInput, protocolFilter);
+    const sameTvl = tvlFilter === tvlInput || tvlInput === "";
     const sameSearch = (search ?? "") === innerSearch;
 
-    return [sameChains, sameActions, sameStatus, sameSearch, sameProtocols].some(v => v === false);
+    return [sameChains, sameActions, sameTvl, sameStatus, sameSearch, sameProtocols].some(v => v === false);
   }, [
     chainIdsInput,
     chainIdsFilter,
     actionsInput,
     actionsFilter,
     statusFilter,
+    tvlFilter,
+    tvlInput,
     protocolInput,
     protocolFilter,
     statusInput,
@@ -182,6 +193,7 @@ export default function OpportunityFilters({ only, protocols, exclude, chains }:
       updateParams("action", actionsInput, params);
       updateParams("status", statusInput, params);
       updateParams("protocol", protocolInput, params);
+      tvlInput && updateParams("tvl", [tvlInput], params);
 
       return params;
     });
@@ -196,6 +208,7 @@ export default function OpportunityFilters({ only, protocols, exclude, chains }:
     setProtocolInput([]);
     setStatusInput([]);
     setActionsInput([]);
+    setTvlInput("");
     setInnerSearch("");
   }
 
@@ -207,13 +220,14 @@ export default function OpportunityFilters({ only, protocols, exclude, chains }:
   }, [navigation]);
 
   return (
-    <Group className="items-center">
+    <Group className="items-center flex-nowrap">
       {fields.includes("search") && (
         <Form>
           <Input
             look="soft"
             name="search"
             value={innerSearch}
+            className="min-w-[12ch]"
             state={[innerSearch, v => setInnerSearch(v)]}
             suffix={<Icon remix="RiSearchLine" />}
             onClick={onSearchSubmit}
@@ -263,6 +277,19 @@ export default function OpportunityFilters({ only, protocols, exclude, chains }:
           look="tint"
           placeholder="Protocols"
         />
+      )}
+      {fields.includes("tvl") && (
+        <Form>
+          <Input
+            state={[tvlInput, n => (/^\d+$/.test(n) || !n) && setTvlInput(n)]}
+            look="soft"
+            name="tvl"
+            value={tvlInput}
+            className="min-w-[4ch]"
+            suffix={<Icon remix="RiFilter2Line" />}
+            placeholder="Minimum TVL"
+          />
+        </Form>
       )}
       {((canApply && !clearing && navigation.state === "idle") ||
         (applying && !clearing && navigation.state === "loading")) && (

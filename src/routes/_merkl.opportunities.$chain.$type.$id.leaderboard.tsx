@@ -5,6 +5,7 @@ import { Box, Container, Group, Hash, Icon, OverrideTheme, PrimitiveTag, Select,
 import moment from "moment";
 import Time from "packages/dappkit/src/components/primitives/Time";
 import { useCallback, useMemo } from "react";
+import { Cache } from "src/api/services/cache.service";
 import { CampaignService } from "src/api/services/campaigns/campaign.service";
 import { ChainService } from "src/api/services/chain.service";
 import { RewardService } from "src/api/services/reward.service";
@@ -42,6 +43,9 @@ export async function loader({ params: { id, type, chain: chainId }, request }: 
     total,
   });
 }
+
+export const clientLoader = Cache.wrap("opportunities/leaderboard", 300);
+clientLoader.hydrate = true;
 
 export default function Index() {
   const { rewards, campaigns, count, total } = useLoaderData<typeof loader>();

@@ -26,7 +26,7 @@ export default function Index() {
       ]}
       navigation={{ label: "Back to opportunities", link: "/" }}
       title={chain.name}
-      description={"Lorem ipsum something cool about the chain"}
+      description={`Earn rewards by supplying liquidity on ${chain.name}`}
       tabs={[
         {
           label: "Opportunities",

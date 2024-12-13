@@ -12,7 +12,7 @@ export default function Index() {
     <Hero
       breadcrumbs={[]}
       navigation={{ label: "Back to opportunities", link: "/" }}
-      title={"Dashboard"}
+      title={"Claims"}
       description={"Claim and monitor the rewards awarded through Merkl"}
       tabs={[
         {

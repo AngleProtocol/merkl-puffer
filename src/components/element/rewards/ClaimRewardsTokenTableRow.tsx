@@ -10,9 +10,15 @@ import ClaimRewardsTokenTablePrice from "./ClaimRewardsTokenTablePrice";
 export type ClaimRewardsTokenTableRowProps = Component<{
   reward: Reward["rewards"][number];
   checkedState?: GetSet<boolean>;
+  showCheckbox?: boolean;
 }>;
 
-export default function ClaimRewardsTokenTableRow({ reward, checkedState, ...props }: ClaimRewardsTokenTableRowProps) {
+export default function ClaimRewardsTokenTableRow({
+  reward,
+  checkedState,
+  showCheckbox,
+  ...props
+}: ClaimRewardsTokenTableRowProps) {
   const [open, setOpen] = useState(false);
 
   const unclaimed = useMemo(() => BigInt(reward.amount) - BigInt(reward.claimed), [reward]);
@@ -22,7 +28,8 @@ export default function ClaimRewardsTokenTableRow({ reward, checkedState, ...pro
       {...props}
       onClick={() => setOpen(o => !o)}
       tokenColumn={
-        <Group>
+        <Group className="flex-nowrap">
+          {showCheckbox && <Checkbox look="hype" state={checkedState} className="!m-md" size="sm" />}
           <Tag type="token" value={reward.token} />
           <Icon
             data-state={!open ? "closed" : "opened"}
@@ -47,11 +54,6 @@ export default function ClaimRewardsTokenTableRow({ reward, checkedState, ...pro
           price={reward.token.price}
           decimals={reward.token.decimals}
         />
-      }
-      claimColumn={
-        <Group className="items-center justify-center">
-          <Checkbox state={checkedState} className="m-auto" size="sm" />
-        </Group>
       }>
       <Collapsible state={[open, setOpen]}>
         <Space size="md" />

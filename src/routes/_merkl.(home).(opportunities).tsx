@@ -1,6 +1,7 @@
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json, useLoaderData } from "@remix-run/react";
 import { Container, Space } from "dappkit";
+import { Cache } from "src/api/services/cache.service";
 import { ChainService } from "src/api/services/chain.service";
 import { OpportunityService } from "src/api/services/opportunity/opportunity.service";
 import { ProtocolService } from "src/api/services/protocol.service";
@@ -15,6 +16,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   return json({ opportunities, chains, count, protocols });
 }
+
+export const clientLoader = Cache.wrap("root", 300);
+clientLoader.hydrate = true;
 
 export default function Index() {
   const { opportunities, chains, count, protocols } = useLoaderData<typeof loader>();

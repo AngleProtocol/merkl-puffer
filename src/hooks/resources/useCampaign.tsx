@@ -57,6 +57,7 @@ export default function useCampaign(campaign?: Campaign, opportunity?: Opportuni
             {
               type: "liquidity" as const,
               value: {
+                description: `${c.params.weightFees / 100}% of campaign rewards are split amongst liquidity providers based on the fees their positions earn`,
                 label: (
                   <>
                     <Icon remix="RiDiscountPercentFill" />
@@ -68,16 +69,24 @@ export default function useCampaign(campaign?: Campaign, opportunity?: Opportuni
             },
             !!opportunity && {
               type: "liquidity" as const,
-              value: { label: <Token value token={opportunity.tokens?.[0]} />, percentage: c.params.weightToken0 },
+              value: {
+                description: `${c.params.weightToken0 / 100}% of campaign rewards are split amongst liquidity providers based on the amount of ${opportunity.tokens?.[0].symbol} held in their positions. The more ${opportunity.tokens?.[0].symbol} they hold over time relative to others, the greater their share of rewards`,
+                label: <Token value token={opportunity.tokens?.[0]} />,
+                percentage: c.params.weightToken0,
+              },
             },
             !!opportunity && {
               type: "liquidity" as const,
-              value: { label: <Token value token={opportunity.tokens?.[1]} />, percentage: c.params.weightToken1 },
+              value: {
+                description: `${c.params.weightToken1 / 100}% of campaign rewards are split amongst liquidity providers based on the amount of ${opportunity.tokens?.[1].symbol} held in their positions. The more ${opportunity.tokens?.[1].symbol} they hold over time relative to others, the greater their share of rewards`,
+                label: <Token value token={opportunity.tokens?.[1]} />,
+                percentage: c.params.weightToken1,
+              },
             },
             !c.params.isOutOfRangeIncentivized && {
               type: "boolean",
               value: {
-                description: <>Positions that are out of range won't earn rewards</>,
+                description: "Out-of-range positions do not earn rewards",
                 label: (
                   <>
                     <Icon remix="RiStockFill" />
@@ -106,6 +115,9 @@ export default function useCampaign(campaign?: Campaign, opportunity?: Opportuni
                   Blacklist
                 </>
               ),
+              chain: campaign.chain,
+              description:
+                "The following blacklisted addresses don’t earn rewards. If a liquidity manager (ALM) address is blacklisted, any addresses linked to it are also ineligible",
               addresses: (campaign as Campaign<WithList>).params.blacklist,
             },
           }
@@ -119,12 +131,15 @@ export default function useCampaign(campaign?: Campaign, opportunity?: Opportuni
         ? {
             type: "address",
             value: {
+              description:
+                "Only the following addresses are eligible for rewards. If a liquidity manager (ALM) address is whitelisted, any addresses that provided liquidity via the ALM are also eligible",
               label: (
                 <>
                   <Icon remix="RiProhibitedFill" />
                   Whitelist
                 </>
               ),
+              chain: campaign.chain,
               addresses: (campaign as Campaign<WithList>).params.whitelist,
             },
           }

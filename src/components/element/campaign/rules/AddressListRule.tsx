@@ -1,20 +1,29 @@
-import { Dropdown, Group, Hash, PrimitiveTag, Value } from "packages/dappkit/src";
-import type { ReactNode } from "react";
+import type { Chain } from "@merkl/api";
+import { Divider, Dropdown, Group, PrimitiveTag, Value } from "packages/dappkit/src";
+import { type ReactNode, useMemo } from "react";
+import User from "../../user/User";
 
-export type AddressListRuleProps = { value: { label: ReactNode; addresses: string[] } };
+export type AddressListRuleProps = {
+  value: { label: ReactNode; addresses: string[]; description: string; chain: Chain };
+};
 
-export default function AddressListRule({ value: { label, addresses }, ...props }: AddressListRuleProps) {
+export default function AddressListRule({
+  value: { label, addresses, description, chain },
+  ...props
+}: AddressListRuleProps) {
+  const listedAddresses = useMemo(
+    () => addresses.map(a => <User chain={chain} address={a} key={a} />),
+    [addresses, chain],
+  );
   return (
     <Dropdown
       size="lg"
       padding="xs"
       content={
-        <Group className="flex-col">
-          {addresses.map(a => (
-            <Hash copy key={a} format="short">
-              {a}
-            </Hash>
-          ))}
+        <Group className="flex-col max-w-[42ch]">
+          <Group className="flex-col">{description}</Group>
+          <Divider horizontal look="soft" />
+          <Group className="">{listedAddresses}</Group>
         </Group>
       }>
       <PrimitiveTag look="soft" {...props}>

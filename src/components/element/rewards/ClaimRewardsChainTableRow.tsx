@@ -5,7 +5,8 @@ import Collapsible from "packages/dappkit/src/components/primitives/Collapsible"
 import EventBlocker from "packages/dappkit/src/components/primitives/EventBlocker";
 import { useWalletContext } from "packages/dappkit/src/context/Wallet.context";
 import { useMemo, useState } from "react";
-import { encodeFunctionData, formatUnits, parseAbi } from "viem";
+import useReward from "src/hooks/resources/useReward";
+import { formatUnits } from "viem";
 import Tag from "../Tag";
 import { ClaimRewardsChainRow } from "./ClaimRewardsChainTable";
 import { ClaimRewardsTokenTable } from "./ClaimRewardsTokenTable";
@@ -33,44 +34,16 @@ export default function ClaimRewardsChainTableRow({
   );
   const isOnCorrectChain = useMemo(() => reward.chain.id === chainId, [reward, chainId]);
 
-  const claimTransaction = useMemo(() => {
-    const abi = parseAbi(["function claim(address[],address[],uint256[],bytes32[][]) view returns (uint256)"]);
-
-    const tokenAddresses = reward.rewards.map(({ token }) => token.address as `0x${string}`);
-    const accumulatedRewards = reward.rewards.map(({ amount }) => amount);
-    const proofs = reward.rewards.map(({ proofs }) => proofs as `0x${string}`[]);
-
-    if (!reward || !user || !isUserRewards) return;
-    return {
-      to: reward.distributor,
-      data: encodeFunctionData({
-        abi,
-        functionName: "claim",
-        args: [tokenAddresses.map(() => user as `0x${string}`), tokenAddresses, accumulatedRewards, proofs],
-      }),
-    };
-  }, [user, reward, isUserRewards]);
+  const { claimTransaction } = useReward(
+    reward,
+    !isUserRewards ? undefined : user,
+    selectedTokens?.size > 0 ? selectedTokens : undefined,
+  );
 
   const unclaimed = useMemo(() => {
     return reward.rewards.reduce(
       (sum, { amount, claimed, token: { decimals, price } }) =>
         sum + Number.parseFloat(formatUnits(amount - claimed, decimals)) * (price ?? 0),
-      0,
-    );
-  }, [reward]);
-
-  const pending = useMemo(() => {
-    return reward.rewards.reduce(
-      (sum, { pending, token: { decimals, price } }) =>
-        sum + Number.parseFloat(formatUnits(pending, decimals)) * (price ?? 0),
-      0,
-    );
-  }, [reward]);
-
-  const claimed = useMemo(() => {
-    return reward.rewards.reduce(
-      (sum, { claimed, token: { decimals, price } }) =>
-        sum + Number.parseFloat(formatUnits(claimed, decimals)) * (price ?? 0),
       0,
     );
   }, [reward]);
@@ -83,8 +56,9 @@ export default function ClaimRewardsChainTableRow({
           <ClaimRewardsTokenTableRow
             key={_reward.token.address}
             className="cursor-pointer [&>*>*]:cursor-auto"
+            showCheckbox={isOnCorrectChain && isAbleToClaim}
             checkedState={[
-              selectedTokens.has(_reward.token.address),
+              selectedTokens.has(_reward.token.address) || !selectedTokens.size,
               checked => {
                 setSelectedTokens(t => {
                   if (checked) t.add(_reward.token.address);
@@ -97,7 +71,7 @@ export default function ClaimRewardsChainTableRow({
             reward={_reward}
           />
         )),
-    [reward, selectedTokens],
+    [reward, selectedTokens, isOnCorrectChain, isAbleToClaim],
   );
 
   return (
@@ -121,30 +95,16 @@ export default function ClaimRewardsChainTableRow({
                 </TransactionButton>
               ) : (
                 <Button className="ml-xl" onClick={() => switchChain(reward.chain.id)}>
-                  Switch
+                  Switch Network <Icon remix="RiArrowLeftRightLine" />
                 </Button>
               ))}
           </EventBlocker>
         </>
       }
-      pendingColumn={
-        pending === 0 ? undefined : (
-          <Value size="lg" format="$0,0" look="bold" className="font-title">
-            {pending}
-          </Value>
-        )
-      }
       unclaimedColumn={
         unclaimed === 0 ? undefined : (
-          <Value size="lg" format="$0,0" look="bold" className="font-title">
+          <Value size="lg" format="$0,0.#" look="bold" className="font-title">
             {unclaimed}
-          </Value>
-        )
-      }
-      claimedColumn={
-        claimed === 0 ? undefined : (
-          <Value size="lg" format="$0,0" look="bold" className="font-title">
-            {claimed}
           </Value>
         )
       }>

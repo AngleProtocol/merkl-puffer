@@ -43,22 +43,22 @@ export default function useOpportunity(opportunity: Opportunity) {
   const description = useMemo(() => {
     const tokenSymbols = opportunity?.tokens?.reduce((str, token, index, tokens) => {
       const noSeparator = index === tokens.length || index === 0;
-      const separator = index === tokens.length - 1 ? " and " : ", ";
+      const separator = index === tokens.length - 1 ? "-" : "-";
 
       return str + (noSeparator ? "" : separator) + token.symbol;
     }, "");
 
     switch (opportunity.action) {
       case "POOL":
-        return `Earn rewards by providing ${tokenSymbols} in the pool through ${opportunity.protocol?.name} or one of the liquidity management solutions related to the pool supported by Merkl.`;
+        return `Earn rewards by providing liquidity to the ${opportunity.protocol?.name} ${tokenSymbols} pool on ${opportunity.chain.name}, or through a liquidity manager supported by Merkl`;
       case "HOLD":
-        return `Earn rewards by holding ${tokenSymbols} or staking the token in one of the supported contracts.`;
+        return `Earn rewards by holding ${tokenSymbols} or by staking it in a supported contract`;
       case "LEND":
-        return `Earn rewards by lending ${tokenSymbols} through ${opportunity.protocol?.name}.`;
+        return `Earn rewards by supplying liquidity to the ${opportunity.protocol?.name} ${tokenSymbols} on ${opportunity.chain.name}`;
       case "BORROW":
-        return `Earn rewards by lending ${tokenSymbols} through ${opportunity.protocol?.name}.`;
+        return `Earn rewards by borrowing liquidity to the ${opportunity.protocol?.name} ${tokenSymbols} on ${opportunity.chain.name}`;
       case "DROP":
-        return `Check you dashboard to see if you are elligible to claim ${tokenSymbols}.`;
+        return `Visit your dashboard to check if you've earned rewards from this airdrop`;
       default:
         break;
     }

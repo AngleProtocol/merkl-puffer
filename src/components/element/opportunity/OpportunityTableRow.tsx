@@ -3,6 +3,7 @@ import { Link } from "@remix-run/react";
 import type { BoxProps } from "dappkit";
 import { Dropdown, Group, Icon, Icons, PrimitiveTag, Text, Title, Value } from "dappkit";
 import { mergeClass } from "dappkit";
+import { useOverflowingRef } from "packages/dappkit/src/hooks/events/useOverflowing";
 import useOpportunity from "src/hooks/resources/useOpportunity";
 import Tag, { type TagTypes } from "../Tag";
 import AprModal from "../apr/AprModal";
@@ -17,14 +18,16 @@ export type OpportunityTableRowProps = {
 export default function OpportunityTableRow({ hideTags, opportunity, className, ...props }: OpportunityTableRowProps) {
   const { tags, link, icons, rewardsBreakdown } = useOpportunity(opportunity);
 
+  const { ref, overflowing } = useOverflowingRef<HTMLHeadingElement>();
+
   return (
-    <Link to={link}>
+    <Link prefetch="intent" to={link}>
       <OpportunityRow
         size="lg"
         content="sm"
         className={mergeClass("dim", className)}
         {...props}
-        apyColumn={
+        aprColumn={
           <Dropdown size="xl" content={<AprModal opportunity={opportunity} />}>
             <PrimitiveTag look="tint" size="lg">
               <Value value format="0a%">
@@ -72,16 +75,23 @@ export default function OpportunityTableRow({ hideTags, opportunity, className, 
         }
         opportunityColumn={
           <Group className="flex-col w-full text-nowrap whitespace-nowrap text-ellipsis">
-            <Group className="text-nowrap whitespace-nowrap text-ellipsis min-w-0 flex-nowrap overflow-hidden max-w-full">
+            <Group className="text-nowrap whitespace-nowrap min-w-0 flex-nowrap overflow-hidden max-w-full">
               <Text className="text-xl">
                 <Icons className="flex-nowrap">{icons}</Icons>
               </Text>
-              <Title
-                h={3}
-                size={4}
-                className="text-nowrap whitespace-nowrap text-ellipsis min-w-0 inline-block overflow-hidden">
-                {opportunity.name}
-              </Title>
+              {/* TODO: embed the ellipsis scroll behavior in the Text component as an ellipsis prop */}
+              <Group className="overflow-hidden">
+                <Title
+                  h={3}
+                  size={4}
+                  ref={ref}
+                  className={mergeClass(
+                    "text-nowrap whitespace-nowrap text-ellipsis min-w-0 inline-block overflow-hidden",
+                    overflowing && "hover:overflow-visible hover:animate-textScroll hover:text-clip",
+                  )}>
+                  <span className="overflow-visible">{opportunity.name}</span>
+                </Title>
+              </Group>
             </Group>
             <Group>
               {tags

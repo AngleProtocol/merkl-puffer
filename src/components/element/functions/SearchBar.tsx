@@ -65,7 +65,7 @@ export default function SearchBar({ icon = false }: SearchBarProps) {
                       case "chain":
                         return (
                           <>
-                            <Button to={`/chain/${results[i].name}`} look="soft" className="gap-lg">
+                            <Button to={`/chains/${results[i].name}`} look="soft" className="gap-lg">
                               <Icon src={results[i].icon} /> {results[i].name}
                               <Icon remix="RiArrowRightLine" />
                             </Button>
@@ -77,7 +77,7 @@ export default function SearchBar({ icon = false }: SearchBarProps) {
                       case "token":
                         return (
                           <>
-                            <Button to={`/token/${results[i].symbol}`} look="soft">
+                            <Button to={`/tokens/${results[i].symbol}`} look="soft">
                               <Icon src={results[i].icon} /> {results[i].symbol} <Icon remix="RiArrowRightLine" />
                             </Button>
                             <Divider look="soft" />
@@ -86,7 +86,7 @@ export default function SearchBar({ icon = false }: SearchBarProps) {
                       case "protocol":
                         return (
                           <>
-                            <Button to={`/protocol/${results[i].name}`} look="soft">
+                            <Button to={`/protocols/${results[i].id}`} look="soft">
                               <Icon src={results[i].icon} /> {results[i].name}
                               <Icon remix="RiArrowRightLine" />
                             </Button>
