@@ -1,10 +1,9 @@
 import { type LoaderFunctionArgs, type MetaFunction, json } from "@remix-run/node";
 import { Outlet, useLoaderData } from "@remix-run/react";
-import { Value } from "packages/dappkit/src";
 import { Cache } from "src/api/services/cache.service";
 import { ChainService } from "src/api/services/chain.service";
 import { OpportunityService } from "src/api/services/opportunity/opportunity.service";
-import Hero from "src/components/composite/Hero";
+import Hero, { heroBuildSideDatas } from "src/components/composite/Hero";
 
 export async function loader({ params: { id } }: LoaderFunctionArgs) {
   const chain = await ChainService.get({ search: id });
@@ -58,37 +57,7 @@ export default function Index() {
           key: crypto.randomUUID(),
         },
       ]}
-      // TODO: Make this dynamic
-      sideDatas={[
-        {
-          data: (
-            <Value format="0" size={4} className="!text-main-12">
-              {count}
-            </Value>
-          ),
-          label: "Live opportunities",
-          key: crypto.randomUUID(),
-        },
-        {
-          data: (
-            <Value format="0a%" size={4} className="!text-main-12">
-              {maxApr / 100}
-            </Value>
-          ),
-          label: "APR",
-          key: crypto.randomUUID(),
-        },
-        {
-          data: (
-            <Value format="$0.00a" size={4} className="!text-main-12">
-              {dailyRewards}
-            </Value>
-          ),
-          label: "Daily rewards",
-          key: crypto.randomUUID(),
-        },
-      ]}
-    >
+      sideDatas={heroBuildSideDatas(count, maxApr, dailyRewards)}>
       <Outlet />
     </Hero>
   );

@@ -3,8 +3,9 @@ import { Outlet, useLoaderData } from "@remix-run/react";
 import { useMemo } from "react";
 import { Cache } from "src/api/services/cache.service";
 import { ChainService } from "src/api/services/chain.service";
+import { OpportunityService } from "src/api/services/opportunity/opportunity.service";
 import { TokenService } from "src/api/services/token.service";
-import Hero from "src/components/composite/Hero";
+import Hero, { heroBuildSideDatas } from "src/components/composite/Hero";
 import Tag, { type TagType } from "src/components/element/Tag";
 import { chainIdOrder } from "src/constants/chain";
 
@@ -12,7 +13,16 @@ export async function loader({ params: { symbol } }: LoaderFunctionArgs) {
   const tokens = await TokenService.getSymbol(symbol);
   const chains = await ChainService.getAll();
 
-  return json({ tokens, chains });
+  const { opportunities: opportunitiesByApr, count } = await OpportunityService.getMany({
+    tokens: symbol,
+    status: "LIVE",
+    sort: "apr",
+    order: "desc",
+  });
+
+  const { sum: dailyRewards } = await OpportunityService.getAggregate({ tokens: symbol }, "dailyRewards");
+
+  return json({ tokens, chains, dailyRewards, maxApr: opportunitiesByApr?.[0]?.apr, count });
 }
 
 export const clientLoader = Cache.wrap("token", 300);
@@ -26,7 +36,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 };
 
 export default function Index() {
-  const { tokens, chains } = useLoaderData<typeof loader>();
+  const { tokens, chains, dailyRewards, count, maxApr } = useLoaderData<typeof loader>();
   const token = tokens?.[0];
 
   const tags = useMemo(() => {
@@ -70,17 +80,8 @@ export default function Index() {
         },
       ]}
       // TODO: Make this dynamic
-      // sideDatas={[
-      //   {
-      //     data: "25",
-      //     label: "Live opportunities",
-      //     key: crypto.randomUUID(),
-      //   },
-      //   { data: "400%", label: "APR", key: crypto.randomUUID() },
-      //   { data: "$4k", label: "Daily rewards", key: crypto.randomUUID() },
-      // ]}
-      tags={tags.map(tag => <Tag key={`${tag.type}_${tag.value?.address ?? tag.value}`} {...tag} size="lg" />)}
-    >
+      sideDatas={heroBuildSideDatas(count, maxApr, dailyRewards)}
+      tags={tags.map(tag => <Tag key={`${tag.type}_${tag.value?.address ?? tag.value}`} {...tag} size="lg" />)}>
       <Outlet />
     </Hero>
   );

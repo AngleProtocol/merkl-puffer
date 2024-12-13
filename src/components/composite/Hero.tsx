@@ -1,5 +1,5 @@
 import { useLocation } from "@remix-run/react";
-import { Container, Divider, Group, Icon, type IconProps, Icons, Tabs, Text, Title } from "dappkit";
+import { Container, Divider, Group, Icon, type IconProps, Icons, Tabs, Text, Title, Value } from "dappkit";
 import { Button } from "dappkit";
 import config from "merkl.config";
 import type { PropsWithChildren, ReactNode } from "react";
@@ -124,4 +124,36 @@ export default function Hero({
       <div>{children}</div>
     </>
   );
+}
+
+export function heroBuildSideDatas(count: number, maxApr: number, dailyRewards: number) {
+  return [
+    {
+      data: (
+        <Value format="0" size={4} className="!text-main-12">
+          {count}
+        </Value>
+      ),
+      label: "Live opportunities",
+      key: crypto.randomUUID(),
+    },
+    {
+      data: (
+        <Value format="0a%" size={4} className="!text-main-12">
+          {maxApr / 100}
+        </Value>
+      ),
+      label: "APR",
+      key: crypto.randomUUID(),
+    },
+    {
+      data: (
+        <Value format="$0.00a" size={4} className="!text-main-12">
+          {dailyRewards}
+        </Value>
+      ),
+      label: "Daily rewards",
+      key: crypto.randomUUID(),
+    },
+  ];
 }
