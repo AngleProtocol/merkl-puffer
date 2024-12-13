@@ -78,7 +78,7 @@ export default function useOpportunity(opportunity: Opportunity) {
             key: crypto.randomUUID(),
           },
           {
-            label: "Max APR",
+            label: "APR",
             data: (
               <Value format="0.00%" size={4} className="!text-main-12">
                 {opportunity.apr / 100}

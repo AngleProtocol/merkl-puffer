@@ -1,4 +1,5 @@
 import type { Campaign } from "@merkl/api";
+import { Link } from "@remix-run/react";
 import { type Component, Group, Hash, PrimitiveTag, Text, Value, mergeClass } from "dappkit";
 import { useMemo } from "react";
 import type { IRewards } from "src/api/services/reward.service";
@@ -38,9 +39,11 @@ export default function LeaderboardTableRow({ row, rank, total, className, ...pr
         </Group>
       }
       addressColumn={
-        <Hash format="short" copy>
-          {row?.recipient}
-        </Hash>
+        <Link to={`/users/${row?.recipient}`}>
+          <Hash format="short" className="dim" look="bold">
+            {row?.recipient}
+          </Hash>
+        </Link>
       }
       rewardsColumn={<Token token={campaign.rewardToken} format="amount_price" amount={parseUnits(row?.amount, 0)} />}
       protocolColumn={<Text>{row?.reason?.split("_")[0]}</Text>}
