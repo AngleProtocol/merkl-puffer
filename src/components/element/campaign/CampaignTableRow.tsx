@@ -15,6 +15,7 @@ import {
 } from "dappkit";
 import moment from "moment";
 import Collapsible from "packages/dappkit/src/components/primitives/Collapsible";
+import Time from "packages/dappkit/src/components/primitives/Time";
 import { type ReactNode, useCallback, useMemo, useState } from "react";
 import type { Opportunity } from "src/api/services/opportunity/opportunity.model";
 import useCampaign from "src/hooks/resources/useCampaign";
@@ -78,6 +79,16 @@ export default function CampaignTableRow({
         <Hash key="id" size="sm" format="short" copy>
           {campaign.campaignId}
         </Hash>,
+      ],
+      [
+        "Last snapshot",
+        <Text key="computedUntil">
+          {campaign?.campaignStatus?.computedUntil ? (
+            <Time timestamp={Number(campaign?.campaignStatus?.computedUntil) * 1000} />
+          ) : (
+            "not computed yet"
+          )}
+        </Text>,
       ],
     ] as const satisfies [string, ReactNode][];
 
