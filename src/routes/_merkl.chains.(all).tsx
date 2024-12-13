@@ -20,7 +20,7 @@ export default function Index() {
           label: "Live opportunities",
           key: crypto.randomUUID(),
         },
-        { data: "400%", label: "Max APR", key: crypto.randomUUID() },
+        { data: "400%", label: "APR", key: crypto.randomUUID() },
         { data: "$4k", label: "Daily rewards", key: crypto.randomUUID() },
       ]}
     >

@@ -1,8 +1,9 @@
 import type { Campaign } from "@merkl/api";
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json, useLoaderData } from "@remix-run/react";
-import { Box, Container, Group, Hash, Icon, OverrideTheme, Select, Space, Title, Value } from "dappkit";
+import { Box, Container, Group, Hash, Icon, OverrideTheme, PrimitiveTag, Select, Space, Title, Value } from "dappkit";
 import moment from "moment";
+import Time from "packages/dappkit/src/components/primitives/Time";
 import { useCallback, useMemo } from "react";
 import { CampaignService } from "src/api/services/campaigns/campaign.service";
 import { ChainService } from "src/api/services/chain.service";
@@ -79,12 +80,20 @@ export default function Index() {
 
   const campaignsOptions = campaigns?.reduce(
     (options, campaign: Campaign) => {
+      if (!campaign) return options;
       const isActive = BigInt(campaign.endTimestamp) > BigInt(moment().unix());
       options[campaign.campaignId] = (
         <Group className="items-center">
           <OverrideTheme accent={"good"}>
             <Icon className={isActive ? "text-accent-10" : "text-main-10"} remix="RiCircleFill" />
           </OverrideTheme>
+
+          <PrimitiveTag look={isActive ? "bold" : "soft"}>
+            {isActive && <Icon remix="RiFlashlightFill" />}
+            {"End "}
+            <Time timestamp={Number(campaign.endTimestamp) * 1000} />
+          </PrimitiveTag>
+
           <Hash format="short">{campaign.campaignId}</Hash>
 
           <Group>

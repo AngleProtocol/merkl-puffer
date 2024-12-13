@@ -57,7 +57,7 @@ export default function Index() {
       key: crypto.randomUUID(),
     },
     {
-      label: "Max APR",
+      label: "Max",
       data: (
         <Value format="0a%" size={4} className="!text-main-12">
           {maxApr / 100}

@@ -47,7 +47,7 @@ export default function CampaignTableRow({
   const campaignInformation = useMemo(() => {
     const columns = [
       [
-        "Total",
+        "Total distributed",
         <Token
           key="token"
           symbol={false}
@@ -93,6 +93,8 @@ export default function CampaignTableRow({
     });
   }, [campaign, amount]);
 
+  const isCampaignLive = useMemo(() => BigInt(campaign.endTimestamp) * 1000n > moment.now(), [campaign]);
+
   return (
     <CampaignRow
       {...props}
@@ -122,8 +124,8 @@ export default function CampaignTableRow({
         </Group>
       }
       timeRemainingColumn={
-        <PrimitiveTag look="bold">
-          <Icon remix="RiFlashlightFill" />
+        <PrimitiveTag look={isCampaignLive ? "bold" : "soft"}>
+          {isCampaignLive && <Icon remix="RiFlashlightFill" />}
           {time}
         </PrimitiveTag>
       }>

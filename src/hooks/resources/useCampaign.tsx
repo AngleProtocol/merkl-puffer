@@ -40,12 +40,11 @@ export default function useCampaign(campaign?: Campaign, opportunity?: Opportuni
   // ─── Campaign Amount Time displaying ──────────────────────────────────
 
   const time = useMemo(() => {
-    const live = campaign.endTimestamp > moment.now();
-
+    const live = BigInt(campaign.endTimestamp) * 1000n > moment.now();
     return (
       <>
         {!live && "Ended "}
-        <Time prefix={live ? "Live for" : "Past since"} timestamp={Number(campaign.endTimestamp) * 1000} />
+        <Time timestamp={Number(campaign.endTimestamp) * 1000} />
       </>
     );
   }, [campaign.endTimestamp]);
