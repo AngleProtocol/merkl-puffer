@@ -17,8 +17,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return json({ opportunities, chains, count, protocols });
 }
 
-export const clientLoader = Cache.wrap("root", 300);
-clientLoader.hydrate = true;
+export const clientLoader = Cache.wrap("opportunities", 300);
 
 export default function Index() {
   const { opportunities, chains, count, protocols } = useLoaderData<typeof loader>();

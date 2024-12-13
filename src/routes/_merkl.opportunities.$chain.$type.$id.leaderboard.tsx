@@ -44,8 +44,7 @@ export async function loader({ params: { id, type, chain: chainId }, request }: 
   });
 }
 
-export const clientLoader = Cache.wrap("opportunities/leaderboard", 300);
-clientLoader.hydrate = true;
+export const clientLoader = Cache.wrap("opportunity/leaderboard", 300);
 
 export default function Index() {
   const { rewards, campaigns, count, total } = useLoaderData<typeof loader>();

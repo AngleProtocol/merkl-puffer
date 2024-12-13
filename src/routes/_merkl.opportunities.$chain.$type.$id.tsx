@@ -25,8 +25,7 @@ export async function loader({ params: { id, type, chain: chainId } }: LoaderFun
   return json({ opportunity, chain });
 }
 
-export const clientLoader = Cache.wrap("opportunities", 300);
-clientLoader.hydrate = true;
+export const clientLoader = Cache.wrap("opportunity", 300);
 
 export const meta: MetaFunction<typeof loader> = ({ data, error }) => {
   if (error) return [{ title: error }];

@@ -14,7 +14,7 @@ export type ProtocolTableRowProps = {
 
 export default function ProtocolTableRow({ hideTags, protocol, className, ...props }: ProtocolTableRowProps) {
   return (
-    <Link to={`/protocols/${protocol.name}`}>
+    <Link to={`/protocols/${protocol.id}`}>
       <ProtocolRow
         size="lg"
         content="sm"

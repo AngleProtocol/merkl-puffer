@@ -1,6 +1,7 @@
 import { type LoaderFunctionArgs, type MetaFunction, json } from "@remix-run/node";
 import { Outlet, useLoaderData } from "@remix-run/react";
 import { useMemo } from "react";
+import { Cache } from "src/api/services/cache.service";
 import { ChainService } from "src/api/services/chain.service";
 import { TokenService } from "src/api/services/token.service";
 import Hero from "src/components/composite/Hero";
@@ -13,6 +14,8 @@ export async function loader({ params: { symbol } }: LoaderFunctionArgs) {
 
   return json({ tokens, chains });
 }
+
+export const clientLoader = Cache.wrap("token", 300);
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   const symbol = data?.tokens?.[0]?.symbol;

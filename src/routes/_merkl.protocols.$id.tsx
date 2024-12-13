@@ -2,12 +2,13 @@ import type { Opportunity } from "@merkl/api";
 import { type LoaderFunctionArgs, type MetaFunction, json } from "@remix-run/node";
 import { Outlet, useLoaderData } from "@remix-run/react";
 import { Group, Value } from "dappkit";
+import { Cache } from "src/api/services/cache.service";
 import { OpportunityService } from "src/api/services/opportunity/opportunity.service";
 import { ProtocolService } from "src/api/services/protocol.service";
 import Hero from "src/components/composite/Hero";
 
 export async function loader({ params: { id }, request }: LoaderFunctionArgs) {
-  const protocol = (await ProtocolService.get({ id: id ?? "" }))?.[0];
+  const protocol = (await ProtocolService.get({ id: id ?? undefined }))?.[0];
   const { opportunities, count } = await OpportunityService.getManyFromRequest(request, { mainProtocolId: id });
 
   const { opportunities: opportunitiesByApr, count: liveCount } = await OpportunityService.getMany({
@@ -26,6 +27,8 @@ export async function loader({ params: { id }, request }: LoaderFunctionArgs) {
     sumDailyRewards: sum,
   });
 }
+
+export const clientLoader = Cache.wrap("protocol", 300);
 
 export type OutletContextProtocol = {
   opportunities: Opportunity[];
@@ -73,7 +76,7 @@ export default function Index() {
       title={<Group className="items-center">{protocol?.name}</Group>}
       breadcrumbs={[
         { link: "/protocols", name: "Protocols" },
-        { link: `/protocols/${protocol.name}`, name: protocol.name },
+        { link: `/protocols/${protocol.id}`, name: protocol.name },
       ]}
       description={protocol.description ?? `Earn rewards by supplying liquidity on ${protocol.name}`}
       sideDatas={herosData}>

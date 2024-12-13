@@ -1,5 +1,6 @@
 import { type LoaderFunctionArgs, type MetaFunction, json } from "@remix-run/node";
 import { Outlet, useLoaderData } from "@remix-run/react";
+import { Cache } from "src/api/services/cache.service";
 import { ChainService } from "src/api/services/chain.service";
 import Hero from "src/components/composite/Hero";
 
@@ -8,6 +9,8 @@ export async function loader({ params: { id } }: LoaderFunctionArgs) {
 
   return json({ chain });
 }
+
+export const clientLoader = Cache.wrap("chain", 300);
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [{ title: `${data?.chain?.name} on Merkl` }];

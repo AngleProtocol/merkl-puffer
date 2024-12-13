@@ -41,7 +41,7 @@ export async function loader(_args: LoaderFunctionArgs) {
   return json({ ENV: { API_URL: process.env.API_URL }, chains });
 }
 
-export const clientLoader = Cache.wrap("root", 100000);
+export const clientLoader = Cache.wrap("root", 300);
 
 export default function App() {
   const data = useLoaderData<typeof loader>();
