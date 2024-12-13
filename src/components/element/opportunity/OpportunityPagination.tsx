@@ -32,7 +32,12 @@ export default function OpportunityPagination({ count }: OpportunityPaginationPr
         <Button look="soft" size="xs" onClick={() => setItemsFilter(Math.min(50, (itemsFilter ?? 0) + 10))}>
           More <Icon remix="RiArrowDownLine" />
         </Button>
-        <Select state={[itemsFilter, setItemsFilter]} look="base" size="xs" options={{ 50: "50", 100: "100" }} />
+        <Select
+          state={[Math.max(50, itemsFilter ?? 0), setItemsFilter]}
+          look="base"
+          size="xs"
+          options={{ 50: "50", 100: "100" }}
+        />
         <Button look="soft" size="xs" onClick={() => setItemsFilter(Math.max(10, (itemsFilter ?? 0) - 10))}>
           Less <Icon remix="RiArrowUpLine" />
         </Button>
@@ -45,7 +50,12 @@ export default function OpportunityPagination({ count }: OpportunityPaginationPr
           onClick={() => setPageFilter(Math.max(1, (pageFilter ?? 0) - 1))}>
           <Icon remix="RiArrowLeftLine" />
         </Button>
-        <Select state={[pageFilter, setPageFilter]} look="base" size="xs" options={pageOptions} />
+        <Select
+          state={[Math.max(1, (pageFilter ?? 0) - 1), setPageFilter]}
+          look="base"
+          size="xs"
+          options={pageOptions}
+        />
         <Button
           look="base"
           size="xs"
