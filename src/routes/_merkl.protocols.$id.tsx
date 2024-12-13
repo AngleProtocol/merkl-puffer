@@ -80,7 +80,10 @@ export default function Index() {
         { link: "/protocols", name: "Protocols" },
         { link: `/protocols/${protocol.id}`, name: protocol.name },
       ]}
-      description={protocol.description ?? `Earn rewards by supplying liquidity on ${protocol.name}`}
+      description={
+        (protocol.description !== "" && protocol.description) ||
+        `Earn rewards by supplying liquidity on ${protocol.name}`
+      }
       sideDatas={herosData}>
       <Outlet context={{ opportunities, count }} />
     </Hero>
