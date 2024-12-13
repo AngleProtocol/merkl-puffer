@@ -1,13 +1,24 @@
 import { type LoaderFunctionArgs, type MetaFunction, json } from "@remix-run/node";
 import { Outlet, useLoaderData } from "@remix-run/react";
+import { Value } from "packages/dappkit/src";
 import { Cache } from "src/api/services/cache.service";
 import { ChainService } from "src/api/services/chain.service";
+import { OpportunityService } from "src/api/services/opportunity/opportunity.service";
 import Hero from "src/components/composite/Hero";
 
 export async function loader({ params: { id } }: LoaderFunctionArgs) {
   const chain = await ChainService.get({ search: id });
 
-  return json({ chain });
+  const { opportunities: opportunitiesByApr, count } = await OpportunityService.getMany({
+    chainId: chain.id.toString(),
+    status: "LIVE",
+    sort: "apr",
+    order: "desc",
+  });
+
+  const { sum: dailyRewards } = await OpportunityService.getAggregate({ chainId: chain.id.toString() }, "dailyRewards");
+
+  return json({ chain, count, dailyRewards, maxApr: opportunitiesByApr?.[0]?.apr });
 }
 
 export const clientLoader = Cache.wrap("chain", 300);
@@ -17,7 +28,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 };
 
 export default function Index() {
-  const { chain } = useLoaderData<typeof loader>();
+  const { chain, count, dailyRewards, maxApr } = useLoaderData<typeof loader>();
   const label = chain.name.toLowerCase();
 
   return (
@@ -50,12 +61,32 @@ export default function Index() {
       // TODO: Make this dynamic
       sideDatas={[
         {
-          data: "25",
+          data: (
+            <Value format="0" size={4} className="!text-main-12">
+              {count}
+            </Value>
+          ),
           label: "Live opportunities",
           key: crypto.randomUUID(),
         },
-        { data: "400%", label: "APR", key: crypto.randomUUID() },
-        { data: "$4k", label: "Daily rewards", key: crypto.randomUUID() },
+        {
+          data: (
+            <Value format="0a%" size={4} className="!text-main-12">
+              {maxApr / 100}
+            </Value>
+          ),
+          label: "APR",
+          key: crypto.randomUUID(),
+        },
+        {
+          data: (
+            <Value format="$0.00a" size={4} className="!text-main-12">
+              {dailyRewards}
+            </Value>
+          ),
+          label: "Daily rewards",
+          key: crypto.randomUUID(),
+        },
       ]}
     >
       <Outlet />

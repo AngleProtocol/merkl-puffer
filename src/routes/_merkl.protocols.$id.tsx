@@ -14,6 +14,8 @@ export async function loader({ params: { id }, request }: LoaderFunctionArgs) {
   const { opportunities: opportunitiesByApr, count: liveCount } = await OpportunityService.getMany({
     mainProtocolId: id,
     status: "LIVE",
+    sort: "apr",
+    order: "desc",
   });
 
   const { sum } = await OpportunityService.getAggregate({ mainProtocolId: id }, "dailyRewards");
