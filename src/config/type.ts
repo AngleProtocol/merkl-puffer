@@ -24,6 +24,7 @@ export type MerklConfig<T extends Themes> = {
   modes: Mode[];
   wagmi: Parameters<typeof createWagmiConfig>["0"];
   appName: string;
+  fonts?: { title: string[]; text: string[]; mono: string[] };
   routes: routesType;
   images: {
     [name: string]: string;
