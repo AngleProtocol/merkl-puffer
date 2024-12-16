@@ -85,7 +85,7 @@ export default createConfig({
     hero: hero,
   },
   routes: {
-    homepage: {
+    home: {
       icon: "RiHomeFill",
       route: "/",
       key: crypto.randomUUID(),

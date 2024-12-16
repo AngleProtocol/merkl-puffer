@@ -39,10 +39,10 @@ export default function Header() {
   }, [chains, chainId]);
 
   const routes = useMemo(() => {
-    const { homepage, ...rest } = config.routes;
+    const { home, ...rest } = config.routes;
 
     return Object.assign(
-      { homepage },
+      { home },
       {
         claims: {
           icon: "RiDashboardFill",
@@ -82,7 +82,7 @@ export default function Header() {
             <Group className="items-center" size="xl">
               <Group className="hidden lg:flex items-center" size="xl">
                 {Object.entries(routes)
-                  .filter(([key]) => !["homepage", "faq", "docs"].includes(key))
+                  .filter(([key]) => !["home", "faq", "docs"].includes(key))
                   .map(([key, { route }]) => {
                     return (
                       <Button
