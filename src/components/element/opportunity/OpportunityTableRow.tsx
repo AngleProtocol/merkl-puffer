@@ -28,7 +28,7 @@ export default function OpportunityTableRow({ hideTags, opportunity, className, 
         className={mergeClass("cursor-pointer", className)}
         {...props}
         aprColumn={
-          <Dropdown size="xl" content={<AprModal opportunity={opportunity} />}>
+          <Dropdown size="xl" onHover content={<AprModal opportunity={opportunity} />}>
             <PrimitiveTag look="tint" size="lg">
               <Value value format="0a%">
                 {opportunity.apr / 100}
@@ -37,7 +37,7 @@ export default function OpportunityTableRow({ hideTags, opportunity, className, 
           </Dropdown>
         }
         tvlColumn={
-          <Dropdown size="xl" content={<AprModal opportunity={opportunity} />}>
+          <Dropdown size="xl" onHover content={<AprModal opportunity={opportunity} />}>
             <PrimitiveTag look="base" className="font-mono">
               <Value value format="$0,0.0a">
                 {opportunity.tvl ?? 0}
