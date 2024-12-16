@@ -31,7 +31,7 @@ export type TagProps<T extends keyof TagTypes> = {
 
 export default function Tag<T extends keyof TagTypes>({ type, filter, value, ...props }: Component<TagProps<T>>) {
   const { chains } = useWalletContext();
-  const [_, setSearchParams] = useSearchParams();
+  const [_searchParams, setSearchParams] = useSearchParams();
 
   switch (type) {
     case "status": {

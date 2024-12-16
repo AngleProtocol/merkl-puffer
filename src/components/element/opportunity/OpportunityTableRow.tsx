@@ -37,7 +37,7 @@ export default function OpportunityTableRow({ hideTags, opportunity, className, 
           </Dropdown>
         }
         tvlColumn={
-          <Dropdown className="py-xl" content={<AprModal opportunity={opportunity} />}>
+          <Dropdown size="xl" content={<AprModal opportunity={opportunity} />}>
             <PrimitiveTag look="base" className="font-mono">
               <Value value format="$0,0.0a">
                 {opportunity.tvl ?? 0}
