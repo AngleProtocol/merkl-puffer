@@ -28,6 +28,7 @@ export default function CampaignLibrary({ opportunity, chain }: IProps) {
 
   return (
     <CampaignTable
+      className="w-full"
       dividerClassName={index => (index < 2 ? "bg-accent-8" : "bg-main-8")}
       hideLabels={!rows?.length}
       header={

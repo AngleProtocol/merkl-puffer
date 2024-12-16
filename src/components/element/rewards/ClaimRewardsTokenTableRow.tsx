@@ -1,6 +1,7 @@
 import type { Reward } from "@merkl/api";
 import { Checkbox, type Component, Divider, type GetSet, Group, Icon, Space } from "dappkit";
 import Collapsible from "packages/dappkit/src/components/primitives/Collapsible";
+import { Fmt } from "packages/dappkit/src/utils/formatter.service";
 import { useMemo, useState } from "react";
 import Tag from "../Tag";
 import OpportuntiyButton from "../opportunity/OpportunityButton";
@@ -58,7 +59,10 @@ export default function ClaimRewardsTokenTableRow({
       <Collapsible state={[open, setOpen]}>
         <Space size="md" />
         {reward.breakdowns
-          .sort((a, b) => Number(b.amount - b.claimed - (a.amount - a.claimed)))
+          .sort(
+            (a, b) => Fmt.toPrice(b.amount - b.claimed, reward.token) - Fmt.toPrice(a.amount - a.claimed, reward.token),
+          )
+          .filter(b => b.opportunity !== null)
           .map(b => {
             return (
               <>

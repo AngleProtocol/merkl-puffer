@@ -5,11 +5,11 @@ import { parseAbi } from "viem";
 import { useSendTransaction } from "wagmi";
 import { useWriteContract } from "wagmi";
 
-type Targets = Awaited<ReturnType<typeof clientApi.v4.participate.targets.get>>["data"];
-type Protocols = Awaited<ReturnType<typeof clientApi.v4.participate.protocols.get>>["data"];
+type Targets = Awaited<ReturnType<typeof clientApi.v4.interaction.targets.get>>["data"];
+type Protocols = Awaited<ReturnType<typeof clientApi.v4.interaction.protocols.get>>["data"];
 type TokenBalances = Awaited<ReturnType<typeof clientApi.v4.tokens.balances.get>>["data"];
-type Payload = Parameters<typeof clientApi.v4.participate.transaction.get>[0]["query"];
-type Transaction = Awaited<ReturnType<typeof clientApi.v4.participate.transaction.get>>["data"];
+type Payload = Parameters<typeof clientApi.v4.interaction.transaction.get>[0]["query"];
+type Transaction = Awaited<ReturnType<typeof clientApi.v4.interaction.transaction.get>>["data"];
 
 const abi = parseAbi([
   "function approve(address, uint256) returns (bool)",
@@ -30,7 +30,6 @@ export default function useParticipate(
     [chainId: number]: { [protocolId: string]: Targets };
   }>();
   const [transaction, setTransaction] = useState<Transaction>();
-  const [protocols, setProtocols] = useState<Protocols>();
 
   const { address } = useWalletContext();
   const { sendTransaction } = useSendTransaction();
@@ -38,7 +37,10 @@ export default function useParticipate(
 
   const target = useMemo(() => {
     if (!chainId || !protocolId) return;
-    return targets?.[chainId]?.[protocolId]?.find(({ identifier: id }) => id === identifier);
+
+    return targets?.[chainId]?.[protocolId]?.find?.(
+      ({ identifier: id }) => id?.toLowerCase?.() === identifier?.toLowerCase?.(),
+    );
   }, [chainId, protocolId, targets, identifier]);
 
   const balance = useMemo(() => {
@@ -52,10 +54,12 @@ export default function useParticipate(
 
   useEffect(() => {
     async function fetchTargets() {
-      if (!chainId || !protocolId) return;
+      console.log(chainId, protocolId, identifier);
 
-      const { data: targets, ...res } = await clientApi.v4.participate.targets.get({
-        query: { chainId, protocolId },
+      if (!chainId || !protocolId || !identifier) return;
+
+      const { data: targets, ...res } = await clientApi.v4.interaction.targets.get({
+        query: { chainId, protocolId, identifier },
       });
 
       if (res.status === 200)
@@ -69,17 +73,7 @@ export default function useParticipate(
     }
 
     fetchTargets();
-  }, [chainId, protocolId]);
-
-  useEffect(() => {
-    async function fetchProtocols() {
-      const { data: protocols, ...res } = await clientApi.v4.participate.protocols.get({ query: {} });
-
-      if (res.status === 200) setProtocols(protocols);
-    }
-
-    fetchProtocols();
-  }, []);
+  }, [chainId, protocolId, identifier]);
 
   useEffect(() => {
     async function fetchTokenBalances() {
@@ -121,7 +115,9 @@ export default function useParticipate(
     async function fetchTransaction() {
       if (!payload) return;
 
-      const { data: transaction, ...res } = await clientApi.v4.participate.transaction.get({ query: payload });
+      const { data: transaction, ...res } = await clientApi.v4.interaction.transaction.get({ query: payload });
+
+      console.log("tcx", transaction);
 
       if (res.status === 200) setTransaction(transaction);
     }
@@ -131,22 +127,21 @@ export default function useParticipate(
 
   const approve = useCallback(() => {
     if (!transaction) return;
-    const res = writeContract({
-      address: payload?.fromTokenAddress as `0x${string}`,
-      abi,
-      functionName: "approve",
-      args: [transaction.tx.to as `0x${string}`, BigInt(payload?.fromAmount ?? "0")],
+
+    const res = sendTransaction({
+      to: transaction.approval.to as `0x${string}`,
+      data: transaction.approval.data,
     });
 
-    console.info(res);
-  }, [transaction, payload, writeContract]);
+    return res;
+  }, [transaction, sendTransaction]);
 
   const deposit = useCallback(() => {
     if (!transaction) return;
 
     const res = sendTransaction({
-      to: transaction.tx.to as `0x${string}`,
-      data: transaction?.tx.data as `0x${string}`,
+      to: transaction.transaction.to as `0x${string}`,
+      data: transaction?.transaction.data as `0x${string}`,
     });
 
     console.info(res);
@@ -155,7 +150,6 @@ export default function useParticipate(
   return {
     target,
     targets,
-    protocols,
     token,
     balance,
     balances,

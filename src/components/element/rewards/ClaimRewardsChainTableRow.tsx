@@ -4,9 +4,9 @@ import TransactionButton from "packages/dappkit/src/components/dapp/TransactionB
 import Collapsible from "packages/dappkit/src/components/primitives/Collapsible";
 import EventBlocker from "packages/dappkit/src/components/primitives/EventBlocker";
 import { useWalletContext } from "packages/dappkit/src/context/Wallet.context";
+import { Fmt } from "packages/dappkit/src/utils/formatter.service";
 import { useMemo, useState } from "react";
 import useReward from "src/hooks/resources/useReward";
-import { formatUnits } from "viem";
 import Tag from "../Tag";
 import { ClaimRewardsChainRow } from "./ClaimRewardsChainTable";
 import { ClaimRewardsTokenTable } from "./ClaimRewardsTokenTable";
@@ -40,39 +40,41 @@ export default function ClaimRewardsChainTableRow({
     selectedTokens?.size > 0 ? selectedTokens : undefined,
   );
 
-  const unclaimed = useMemo(() => {
-    return reward.rewards.reduce(
-      (sum, { amount, claimed, token: { decimals, price } }) =>
-        sum + Number.parseFloat(formatUnits(amount - claimed, decimals)) * (price ?? 0),
-      0,
-    );
-  }, [reward]);
-
-  const renderTokenRewards = useMemo(
-    () =>
-      reward.rewards
-        .sort((a, b) => Number(b.amount - b.claimed - (a.amount - a.claimed)))
-        .map(_reward => (
-          <ClaimRewardsTokenTableRow
-            key={_reward.token.address}
-            className="cursor-pointer [&>*>*]:cursor-auto"
-            showCheckbox={isOnCorrectChain && isAbleToClaim}
-            checkedState={[
-              selectedTokens.has(_reward.token.address) || !selectedTokens.size,
-              checked => {
-                setSelectedTokens(t => {
-                  if (checked) t.add(_reward.token.address);
-                  else t.delete(_reward.token.address);
-
-                  return new Set(t);
-                });
-              },
-            ]}
-            reward={_reward}
-          />
-        )),
-    [reward, selectedTokens, isOnCorrectChain, isAbleToClaim],
+  const unclaimed = useMemo(
+    () => reward.rewards.reduce((sum, { amount, claimed, token }) => sum + Fmt.toPrice(amount - claimed, token), 0),
+    [reward],
   );
+
+  const renderTokenRewards = useMemo(() => {
+    return reward.rewards
+      .sort((a, b) => {
+        const priceA = Fmt.toPrice(a.amount - a.claimed, a.token);
+        const priceB = Fmt.toPrice(b.amount - b.claimed, b.token);
+
+        if (b.amount === b.claimed && a.amount === a.claimed)
+          return Fmt.toPrice(b.amount, b.token) - Fmt.toPrice(a.amount, a.token);
+        return priceB - priceA;
+      })
+      .map(_reward => (
+        <ClaimRewardsTokenTableRow
+          key={_reward.token.address}
+          className="cursor-pointer [&>*>*]:cursor-auto"
+          showCheckbox={isOnCorrectChain && isAbleToClaim}
+          checkedState={[
+            selectedTokens.has(_reward.token.address) || !selectedTokens.size,
+            () => {
+              setSelectedTokens(t => {
+                if (!t.has(_reward.token.address)) t.add(_reward.token.address);
+                else t.delete(_reward.token.address);
+
+                return new Set(t);
+              });
+            },
+          ]}
+          reward={_reward}
+        />
+      ));
+  }, [reward, selectedTokens.size, selectedTokens, isOnCorrectChain, isAbleToClaim]);
 
   return (
     <ClaimRewardsChainRow
@@ -110,7 +112,6 @@ export default function ClaimRewardsChainTableRow({
       }>
       <Collapsible state={[open, setOpen]}>
         <Space size="md" />
-        {/* <List size="md" dividerClassName={() => "bg-main-8"}>{renderTokenRewards}</List> */}
         <ClaimRewardsTokenTable size="sm" dividerClassName={() => "!bg-main-8"} className="[&>*]:bg-main-4" look="soft">
           {renderTokenRewards}
         </ClaimRewardsTokenTable>

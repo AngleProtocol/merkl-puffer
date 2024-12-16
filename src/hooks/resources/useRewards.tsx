@@ -1,12 +1,10 @@
 import type { Reward } from "@merkl/api";
+import { Fmt } from "packages/dappkit/src/utils/formatter.service";
 import { useMemo } from "react";
-import { formatUnits } from "viem";
 
 function getValueOf(chainRewards: Reward["rewards"], amount: (t: Reward["rewards"][number]) => bigint) {
   return chainRewards.reduce((sum, token) => {
-    const value = Number.parseFloat(formatUnits(amount(token), token.token.decimals)) * (token.token.price ?? 0);
-
-    return sum + value;
+    return sum + Fmt.toPrice(amount(token), token.token);
   }, 0);
 }
 

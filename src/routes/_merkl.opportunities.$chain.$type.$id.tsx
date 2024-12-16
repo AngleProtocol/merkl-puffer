@@ -11,7 +11,7 @@ import Tag from "src/components/element/Tag";
 import { ErrorHeading } from "src/components/layout/ErrorHeading";
 import useOpportunity from "src/hooks/resources/useOpportunity";
 
-export async function loader({ params: { id, type, chain: chainId } }: LoaderFunctionArgs) {
+export async function loader({ params: { id, type, chain: chainId }, request }: LoaderFunctionArgs) {
   if (!chainId || !id || !type) throw "";
 
   const chain = await ChainService.get({ search: chainId });

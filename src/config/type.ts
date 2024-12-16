@@ -19,6 +19,7 @@ export type MerklConfig<T extends Themes> = {
   };
   tags?: string[];
   defaultTheme: keyof T;
+  deposit?: boolean;
   modes: Mode[];
   wagmi: Parameters<typeof createWagmiConfig>["0"];
   appName: string;
