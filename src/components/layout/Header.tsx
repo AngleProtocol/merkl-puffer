@@ -70,7 +70,7 @@ export default function Header() {
               content={<LayerMenu nav={routes} setOpen={setOpen} />}
               className="flex gap-sm md:gap-lg items-center">
               <Image
-                className="w-[140px] md:w-[200px]"
+                imgClassName="w-[140px] md:w-[200px] max-h-[2.5rem]"
                 alt={`${config.appName} logo`}
                 src={mode !== "dark" ? customerDarkLogo : customerLogo}
               />
