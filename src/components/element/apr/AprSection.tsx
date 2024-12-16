@@ -1,6 +1,6 @@
 import type { Opportunity } from "@merkl/api";
-import { Divider, Group, Hash, PrimitiveTag, Text, Value } from "packages/dappkit/src";
-import { Fragment, useMemo } from "react";
+import { Divider, Group, Hash, Icon, PrimitiveTag, Text, Value } from "packages/dappkit/src";
+import { useMemo } from "react";
 
 type AprSectionProps = {
   opportunity: Opportunity;
@@ -17,10 +17,10 @@ export default function AprSection({ opportunity }: AprSectionProps) {
     switch (breakdown?.type) {
       case "CAMPAIGN":
         return (
-          <Group>
+          <Group className="items-center">
             Campaign
             <PrimitiveTag look="soft" size="xs">
-              <Hash size="sm" format="short" copy className="text-main-12">
+              <Hash size="xs" format="short" copy className="text-main-12">
                 {breakdown.identifier}
               </Hash>
             </PrimitiveTag>
@@ -30,7 +30,7 @@ export default function AprSection({ opportunity }: AprSectionProps) {
         return (
           <Group>
             {breakdown.identifier.split(" ")[0]}
-            <Hash format="short" copy>
+            <Hash format="short" copy size="xs">
               {breakdown.identifier.split(" ")[1]}
             </Hash>
           </Group>
@@ -39,7 +39,7 @@ export default function AprSection({ opportunity }: AprSectionProps) {
         return breakdown.identifier;
       default:
         return (
-          <Hash format="short" copy>
+          <Hash format="short" size="xs" copy>
             {breakdown.identifier}
           </Hash>
         );
@@ -47,27 +47,29 @@ export default function AprSection({ opportunity }: AprSectionProps) {
   };
 
   return (
-    <>
-      <Divider className="-mx-xl w-[calc(100%+2*var(--spacing-xl))]" />
-      <Text size="sm">APR details</Text>
-      <Divider className="-mx-xl w-[calc(100%+2*var(--spacing-xl))]" />
+    <Group className="flex-col mt-md">
+      <Group className="items-center" size="sm">
+        <Icon className="text-main-11" remix="RiFileList3Line" />
+        <Text size="sm" bold>
+          APR details
+        </Text>
+      </Group>
+
+      <Divider />
       <Group className="flex-col">
         {breakdowns.map(breakdown => (
-          <Fragment key={breakdown.id}>
-            <Group className="items-center justify-between" size="sm">
-              <Text size="sm" look="bold">
-                {getAprName(breakdown)}
-              </Text>
-              <PrimitiveTag noClick look="bold" size="sm">
-                <Value value format="0a%">
-                  {breakdown.value / 100}
-                </Value>
-              </PrimitiveTag>
-            </Group>
-            <Divider className="last:hidden" look="tint" />
-          </Fragment>
+          <Group key={breakdown.id} className="items-center justify-between" size="sm">
+            <Text size="sm" look="bold">
+              {getAprName(breakdown)}
+            </Text>
+            <PrimitiveTag noClick look="bold" size="sm">
+              <Value value format="0a%">
+                {breakdown.value / 100}
+              </Value>
+            </PrimitiveTag>
+          </Group>
         ))}
       </Group>
-    </>
+    </Group>
   );
 }

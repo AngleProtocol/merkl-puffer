@@ -25,7 +25,7 @@ export default function OpportunityTableRow({ hideTags, opportunity, className, 
       <OpportunityRow
         size="lg"
         content="sm"
-        className={mergeClass("dim", className)}
+        className={mergeClass("cursor-pointer", className)}
         {...props}
         aprColumn={
           <Dropdown size="xl" content={<AprModal opportunity={opportunity} />}>

@@ -15,11 +15,8 @@ export default function Participate({ opportunity }: ParticipateProps) {
   const [amount, setAmount] = useState<bigint>(0n);
   const {
     target,
-    targets,
     balance,
     token: inputToken,
-    approve,
-    deposit,
     transaction,
   } = useParticipate(opportunity.chainId, opportunity.protocol?.id, opportunity.identifier, tokenAddress, amount);
 

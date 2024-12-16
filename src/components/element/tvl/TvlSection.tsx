@@ -32,16 +32,20 @@ export default function TvlSection({ opportunity }: TvlSectionProps) {
             <Text look="bold" size="sm">
               {breakdown.identifier.split(" ")[0]}
             </Text>
-            <Hash format="short" copy size="sm">
-              {breakdown.identifier.split(" ")[1]}
-            </Hash>
+            <PrimitiveTag look="soft" size="xs">
+              <Hash format="short" look="bold" copy size="xs">
+                {breakdown.identifier.split(" ")[1]}
+              </Hash>
+            </PrimitiveTag>
           </Group>
         );
       default:
         return (
-          <Hash format="short" copy>
-            {breakdown.identifier}
-          </Hash>
+          <PrimitiveTag look="soft" size="xs">
+            <Hash format="short" look="bold" copy>
+              {breakdown.identifier}
+            </Hash>
+          </PrimitiveTag>
         );
     }
   };
@@ -52,13 +56,17 @@ export default function TvlSection({ opportunity }: TvlSectionProps) {
     <>
       {hasForwarders && (
         <>
-          <Divider className="-mx-xl w-[calc(100%+2*var(--spacing-xl))]" />
           <Group
-            className="grid"
+            className="grid mt-md"
             style={{
               gridTemplateColumns: "minmax(350px, 1fr) minmax(min-content, 100px) minmax(min-content, 100px)",
             }}>
-            <Text size="sm">Forwarder details</Text>
+            <Group className="items-center" size="sm">
+              <Icon className="text-main-11" remix="RiForwardEndFill" />
+              <Text size="sm" bold>
+                Forwarder details
+              </Text>
+            </Group>
             <Text size="sm" className="inline-flex justify-end">
               APR
             </Text>
@@ -66,7 +74,7 @@ export default function TvlSection({ opportunity }: TvlSectionProps) {
               TVL
             </Text>
           </Group>
-          <Divider className="-mx-xl w-[calc(100%+2*var(--spacing-xl))]" />
+          <Divider />
         </>
       )}
       <Group className="flex-col" size="sm">
@@ -97,17 +105,19 @@ export default function TvlSection({ opportunity }: TvlSectionProps) {
                   </Value>
                 </Text>
               </Group>
-              <Divider className="last:hidden" look="tint" />
             </Fragment>
           );
         })}
       </Group>
 
       {tvlFiltered.length >= DEFAULT_ARRAY_SIZE && (
-        <Button size="sm" className="mx-auto my-sm" look="soft" onClick={() => setIsShowingMore(!isShowingMore)}>
-          Show {isShowingMore ? "Less" : "More"}
-          <Icon remix={isShowingMore ? "RiArrowUpLine" : "RiArrowDownLine"} />
-        </Button>
+        <>
+          <Divider look="soft" />
+          <Button size="sm" className="mx-auto my-sm" look="soft" onClick={() => setIsShowingMore(!isShowingMore)}>
+            Show {isShowingMore ? "Less" : "More"}
+            <Icon remix={isShowingMore ? "RiArrowUpLine" : "RiArrowDownLine"} />
+          </Button>
+        </>
       )}
     </>
   );

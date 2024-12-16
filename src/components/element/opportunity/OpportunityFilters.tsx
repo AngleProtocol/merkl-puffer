@@ -293,13 +293,13 @@ export default function OpportunityFilters({ only, protocols, exclude, chains }:
       )}
       {((canApply && !clearing && navigation.state === "idle") ||
         (applying && !clearing && navigation.state === "loading")) && (
-        <Button onClick={onApplyFilters} look="hype">
+        <Button onClick={onApplyFilters} look="bold">
+          Apply
           {navigation.state === "loading" ? (
             <Icon className="animate-spin" remix="RiLoader2Line" />
           ) : (
-            <Icon remix="RiArrowRightUpLine" />
+            <Icon remix="RiArrowRightLine" />
           )}
-          Apply
         </Button>
       )}
       <Button onClick={onClearFilters} look="soft">

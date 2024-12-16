@@ -100,6 +100,22 @@ export default createConfig({
     //   route: "/protocols",
     //   key: crypto.randomUUID(),
     // },
+    // bridge: {
+    //   icon: "RiCompassesLine",
+    //   route: "/bridge",
+    //   key: crypto.randomUUID(),
+    // },
+    docs: {
+      icon: "RiFile4Fill",
+      external: true,
+      route: "https://docs.merkl.xyz/",
+      key: crypto.randomUUID(),
+    },
+    faq: {
+      icon: "RiQuestionFill",
+      route: "/faq",
+      key: crypto.randomUUID(),
+    },
     // terms: {
     //   icon: "RiCompassesLine",
     //   route: "/terms",
@@ -118,6 +134,7 @@ export default createConfig({
     github: "",
   },
   links: {
+    docs: "https://docs.merkl.xyz/",
     merkl: "https://merkl.xyz/",
     merklTermsConditions: "https://app.merkl.xyz/merklTerms.pdf",
     merklPrivacy: "https://privacy.angle.money",

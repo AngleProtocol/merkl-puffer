@@ -45,7 +45,7 @@ export default function Header() {
       { homepage },
       {
         claims: {
-          icon: "RiPlanetFill",
+          icon: "RiDashboardFill",
           route: user ? `/users/${user}` : "/users",
           key: crypto.randomUUID(),
         },
@@ -64,11 +64,11 @@ export default function Header() {
         <Group className="justify-between items-center">
           <motion.div variants={item}>
             <Dropdown
-              size="lg"
+              size="md"
               padding="xs"
               open={open}
               content={<LayerMenu nav={routes} setOpen={setOpen} />}
-              className="lg:hidden flex gap-sm md:gap-lg items-center">
+              className="flex gap-sm md:gap-lg items-center">
               <Image
                 className="w-[140px] md:w-[200px]"
                 alt={`${config.appName} logo`}
@@ -76,31 +76,27 @@ export default function Header() {
               />
               <Icon className="text-main-12" remix="RiArrowDownSLine" />
             </Dropdown>
-
-            <Button className="hidden lg:flex" size="lg" to={routes.homepage.route} look="soft">
-              <Image
-                className="w-[200px]"
-                alt={`${config.appName} logo`}
-                src={mode !== "dark" ? customerDarkLogo : customerLogo}
-              />
-            </Button>
           </motion.div>
 
           <motion.div variants={item}>
             <Group className="items-center" size="xl">
               <Group className="hidden lg:flex items-center" size="xl">
                 {Object.entries(routes)
-                  .filter(([key]) => !["homepage"].includes(key))
+                  .filter(([key]) => !["homepage", "faq", "docs"].includes(key))
                   .map(([key, { route }]) => {
                     return (
-                      <Button className="capitalize" look="soft" size="lg" key={`${key}-link`} to={route}>
+                      <Button
+                        className={`${["faq"].includes(key) ? "uppercase" : "capitalize"}`}
+                        look="soft"
+                        size="lg"
+                        key={`${key}-link`}
+                        to={route}>
                         {key}
                       </Button>
                     );
                   })}
                 <Group className="items-center">
                   <SwitchMode />
-
                   <SearchBar icon={true} />
                 </Group>
               </Group>

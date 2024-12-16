@@ -16,18 +16,18 @@ export const [OpportunityTable, OpportunityRow, opportunityColumns] = createTabl
     name: "APR",
     size: "minmax(min-content,150px)",
     compactSize: "minmax(min-content,1fr)",
-    className: "justify-center",
+    className: "md:justify-center",
   },
   tvl: {
     name: "TVL",
     size: "minmax(min-content,150px)",
     compactSize: "minmax(min-content,1fr)",
-    className: "justify-center",
+    className: "md:justify-center",
   },
   rewards: {
     name: "Daily rewards",
     size: "minmax(min-content,150px)",
     compactSize: "minmax(min-content,1fr)",
-    className: "justify-center",
+    className: "md:justify-center",
   },
 });

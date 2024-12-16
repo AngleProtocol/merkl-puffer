@@ -19,10 +19,12 @@ export default function TvlRowAllocation({ opportunity }: IProps) {
         <Group className="flex-col" size="sm">
           <Group className="items-center" size="sm">
             <Icon src={opportunity.tokens[0].icon} />
-            <Value value format="0.0a">
-              {tvlBreakdownToken0?.value}
-            </Value>
-            <Text size="sm" look="bold">
+            <Text size="sm" look="bold" bold>
+              <Value value format="0.0a">
+                {tvlBreakdownToken0?.value}
+              </Value>
+            </Text>
+            <Text size="sm" look="bold" bold>
               {token0.name}
             </Text>
 
@@ -41,10 +43,12 @@ export default function TvlRowAllocation({ opportunity }: IProps) {
           </Group>
           <Group className="items-center" size="sm">
             <Icon src={opportunity.tokens[1].icon} />
-            <Value value format="0.0a">
-              {tvlBreakdownToken1?.value}
-            </Value>
-            <Text size="sm" look="bold">
+            <Text size="sm" look="bold" bold>
+              <Value value format="0.0a">
+                {tvlBreakdownToken1?.value}
+              </Value>
+            </Text>
+            <Text size="sm" look="bold" bold>
               {token1.name}
             </Text>
 
@@ -70,11 +74,16 @@ export default function TvlRowAllocation({ opportunity }: IProps) {
   }
   if (!content) return null;
   return (
-    <>
-      <Divider className="-mx-xl w-[calc(100%+2*var(--spacing-xl))]" />
-      <Text size="sm">TVL allocation</Text>
-      <Divider className="-mx-xl w-[calc(100%+2*var(--spacing-xl))]" />
+    <Group className="flex-col">
+      <Group className="items-center" size="sm">
+        <Icon className="text-main-11" remix="RiContractRightFill" />
+        <Text size="sm" bold>
+          TVL allocation
+        </Text>
+      </Group>
+
+      <Divider />
       {content}
-    </>
+    </Group>
   );
 }

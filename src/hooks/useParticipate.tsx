@@ -1,20 +1,12 @@
 import { useWalletContext } from "dappkit/src/context/Wallet.context";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { api as clientApi } from "src/api/index.client";
-import { parseAbi } from "viem";
 import { useSendTransaction } from "wagmi";
-import { useWriteContract } from "wagmi";
 
 type Targets = Awaited<ReturnType<typeof clientApi.v4.interaction.targets.get>>["data"];
-type Protocols = Awaited<ReturnType<typeof clientApi.v4.interaction.protocols.get>>["data"];
 type TokenBalances = Awaited<ReturnType<typeof clientApi.v4.tokens.balances.get>>["data"];
 type Payload = Parameters<typeof clientApi.v4.interaction.transaction.get>[0]["query"];
 type Transaction = Awaited<ReturnType<typeof clientApi.v4.interaction.transaction.get>>["data"];
-
-const abi = parseAbi([
-  "function approve(address, uint256) returns (bool)",
-  "function transferFrom(address, address, uint256) returns (bool)",
-]);
 
 export default function useParticipate(
   chainId?: number,
@@ -33,7 +25,6 @@ export default function useParticipate(
 
   const { address } = useWalletContext();
   const { sendTransaction } = useSendTransaction();
-  const { writeContract } = useWriteContract();
 
   const target = useMemo(() => {
     if (!chainId || !protocolId) return;

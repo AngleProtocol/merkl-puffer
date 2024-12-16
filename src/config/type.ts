@@ -7,6 +7,7 @@ export type routesType = {
     route: string;
     icon: keyof typeof RemixIcon;
     key: string;
+    external?: boolean;
   };
 };
 
