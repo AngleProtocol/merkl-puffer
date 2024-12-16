@@ -6,8 +6,8 @@ import { ChainService } from "src/api/services/chain.service";
 import { OpportunityService } from "src/api/services/opportunity/opportunity.service";
 import OpportunityLibrary from "src/components/element/opportunity/OpportunityLibrary";
 
-export async function loader({ params: { symbol } }: LoaderFunctionArgs) {
-  const { opportunities, count } = await OpportunityService.getMany({ tokens: symbol });
+export async function loader({ params: { symbol }, request }: LoaderFunctionArgs) {
+  const { opportunities, count } = await OpportunityService.getManyFromRequest(request, { tokens: symbol });
   const chains = await ChainService.getAll();
 
   return json({ opportunities, chains, count });

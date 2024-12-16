@@ -179,7 +179,7 @@ export default function Tag<T extends keyof TagTypes>({ type, filter, value, ...
               <Group size="xs" className="flex-col">
                 <Group className="justify-between" size="xl">
                   <Text size="xs">Token</Text>
-                  <Hash format="short" size="xs">
+                  <Hash format="short" size="xs" copy>
                     {token.address}
                   </Hash>
                 </Group>
@@ -192,10 +192,6 @@ export default function Tag<T extends keyof TagTypes>({ type, filter, value, ...
               </Group>
               <Divider look="soft" horizontal />
               <Group className="flex-col" size="md">
-                <Button to={`/tokens/${token?.symbol}`} size="xs" look="soft">
-                  <Icon remix="RiArrowRightLine" />
-                  Check opportunities with {token?.symbol}
-                </Button>
                 <Button to={`/chains/${token.chain?.name}`} size="xs" look="soft">
                   <Icon remix="RiArrowRightLine" /> Check opportunities on {token.chain?.name}
                 </Button>

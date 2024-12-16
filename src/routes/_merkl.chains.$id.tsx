@@ -3,7 +3,7 @@ import { Outlet, useLoaderData } from "@remix-run/react";
 import { Cache } from "src/api/services/cache.service";
 import { ChainService } from "src/api/services/chain.service";
 import { OpportunityService } from "src/api/services/opportunity/opportunity.service";
-import Hero, { heroBuildSideDatas } from "src/components/composite/Hero";
+import Hero, { defaultHeroSideDatas } from "src/components/composite/Hero";
 
 export async function loader({ params: { id } }: LoaderFunctionArgs) {
   const chain = await ChainService.get({ search: id });
@@ -28,7 +28,6 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 
 export default function Index() {
   const { chain, count, dailyRewards, maxApr } = useLoaderData<typeof loader>();
-  const label = chain.name.toLowerCase();
 
   return (
     <Hero
@@ -40,24 +39,7 @@ export default function Index() {
       navigation={{ label: "Back to opportunities", link: "/" }}
       title={chain.name}
       description={`Earn rewards by supplying liquidity on ${chain.name}`}
-      tabs={[
-        {
-          label: "Opportunities",
-          link: `/chains/${label?.toLowerCase()}`,
-          key: crypto.randomUUID(),
-        },
-        {
-          label: "Leaderboard",
-          link: `/chains/${label?.toLowerCase()}/leaderboard`,
-          key: crypto.randomUUID(),
-        },
-        {
-          label: "Analytics",
-          link: `/chains/${label?.toLowerCase()}/analytics`,
-          key: crypto.randomUUID(),
-        },
-      ]}
-      sideDatas={heroBuildSideDatas(count, maxApr, dailyRewards)}>
+      sideDatas={defaultHeroSideDatas(count, maxApr, dailyRewards)}>
       <Outlet />
     </Hero>
   );

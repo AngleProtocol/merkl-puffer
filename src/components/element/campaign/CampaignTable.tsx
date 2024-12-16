@@ -3,16 +3,10 @@ import { createTable } from "dappkit";
 export const [CampaignTable, CampaignRow, CampaignColumns] = createTable({
   dailyRewards: {
     name: "Daily rewards",
-    size: "minmax(200px,250px)",
-    compact: "1fr",
-    className: "justify-start",
-    main: true,
-  },
-  restrictions: {
-    name: "",
     size: "minmax(170px,1fr)",
     compactSize: "1fr",
-    className: "justify-end",
+    className: "justify-start",
+    main: true,
   },
   chain: {
     name: "Chain",

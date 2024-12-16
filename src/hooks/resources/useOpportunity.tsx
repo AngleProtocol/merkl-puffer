@@ -65,10 +65,11 @@ export default function useOpportunity(opportunity: Opportunity) {
   }, [opportunity]);
 
   const herosData = useMemo(() => {
-    switch (opportunity.type) {
-      case "CLAMM":
-        return [
-          {
+    let data = [];
+    switch (opportunity.action) {
+      default:
+        data = [
+          !!opportunity.dailyRewards && {
             label: "Daily rewards",
             data: (
               <Value format="$0.00a" size={4} className="!text-main-12">
@@ -77,7 +78,7 @@ export default function useOpportunity(opportunity: Opportunity) {
             ),
             key: crypto.randomUUID(),
           },
-          {
+          !!opportunity.apr && {
             label: "APR",
             data: (
               <Value format="0.00%" size={4} className="!text-main-12">
@@ -86,7 +87,7 @@ export default function useOpportunity(opportunity: Opportunity) {
             ),
             key: crypto.randomUUID(),
           },
-          {
+          !!opportunity.tvl && {
             label: "Total value locked",
             data: (
               <Value format="$0.00a" size={4} className="!text-main-12">
@@ -96,9 +97,8 @@ export default function useOpportunity(opportunity: Opportunity) {
             key: crypto.randomUUID(),
           },
         ];
-      default:
-        return;
     }
+    return data.filter(data => !!data);
   }, [opportunity]);
 
   const rewardsBreakdown = useMemo(() => {

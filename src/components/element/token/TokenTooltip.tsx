@@ -28,7 +28,7 @@ export default function TokenTooltip({ token, size, chain }: TokenTooltipProps) 
         <Group className="flex-col" size="md">
           <Button to={`/tokens/${token?.symbol}`} size="xs" look="soft">
             <Icon remix="RiArrowRightLine" />
-            {token?.symbol} on Merkl
+            Check opportunities with {token?.symbol}
           </Button>
           {chain?.explorers?.map(explorer => {
             return (
@@ -39,7 +39,7 @@ export default function TokenTooltip({ token, size, chain }: TokenTooltipProps) 
                 size="xs"
                 look="soft">
                 <Icon remix="RiArrowRightLine" />
-                {token?.symbol} on Etherscan
+                Visit explorer
               </Button>
             );
           })}

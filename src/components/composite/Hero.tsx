@@ -126,9 +126,9 @@ export default function Hero({
   );
 }
 
-export function heroBuildSideDatas(count: number, maxApr: number, dailyRewards: number) {
+export function defaultHeroSideDatas(count: number, maxApr: number, dailyRewards: number) {
   return [
-    {
+    !!count && {
       data: (
         <Value format="0" size={4} className="!text-main-12">
           {count}
@@ -137,16 +137,7 @@ export function heroBuildSideDatas(count: number, maxApr: number, dailyRewards: 
       label: "Live opportunities",
       key: crypto.randomUUID(),
     },
-    {
-      data: (
-        <Value format="0a%" size={4} className="!text-main-12">
-          {maxApr / 100}
-        </Value>
-      ),
-      label: "APR",
-      key: crypto.randomUUID(),
-    },
-    {
+    !!dailyRewards && {
       data: (
         <Value format="$0.00a" size={4} className="!text-main-12">
           {dailyRewards}
@@ -155,5 +146,14 @@ export function heroBuildSideDatas(count: number, maxApr: number, dailyRewards: 
       label: "Daily rewards",
       key: crypto.randomUUID(),
     },
-  ];
+    !!maxApr && {
+      data: (
+        <Value format="0a%" size={4} className="!text-main-12">
+          {maxApr / 100}
+        </Value>
+      ),
+      label: "Max APR",
+      key: crypto.randomUUID(),
+    },
+  ].filter(data => !!data);
 }

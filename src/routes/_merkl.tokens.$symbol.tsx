@@ -5,7 +5,7 @@ import { Cache } from "src/api/services/cache.service";
 import { ChainService } from "src/api/services/chain.service";
 import { OpportunityService } from "src/api/services/opportunity/opportunity.service";
 import { TokenService } from "src/api/services/token.service";
-import Hero, { heroBuildSideDatas } from "src/components/composite/Hero";
+import Hero, { defaultHeroSideDatas } from "src/components/composite/Hero";
 import Tag, { type TagType } from "src/components/element/Tag";
 import { chainIdOrder } from "src/constants/chain";
 
@@ -72,15 +72,7 @@ export default function Index() {
         </>
       }
       description={`Earn rewards by using ${token.symbol} as liquidity, or directly earn ${token.symbol} as rewards`}
-      tabs={[
-        {
-          label: "Opportunities",
-          link: `/tokens/${token.symbol?.toLowerCase()}`,
-          key: crypto.randomUUID(),
-        },
-      ]}
-      // TODO: Make this dynamic
-      sideDatas={heroBuildSideDatas(count, maxApr, dailyRewards)}
+      sideDatas={defaultHeroSideDatas(count, maxApr, dailyRewards)}
       tags={tags.map(tag => <Tag key={`${tag.type}_${tag.value?.address ?? tag.value}`} {...tag} size="lg" />)}>
       <Outlet />
     </Hero>

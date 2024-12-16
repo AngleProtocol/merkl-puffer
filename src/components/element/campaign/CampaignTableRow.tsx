@@ -16,6 +16,7 @@ import {
 import moment from "moment";
 import Collapsible from "packages/dappkit/src/components/primitives/Collapsible";
 import Time from "packages/dappkit/src/components/primitives/Time";
+import Tooltip from "packages/dappkit/src/components/primitives/Tooltip";
 import { type ReactNode, useCallback, useMemo, useState } from "react";
 import type { Opportunity } from "src/api/services/opportunity/opportunity.model";
 import useCampaign from "src/hooks/resources/useCampaign";
@@ -48,7 +49,7 @@ export default function CampaignTableRow({
   const campaignInformation = useMemo(() => {
     const columns = [
       [
-        "Total distributed",
+        "Total Distributed",
         <Token
           key="token"
           symbol={false}
@@ -81,14 +82,20 @@ export default function CampaignTableRow({
         </Hash>,
       ],
       [
-        "Last snapshot",
-        <Text key="computedUntil">
-          {campaign?.campaignStatus?.computedUntil ? (
-            <Time timestamp={Number(campaign?.campaignStatus?.computedUntil) * 1000} />
-          ) : (
-            "not computed yet"
-          )}
-        </Text>,
+        "Last Snapshot",
+        <Tooltip
+          helper={
+            "Indicates when the campaign has last been processed by the Merkl engine. Once a campaign is processed, its rewards can then be included in the following distribution of the associated chain. Distributions on a chain may easily be delayed, for example by disputers, or by instabilities in Merkl dependencies"
+          }
+          key="computedUntil">
+          <Text>
+            {campaign?.campaignStatus?.computedUntil ? (
+              <Time timestamp={Number(campaign?.campaignStatus?.computedUntil) * 1000} />
+            ) : (
+              "Never"
+            )}
+          </Text>
+        </Tooltip>,
       ],
     ] as const satisfies [string, ReactNode][];
 
@@ -112,15 +119,6 @@ export default function CampaignTableRow({
       className={mergeClass("cursor-pointer py-4", className)}
       onClick={toggleIsOpen}
       chainColumn={<Chain chain={campaign.chain} />}
-      restrictionsColumn={
-        <Group className="justify-end">
-          {rules
-            ?.filter(({ type }) => type === "address")
-            .map(rule => (
-              <Rule size="sm" key={crypto.randomUUID()} type={rule.type} value={rule.value} />
-            ))}
-        </Group>
-      }
       dailyRewardsColumn={
         <Group className="align-middle items-center flex-nowrap">
           <OverrideTheme accent={"good"}>
