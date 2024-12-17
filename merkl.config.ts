@@ -49,8 +49,8 @@ export default createConfig({
   themes: {
     ignite: {
       base: createColoring(
-        ["#1755F4", "#FF7900", "#0D1530"],
-        ["#1755F4", "#FF7900", "#FFFFFF"]
+        ["#2A35BD", "#BFFF37", "#FFFFFF"],
+        ["#2A35BD", "#BFFF37", "#FFFFFF"]
       ),
       info: createColoring(
         ["#2ABDFF", "#2ABDFF", "#131620"],
@@ -115,8 +115,8 @@ export default createConfig({
     },
     puffer: {
       base: createColoring(
-        ["#2A35BD", "#F5F9FF", "#FFFFFF"],
-        ["#2A35BD", "#F5F9FF", "#FFFFFF"]
+        ["#2A35BD", "#BFFF37", "#FFFFFF"],
+        ["#2A35BD", "#BFFF37", "#FFFFFF"]
       ),
       info: createColoring(
         ["#2ABDFF", "#2ABDFF", "#131620"],
