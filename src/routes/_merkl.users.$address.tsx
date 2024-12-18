@@ -93,7 +93,7 @@ export default function Index() {
           </Group>
         </Group>
       }
-      description={"Check your liquidity positions and claim your rewards"}
+      description={""}
       tabs={[
         {
           label: (
