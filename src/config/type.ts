@@ -1,6 +1,7 @@
 import type * as RemixIcon from "@remixicon/react";
 import type { Mode, Themes, sizeScale } from "dappkit";
 import { createConfig as createWagmiConfig } from "wagmi";
+import type { OpportunityNavigationMode } from "./opportunity";
 
 export type routesType = {
   [key: string]: {
@@ -21,6 +22,7 @@ export type MerklConfig<T extends Themes> = {
   tags?: string[];
   defaultTheme: keyof T;
   deposit?: boolean;
+  opportunityNavigationMode?: OpportunityNavigationMode;
   modes: Mode[];
   wagmi: Parameters<typeof createWagmiConfig>["0"];
   appName: string;

@@ -41,6 +41,14 @@ export default function useOpportunity(opportunity: Opportunity) {
     [opportunity],
   );
 
+  const rewardIcons = useMemo(
+    () =>
+      opportunity.rewardsRecord?.breakdowns?.map(({ token: { icon, address } }) => (
+        <Icon key={address} rounded src={icon} />
+      )) ?? [],
+    [opportunity],
+  );
+
   const description = useMemo(() => {
     const tokenSymbols = opportunity?.tokens?.reduce((str, token, index, tokens) => {
       const noSeparator = index === tokens.length || index === 0;
@@ -123,6 +131,7 @@ export default function useOpportunity(opportunity: Opportunity) {
   return {
     link,
     icons,
+    rewardIcons,
     description,
     rewardsBreakdown,
     ...opportunity,
