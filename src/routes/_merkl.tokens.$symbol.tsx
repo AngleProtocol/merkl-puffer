@@ -22,7 +22,13 @@ export async function loader({ params: { symbol } }: LoaderFunctionArgs) {
 
   const { sum: dailyRewards } = await OpportunityService.getAggregate({ tokens: symbol }, "dailyRewards");
 
-  return json({ tokens, chains, dailyRewards, maxApr: opportunitiesByApr?.[0]?.apr, count });
+  return json({
+    tokens,
+    chains,
+    dailyRewards,
+    maxApr: opportunitiesByApr?.[0]?.apr,
+    count,
+  });
 }
 
 export const clientLoader = Cache.wrap("token", 300);

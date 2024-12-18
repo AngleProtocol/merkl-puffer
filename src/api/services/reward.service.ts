@@ -20,22 +20,6 @@ export type IRewards = {
     price: number;
   };
 };
-// Todo: Check how we should type Raw query
-export type ITotalRewards = {
-  campaignId: string;
-  totalAmount: string;
-  Token: {
-    id: string;
-    name: string;
-    chainId: number;
-    address: string;
-    decimals: number;
-    symbol: string;
-    icon: string;
-    verified: boolean;
-    price: number;
-  };
-}[];
 
 export abstract class RewardService {
   static async #fetch<R, T extends { data: R; status: number; response: Response }>(
@@ -90,7 +74,9 @@ export abstract class RewardService {
     request: Request,
     overrides?: Parameters<typeof api.v4.rewards.index.get>[0]["query"],
   ) {
-    return RewardService.getByParams(Object.assign(RewardService.#getQueryFromRequest(request), overrides ?? {}));
+    return RewardService.getByParams(
+      Object.assign(RewardService.#getQueryFromRequest(request), overrides ?? undefined),
+    );
   }
 
   static async getByParams(query: Parameters<typeof api.v4.rewards.index.get>[0]["query"]) {
@@ -106,10 +92,7 @@ export abstract class RewardService {
     return { count, rewards, total: amount };
   }
 
-  static async total(query: {
-    chainId: number;
-    campaignId: string;
-  }): Promise<ITotalRewards> {
+  static async total(query: { chainId: number; campaignId: string }) {
     const total = await RewardService.#fetch(async () =>
       api.v4.rewards.total.get({
         query: {
@@ -119,6 +102,6 @@ export abstract class RewardService {
       }),
     );
 
-    return total as ITotalRewards;
+    return total;
   }
 }

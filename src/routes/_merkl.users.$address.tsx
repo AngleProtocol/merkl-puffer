@@ -10,11 +10,12 @@ import AddressEdit from "src/components/element/AddressEdit";
 import useReward from "src/hooks/resources/useReward";
 import useRewards from "src/hooks/resources/useRewards";
 import { v4 as uuidv4 } from "uuid";
+import { isAddress } from "viem";
 
 export async function loader({ params: { address } }: LoaderFunctionArgs) {
-  if (!address) throw "";
+  if (!address || !isAddress(address)) throw "";
 
-  //TODO: use a ligther route
+  //TODO: use a lighter route
   const rewards = await RewardService.getForUser(address);
 
   return json({ rewards, address });
@@ -103,6 +104,26 @@ export default function Index() {
           ),
           link: `/users/${address}`,
           key: uuidv4(),
+        },
+        {
+          label: (
+            <>
+              <Icon size="sm" remix="RiDropFill" />
+              Liquidity
+            </>
+          ),
+          link: `/users/${address}/liquidity`,
+          key: crypto.randomUUID(),
+        },
+        {
+          label: (
+            <>
+              <Icon size="sm" remix="RiListCheck3" />
+              Claims
+            </>
+          ),
+          link: `/users/${address}/claims`,
+          key: crypto.randomUUID(),
         },
       ]}>
       <Outlet context={rewards} />
