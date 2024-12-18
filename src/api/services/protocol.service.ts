@@ -1,3 +1,4 @@
+import config from "merkl.config";
 import { api } from "../index.server";
 import { fetchWithLogs } from "../utils";
 
@@ -5,15 +6,28 @@ export abstract class ProtocolService {
   // ─── Get Many Protocols ──────────────────────────────────────────────
 
   static async get(query: Parameters<typeof api.v4.protocols.index.get>[0]["query"]) {
-    return await ProtocolService.#fetch(async () => api.v4.protocols.index.get({ query }));
+    return await ProtocolService.#fetch(async () =>
+      api.v4.protocols.index.get({
+        query: Object.assign({ ...query }, config.tags?.[0] ? { tags: config.tags?.[0] } : {}),
+      }),
+    );
   }
 
   // ─── Get Many Protocols from request ──────────────────────────────────
 
   static async getManyFromRequest(request: Request) {
-    const query = ProtocolService.#getQueryFromRequest(request);
-    const protocols = await ProtocolService.#fetch(async () => api.v4.protocols.index.get({ query }));
-    const count = await ProtocolService.#fetch(async () => api.v4.protocols.count.get({ query }));
+    const query: Parameters<typeof api.v4.protocols.index.get>[0]["query"] =
+      ProtocolService.#getQueryFromRequest(request);
+    const protocols = await ProtocolService.#fetch(async () =>
+      api.v4.protocols.index.get({
+        query: Object.assign({ ...query }, config.tags?.[0] ? { tags: config.tags?.[0] } : {}),
+      }),
+    );
+    const count = await ProtocolService.#fetch(async () =>
+      api.v4.protocols.count.get({
+        query: Object.assign({ ...query }, config.tags?.[0] ? { tags: config.tags?.[0] } : {}),
+      }),
+    );
 
     return { protocols, count };
   }
