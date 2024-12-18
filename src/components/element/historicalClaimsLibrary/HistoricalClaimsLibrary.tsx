@@ -13,18 +13,21 @@ export default function HistoricalClaimsLibrary(props: IProps) {
   const { claims } = props;
 
   const rows = useMemo(() => {
-    return claims?.map(claim => <LeaderboardTableRow key={uuidv4()} claim={claim} />);
+    return claims?.map((claim) => (
+      <LeaderboardTableRow key={uuidv4()} claim={claim} />
+    ));
   }, [claims]);
 
   return (
     <HistoricalClaimsTable
-      dividerClassName={index => (index < 2 ? "bg-accent-8" : "bg-main-8")}
+      dividerClassName={(index) => (index < 2 ? "bg-accent-8" : "bg-main-8")}
       header={
         <Title h={5} className="!text-main-11 w-full">
-          Leaderboard
+          Past Claims
         </Title>
-      }>
-      {!!rows.length ? rows : <Text>No claims transactio done</Text>}
+      }
+    >
+      {!!rows.length ? rows : <Text>No claim transaction found</Text>}
     </HistoricalClaimsTable>
   );
 }
