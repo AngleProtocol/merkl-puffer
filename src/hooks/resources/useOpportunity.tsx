@@ -3,6 +3,7 @@ import type { Token } from "@merkl/api";
 import { Icon, Value } from "dappkit";
 import { useMemo } from "react";
 import type { TagType } from "src/components/element/Tag";
+import { v4 as uuidv4 } from "uuid";
 
 export default function useOpportunity(opportunity: Opportunity) {
   const tags = useMemo(() => {
@@ -76,7 +77,7 @@ export default function useOpportunity(opportunity: Opportunity) {
                 {opportunity.dailyRewards}
               </Value>
             ),
-            key: crypto.randomUUID(),
+            key: uuidv4(),
           },
           !!opportunity.apr && {
             label: "APR",
@@ -85,7 +86,7 @@ export default function useOpportunity(opportunity: Opportunity) {
                 {opportunity.apr / 100}
               </Value>
             ),
-            key: crypto.randomUUID(),
+            key: uuidv4(),
           },
           !!opportunity.tvl && {
             label: "Total value locked",
@@ -94,7 +95,7 @@ export default function useOpportunity(opportunity: Opportunity) {
                 {opportunity.tvl}
               </Value>
             ),
-            key: crypto.randomUUID(),
+            key: uuidv4(),
           },
         ];
     }
@@ -112,9 +113,20 @@ export default function useOpportunity(opportunity: Opportunity) {
       const breakdowns = opportunity.rewardsRecord.breakdowns.filter(({ token: t }) => t.address === address);
       const amount = breakdowns?.reduce((sum, breakdown) => sum + BigInt(breakdown.amount), 0n);
 
-      return { token: breakdowns?.[0]?.token, amount } satisfies { token: Token; amount: bigint };
+      return { token: breakdowns?.[0]?.token, amount } satisfies {
+        token: Token;
+        amount: bigint;
+      };
     });
   }, [opportunity]);
 
-  return { link, icons, description, rewardsBreakdown, ...opportunity, tags, herosData };
+  return {
+    link,
+    icons,
+    description,
+    rewardsBreakdown,
+    ...opportunity,
+    tags,
+    herosData,
+  };
 }

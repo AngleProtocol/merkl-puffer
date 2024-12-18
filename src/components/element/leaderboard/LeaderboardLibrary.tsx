@@ -3,6 +3,7 @@ import { useSearchParams } from "@remix-run/react";
 import { Text, Title } from "dappkit";
 import { useMemo } from "react";
 import type { IRewards } from "src/api/services/reward.service";
+import { v4 as uuidv4 } from "uuid";
 import OpportunityPagination from "../opportunity/OpportunityPagination";
 import { LeaderboardTable } from "./LeaderboardTable";
 import LeaderboardTableRow from "./LeaderboardTableRow";
@@ -24,7 +25,7 @@ export default function LeaderboardLibrary(props: IProps) {
   const rows = useMemo(() => {
     return leaderboard?.map((row, index) => (
       <LeaderboardTableRow
-        key={crypto.randomUUID()}
+        key={uuidv4()}
         total={BigInt(total ?? 0n)}
         row={row}
         rank={index + 1 + Math.max(Number(page) - 1, 0) * Number(items)}

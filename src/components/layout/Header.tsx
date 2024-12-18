@@ -1,12 +1,12 @@
 import { Button, Container, Dropdown, Group, Icon, WalletButton, useTheme } from "dappkit";
 import { Image } from "dappkit";
-import customerDarkLogo from "src/customer/assets/images/customer-dark-logo.svg";
-import customerLogo from "src/customer/assets/images/customer-logo.svg";
-
 import { motion } from "framer-motion";
 import config from "merkl.config";
 import { useWalletContext } from "packages/dappkit/src/context/Wallet.context";
 import { useMemo, useState } from "react";
+import customerDarkLogo from "src/customer/assets/images/customer-dark-logo.svg";
+import customerLogo from "src/customer/assets/images/customer-logo.svg";
+import { v4 as uuidv4 } from "uuid";
 import SwitchMode from "../element/SwitchMode";
 import SearchBar from "../element/functions/SearchBar";
 import { LayerMenu } from "./LayerMenu";
@@ -47,7 +47,7 @@ export default function Header() {
         claims: {
           icon: "RiDashboardFill",
           route: user ? `/users/${user}` : "/users",
-          key: crypto.randomUUID(),
+          key: uuidv4(),
         },
       },
       rest,

@@ -9,6 +9,7 @@ import Hero from "src/components/composite/Hero";
 import AddressEdit from "src/components/element/AddressEdit";
 import useReward from "src/hooks/resources/useReward";
 import useRewards from "src/hooks/resources/useRewards";
+import { v4 as uuidv4 } from "uuid";
 
 export async function loader({ params: { address } }: LoaderFunctionArgs) {
   if (!address) throw "";
@@ -101,7 +102,7 @@ export default function Index() {
             </>
           ),
           link: `/users/${address}`,
-          key: crypto.randomUUID(),
+          key: uuidv4(),
         },
       ]}>
       <Outlet context={rewards} />

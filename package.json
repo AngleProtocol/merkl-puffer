@@ -49,6 +49,7 @@
     "tailwindcss": "^3.4.12",
     "tailwindcss-animate": "^1.0.7",
     "typedoc": "^0.26.7",
+    "uuid": "^11.0.3",
     "viem": "2.21.54",
     "vite-plugin-dts": "^4.2.1",
     "wagmi": "^2.12.29",

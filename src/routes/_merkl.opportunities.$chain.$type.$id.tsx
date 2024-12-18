@@ -10,6 +10,7 @@ import Hero from "src/components/composite/Hero";
 import Tag from "src/components/element/Tag";
 import { ErrorHeading } from "src/components/layout/ErrorHeading";
 import useOpportunity from "src/hooks/resources/useOpportunity";
+import { v4 as uuidv4 } from "uuid";
 
 export async function loader({ params: { id, type, chain: chainId } }: LoaderFunctionArgs) {
   if (!chainId || !id || !type) throw "";
@@ -46,7 +47,7 @@ export default function Index() {
 
     return spaced
       .map(str => {
-        const key = str + crypto.randomUUID();
+        const key = str + uuidv4();
         if (!str.match(/[\p{Letter}\p{Mark}]+/gu))
           return [
             <span key={key} className="text-main-11">
@@ -80,11 +81,11 @@ export default function Index() {
         title={styleName}
         description={description}
         tabs={[
-          { label: "Overview", link, key: crypto.randomUUID() },
+          { label: "Overview", link, key: uuidv4() },
           {
             label: "Leaderboard",
             link: `${link}/leaderboard?campaignId=${currentLiveCampaign?.campaignId}`,
-            key: crypto.randomUUID(),
+            key: uuidv4(),
           },
         ]}
         tags={tags.map(tag => (

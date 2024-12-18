@@ -3,6 +3,7 @@ import { Icon } from "dappkit";
 import { useWalletContext } from "packages/dappkit/src/context/Wallet.context";
 import { useState } from "react";
 import Hero from "src/components/composite/Hero";
+import { v4 as uuidv4 } from "uuid";
 
 export default function Index() {
   const [_isEditingAddress] = useState(false);
@@ -23,7 +24,7 @@ export default function Index() {
             </>
           ),
           link: `/users/${address}`,
-          key: crypto.randomUUID(),
+          key: uuidv4(),
         },
         {
           label: (
@@ -33,7 +34,7 @@ export default function Index() {
             </>
           ),
           link: `/users/${address}/liquidity`,
-          key: crypto.randomUUID(),
+          key: uuidv4(),
         },
         {
           label: (
@@ -43,7 +44,7 @@ export default function Index() {
             </>
           ),
           link: `/users/${address}/claims`,
-          key: crypto.randomUUID(),
+          key: uuidv4(),
         },
       ]}>
       <Outlet />
