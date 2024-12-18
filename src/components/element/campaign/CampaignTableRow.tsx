@@ -98,6 +98,7 @@ export default function CampaignTableRow({
           </Text>
         </Tooltip>,
       ],
+      ["Compute Chain", <Chain chain={campaign.chain} key="computeChain" />],
     ] as const satisfies [string, ReactNode][];
 
     return columns.map(([label, content]) => {
@@ -119,7 +120,7 @@ export default function CampaignTableRow({
       {...props}
       className={mergeClass("cursor-pointer py-4", className)}
       onClick={toggleIsOpen}
-      chainColumn={<Chain chain={campaign.chain} />}
+      chainColumn={<Chain chain={campaign.distributionChain} />}
       dailyRewardsColumn={
         <Group className="align-middle items-center flex-nowrap">
           <OverrideTheme accent={"good"}>

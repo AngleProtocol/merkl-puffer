@@ -1,7 +1,7 @@
 import type { Campaign } from "@merkl/api";
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json, useLoaderData } from "@remix-run/react";
-import { Box, Container, Group, Hash, Icon, OverrideTheme, PrimitiveTag, Select, Space, Title, Value } from "dappkit";
+import { Box, Container, Group, Icon, OverrideTheme, PrimitiveTag, Select, Space, Title, Value } from "dappkit";
 import moment from "moment";
 import Time from "packages/dappkit/src/components/primitives/Time";
 import { useCallback, useMemo } from "react";
@@ -96,8 +96,6 @@ export default function Index() {
             {"End "}
             <Time timestamp={Number(campaign.endTimestamp) * 1000} />
           </PrimitiveTag>
-
-          <Hash format="short">{campaign.campaignId}</Hash>
 
           <Group>
             <Token token={campaign.rewardToken} amount={dailyRewards(campaign)} format="amount_price" value />
