@@ -49,6 +49,7 @@ export default createConfig({
   defaultTheme: "ignite",
   tags: ["puffer"],
   opportunityNavigationMode: "direct",
+  rewardsNavigationMode: "chain",
   deposit: true,
   themes: {
     ignite: {

@@ -1,6 +1,9 @@
 import type { Reward } from "@merkl/api";
 import { Group } from "dappkit";
+import config from "merkl.config";
 import { useMemo } from "react";
+import { ClaimRewardsChainTable } from "./ClaimRewardsChainTable";
+import ClaimRewardsChainTableRow from "./ClaimRewardsChainTableRow";
 import ClaimRewardsByOpportunity from "./byOpportunity/ClaimRewardsByOpportunity";
 
 export type ClaimRewardsLibraryProps = {
@@ -18,13 +21,21 @@ export default function ClaimRewardsLibrary({ from, rewards }: ClaimRewardsLibra
       ),
     [rewards],
   );
-  return (
-    <Group className="flex-row w-full [&>*]:flex-grow">
-      {/* Todo need to be config implemented for subprojects */}
-      <ClaimRewardsByOpportunity from={from} rewards={flatenedRewards} />
-      {/* {rewards?.map((reward, index) => (
-        <ClaimRewardsChainTableRow {...{ from, reward }} key={reward.chain?.id ?? index} />
-      ))} */}
-    </Group>
-  );
+
+  const renderRewards = useMemo(() => {
+    switch (config.rewardsNavigationMode) {
+      case "opportunity":
+        return <ClaimRewardsByOpportunity from={from} rewards={flatenedRewards} />;
+      default:
+        return (
+          <ClaimRewardsChainTable dividerClassName={index => (index === 1 ? "bg-accent-10" : "bg-main-7")}>
+            {rewards?.map((reward, index) => (
+              <ClaimRewardsChainTableRow {...{ from, reward }} key={reward.chain?.id ?? index} />
+            ))}
+          </ClaimRewardsChainTable>
+        );
+    }
+  }, [rewards, flatenedRewards, from]);
+
+  return <Group className="flex-row w-full [&>*]:flex-grow">{renderRewards}</Group>;
 }
