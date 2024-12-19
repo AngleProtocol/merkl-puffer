@@ -9,9 +9,7 @@ import { LeaderboardTable } from "./LeaderboardTable";
 import LeaderboardTableRow from "./LeaderboardTableRow";
 
 export type IProps = {
-  leaderboard: Awaited<
-    ReturnType<(typeof RewardService)["getManyFromRequest"]>
-  >["rewards"];
+  leaderboard: Awaited<ReturnType<(typeof RewardService)["getManyFromRequest"]>>["rewards"];
   count?: number;
   total?: number;
   campaign: Campaign;
@@ -38,14 +36,13 @@ export default function LeaderboardLibrary(props: IProps) {
 
   return (
     <LeaderboardTable
-      dividerClassName={(index) => (index < 2 ? "bg-accent-8" : "bg-main-8")}
+      dividerClassName={index => (index < 2 ? "bg-accent-8" : "bg-main-8")}
       header={
         <Title h={5} className="!text-main-11 w-full">
           Leaderboard
         </Title>
       }
-      footer={count !== undefined && <OpportunityPagination count={count} />}
-    >
+      footer={count !== undefined && <OpportunityPagination count={count} />}>
       {!!rows.length ? rows : <Text>No rewarded users</Text>}
     </LeaderboardTable>
   );

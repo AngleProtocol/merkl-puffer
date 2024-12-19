@@ -51,8 +51,7 @@ export default function Index() {
                 key: uuidv4(),
               },
             ]
-      }
-    >
+      }>
       <Outlet />
     </Hero>
   );
