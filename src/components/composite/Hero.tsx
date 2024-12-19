@@ -121,11 +121,8 @@ export default function Hero({
                   {!!tags && <Group className="mb-lg">{tags}</Group>}
                 </Group>
                 {!!sideDatas && (
-                  <Group
-                    className="w-full lg:w-auto lg:flex-col mr-xl*2"
-                    size="lg"
-                  >
-                    {sideDatas.map((data) => (
+                  <Group className="w-full lg:w-auto lg:flex-col mr-xl*2" size="lg">
+                    {sideDatas.map(data => (
                       <Group key={data.key} className="flex-col" size="xs">
                         <Text size={4} className="!text-main-12">
                           {data.data}
@@ -151,11 +148,7 @@ export default function Hero({
   );
 }
 
-export function defaultHeroSideDatas(
-  count: number,
-  maxApr: number,
-  dailyRewards: number
-) {
+export function defaultHeroSideDatas(count: number, maxApr: number, dailyRewards: number) {
   return [
     !!count && {
       data: (
@@ -184,5 +177,5 @@ export function defaultHeroSideDatas(
       label: "Max APR",
       key: uuidv4(),
     },
-  ].filter((data) => !!data);
+  ].filter(data => !!data);
 }
