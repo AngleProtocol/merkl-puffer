@@ -3,6 +3,7 @@ import { Link } from "@remix-run/react";
 import type { BoxProps } from "dappkit";
 import { Dropdown, Group, Icon, Icons, PrimitiveTag, Text, Title, Value } from "dappkit";
 import { mergeClass } from "dappkit";
+import config from "merkl.config";
 import { useOverflowingRef } from "packages/dappkit/src/hooks/events/useOverflowing";
 import { useMemo } from "react";
 import type { OpportunityNavigationMode } from "src/config/opportunity";
@@ -115,7 +116,11 @@ export default function OpportunityTableRow({
                     "text-nowrap whitespace-nowrap text-ellipsis min-w-0 inline-block overflow-hidden",
                     overflowing && "hover:overflow-visible hover:animate-textScroll hover:text-clip",
                   )}>
-                  <span className="overflow-visible">{opportunity.name}</span>
+                  <span className="overflow-visible">
+                    {config.opprtunityPercentage
+                      ? opportunity.name
+                      : opportunity.name.replace(/\s*\d+(\.\d+)?%$/, "").trim()}
+                  </span>
                 </Title>
               </Group>
             </Group>

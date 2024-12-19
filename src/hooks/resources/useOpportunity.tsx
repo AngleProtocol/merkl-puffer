@@ -1,6 +1,7 @@
 import type { Opportunity } from "@merkl/api";
 import type { Token } from "@merkl/api";
 import { Icon, Value } from "dappkit";
+import config from "merkl.config";
 import { useMemo } from "react";
 import type { TagType } from "src/components/element/Tag";
 import { v4 as uuidv4 } from "uuid";
@@ -134,7 +135,10 @@ export default function useOpportunity(opportunity: Opportunity) {
     rewardIcons,
     description,
     rewardsBreakdown,
-    ...opportunity,
+    opportunity: {
+      ...opportunity,
+      name: config.opprtunityPercentage ? opportunity.name : opportunity.name.replace(/\s*\d+(\.\d+)?%$/, "").trim(),
+    },
     tags,
     herosData,
   };

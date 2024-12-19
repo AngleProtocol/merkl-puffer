@@ -25,11 +25,17 @@ export type MerklConfig<T extends Themes> = {
   deposit?: boolean;
   opportunityNavigationMode?: OpportunityNavigationMode;
   rewardsNavigationMode?: RewardsNavigationMode;
+  opprtunityPercentage: boolean;
   modes: Mode[];
   wagmi: Parameters<typeof createWagmiConfig>["0"];
   appName: string;
   fonts?: { title: string[]; text: string[]; mono: string[] };
   routes: routesType;
+  header: {
+    searchbar: {
+      enabled: boolean;
+    };
+  };
   images: {
     [name: string]: string;
   };

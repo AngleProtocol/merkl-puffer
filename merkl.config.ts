@@ -47,9 +47,9 @@ export default createConfig({
   appName: "Merkl",
   modes: ["dark", "light"],
   defaultTheme: "ignite",
-  tags: [],
   opportunityNavigationMode: "direct",
   rewardsNavigationMode: "chain",
+  opprtunityPercentage: true,
   deposit: true,
   themes: {
     ignite: {
@@ -95,16 +95,16 @@ export default createConfig({
       route: "/",
       key: uuidv4(),
     },
-    opportunities: {
-      icon: "RiPlanetFill",
-      route: "/opportunities",
-      key: uuidv4(),
-    },
-    // protocols: {
-    //   icon: "RiVipCrown2Fill",
-    //   route: "/protocols",
+    // opportunities: {
+    //   icon: "RiPlanetFill",
+    //   route: "/opportunities",
     //   key: uuidv4(),
     // },
+    protocols: {
+      icon: "RiVipCrown2Fill",
+      route: "/protocols",
+      key: uuidv4(),
+    },
     // bridge: {
     //   icon: "RiCompassesLine",
     //   route: "/bridge",
@@ -131,6 +131,11 @@ export default createConfig({
     //   route: "/privacy",
     //   key: uuidv4(),
     // },
+  },
+  header: {
+    searchbar: {
+      enabled: true,
+    },
   },
   socials: {
     discord: "",

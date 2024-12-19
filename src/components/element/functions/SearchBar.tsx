@@ -20,7 +20,9 @@ function OpportunityResult({ opportunity }: { opportunity: Opportunity }) {
   return (
     <>
       <Button to={link} look="soft">
-        <Icons>{icons}</Icons> {opportunity.name} <Icon remix="RiArrowRightLine" />
+        <Icons>{icons}</Icons>
+        {opportunity.name}
+        <Icon remix="RiArrowRightLine" />
       </Button>
       <Divider look="soft" />
     </>

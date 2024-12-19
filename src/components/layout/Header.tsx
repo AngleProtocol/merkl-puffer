@@ -44,7 +44,7 @@ export default function Header() {
     return Object.assign(
       { home },
       {
-        claims: {
+        dashboard: {
           icon: "RiDashboardFill",
           route: user ? `/users/${user}` : "/users",
           key: uuidv4(),
@@ -97,7 +97,7 @@ export default function Header() {
                   })}
                 <Group className="items-center">
                   <SwitchMode />
-                  <SearchBar icon={true} />
+                  {config.header.searchbar.enabled && <SearchBar icon={true} />}
                 </Group>
               </Group>
 
