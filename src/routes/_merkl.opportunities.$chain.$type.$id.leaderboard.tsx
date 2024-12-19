@@ -34,6 +34,7 @@ export async function loader({ params: { id, type, chain: chainId }, request }: 
 
   const { rewards, count, total } = await RewardService.getManyFromRequest(request, {
     chainId: chain.id,
+    campaignId: campaigns?.[0]?.campaignId,
   });
 
   return json({

@@ -40,7 +40,7 @@ export abstract class OpportunityService {
 
     //TODO: updates tags to take an array
     if (config.tags && !opportunityWithCampaigns.tags.includes(config.tags?.[0]))
-      throw new Response("Opportunity inacessible", { status: 403 });
+      throw new Response("Opportunity inaccessible", { status: 403 });
 
     return opportunityWithCampaigns;
   }
