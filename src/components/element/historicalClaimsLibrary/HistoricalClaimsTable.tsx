@@ -1,10 +1,6 @@
 import { createTable } from "dappkit";
 
-export const [
-  HistoricalClaimsTable,
-  HistoricalClaimsRow,
-  HistoricalClaimsColumns,
-] = createTable({
+export const [HistoricalClaimsTable, HistoricalClaimsRow, HistoricalClaimsColumns] = createTable({
   chain: {
     name: "Chain",
     size: "minmax(120px,150px)",
@@ -18,12 +14,6 @@ export const [
     compact: "1fr",
     className: "justify-start",
     main: true,
-  },
-  value: {
-    name: "Value",
-    size: "minmax(170px,1fr)",
-    compactSize: "1fr",
-    className: "justify-start",
   },
   date: {
     name: "Date",
