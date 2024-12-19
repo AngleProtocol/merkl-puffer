@@ -92,7 +92,7 @@ export default createConfig({
     library: {
       columns: {
         action: {
-          enabled: false,
+          enabled: true,
         },
       },
     },
@@ -195,7 +195,6 @@ export default createConfig({
     github: "https://github.com/PufferFinance",
   },
   links: {
-    docs: "https://docs.merkl.xyz/",
     merkl: "https://merkl.xyz/",
     merklTermsConditions: "https://app.merkl.xyz/merklTerms.pdf",
     merklPrivacy: "https://privacy.angle.money",
