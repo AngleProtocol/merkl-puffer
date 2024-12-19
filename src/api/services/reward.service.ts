@@ -1,25 +1,5 @@
-import type { Reward } from "@merkl/api";
 import { api } from "../index.server";
 import { fetchWithLogs } from "../utils";
-
-// Todo: Check how we should type Raw query
-export type IRewards = {
-  amount: string;
-  recipient: string;
-  campaignId: string;
-  reason: string;
-  Token: {
-    id: string;
-    name: string;
-    chainId: number;
-    address: string;
-    decimals: number;
-    symbol: string;
-    icon: string;
-    verified: boolean;
-    price: number;
-  };
-};
 
 export abstract class RewardService {
   static async #fetch<R, T extends { data: R; status: number; response: Response }>(
@@ -63,11 +43,12 @@ export abstract class RewardService {
     return query;
   }
 
-  static async getForUser(address: string): Promise<Reward[]> {
-    const rewards = await RewardService.#fetch(async () => api.v4.users({ address }).rewards.full.get());
-
-    //TODO: add some cache here
-    return rewards;
+  static async getForUser(address: string, chainId: number) {
+    return await RewardService.#fetch(async () =>
+      api.v4.users({ address }).rewards.breakdowns.get({
+        query: { chainId },
+      }),
+    );
   }
 
   static async getManyFromRequest(

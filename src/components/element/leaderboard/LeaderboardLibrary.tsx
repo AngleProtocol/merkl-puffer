@@ -2,14 +2,16 @@ import type { Campaign } from "@merkl/api";
 import { useSearchParams } from "@remix-run/react";
 import { Text, Title } from "dappkit";
 import { useMemo } from "react";
-import type { IRewards } from "src/api/services/reward.service";
+import type { RewardService } from "src/api/services/reward.service";
 import { v4 as uuidv4 } from "uuid";
 import OpportunityPagination from "../opportunity/OpportunityPagination";
 import { LeaderboardTable } from "./LeaderboardTable";
 import LeaderboardTableRow from "./LeaderboardTableRow";
 
 export type IProps = {
-  leaderboard: IRewards[];
+  leaderboard: Awaited<
+    ReturnType<(typeof RewardService)["getManyFromRequest"]>
+  >["rewards"];
   count?: number;
   total?: number;
   campaign: Campaign;
@@ -36,13 +38,14 @@ export default function LeaderboardLibrary(props: IProps) {
 
   return (
     <LeaderboardTable
-      dividerClassName={index => (index < 2 ? "bg-accent-8" : "bg-main-8")}
+      dividerClassName={(index) => (index < 2 ? "bg-accent-8" : "bg-main-8")}
       header={
         <Title h={5} className="!text-main-11 w-full">
           Leaderboard
         </Title>
       }
-      footer={count !== undefined && <OpportunityPagination count={count} />}>
+      footer={count !== undefined && <OpportunityPagination count={count} />}
+    >
       {!!rows.length ? rows : <Text>No rewarded users</Text>}
     </LeaderboardTable>
   );

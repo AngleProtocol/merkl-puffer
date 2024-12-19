@@ -4,6 +4,7 @@ import { useWalletContext } from "packages/dappkit/src/context/Wallet.context";
 import { useState } from "react";
 import Hero from "src/components/composite/Hero";
 import { v4 as uuidv4 } from "uuid";
+import { isAddress } from "viem";
 
 export default function Index() {
   const [_isEditingAddress] = useState(false);
@@ -16,7 +17,7 @@ export default function Index() {
       title={"Claims"}
       description={"Claim and monitor the rewards awarded through Merkl"}
       tabs={
-        !address
+        !address || !isAddress(address)
           ? []
           : [
               {
@@ -50,7 +51,8 @@ export default function Index() {
                 key: uuidv4(),
               },
             ]
-      }>
+      }
+    >
       <Outlet />
     </Hero>
   );

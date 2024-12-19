@@ -15,8 +15,7 @@ import { isAddress } from "viem";
 export async function loader({ params: { address } }: LoaderFunctionArgs) {
   if (!address || !isAddress(address)) throw "";
 
-  //TODO: use a lighter route
-  const rewards = await RewardService.getForUser(address);
+  const rewards = await RewardService.getForUser(address, 1);
 
   return json({ rewards, address });
 }
@@ -25,7 +24,9 @@ export const meta: MetaFunction<typeof loader> = ({ data, error }) => {
   if (error) return [{ title: error }];
   return [
     {
-      title: `${data?.address?.substring(0, 6)}…${data?.address.substring(data?.address.length - 4)} on Merkl`,
+      title: `${data?.address?.substring(0, 6)}…${data?.address.substring(
+        data?.address.length - 4
+      )} on Merkl`,
     },
   ];
 };
@@ -37,14 +38,23 @@ export default function Index() {
   const rewards = useRewards(raw);
 
   const { chainId, chains, address: user } = useWalletContext();
-  const chain = useMemo(() => chains?.find(c => c.id === chainId), [chainId, chains]);
-  const reward = useMemo(() => raw.find(({ chain: { id } }) => id === chainId), [chainId, raw]);
+  const chain = useMemo(
+    () => chains?.find((c) => c.id === chainId),
+    [chainId, chains]
+  );
+  const reward = useMemo(
+    () => raw.find(({ chain: { id } }) => id === chainId),
+    [chainId, raw]
+  );
   const { claimTransaction } = useReward(reward, user);
 
   const isUserRewards = useMemo(() => user === address, [user, address]);
   const isAbleToClaim = useMemo(
-    () => isUserRewards && reward && !reward.rewards.every(({ amount, claimed }) => amount === claimed),
-    [isUserRewards, reward],
+    () =>
+      isUserRewards &&
+      reward &&
+      !reward.rewards.every(({ amount, claimed }) => amount === claimed),
+    [isUserRewards, reward]
   );
 
   return (
@@ -86,7 +96,12 @@ export default function Index() {
           </Group>
           <Group className="flex-col">
             {isAbleToClaim && (
-              <TransactionButton disabled={!claimTransaction} look="hype" size="lg" tx={claimTransaction}>
+              <TransactionButton
+                disabled={!claimTransaction}
+                look="hype"
+                size="lg"
+                tx={claimTransaction}
+              >
                 Claim on {chain?.name}
               </TransactionButton>
             )}
@@ -125,7 +140,8 @@ export default function Index() {
           link: `/users/${address}/claims`,
           key: crypto.randomUUID(),
         },
-      ]}>
+      ]}
+    >
       <Outlet context={rewards} />
     </Hero>
   );
