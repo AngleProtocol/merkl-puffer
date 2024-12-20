@@ -1,7 +1,7 @@
 import type { Opportunity } from "@merkl/api";
 import { Button, Group, Icon, Input, PrimitiveTag, Text, Value } from "dappkit";
 import { Fmt } from "packages/dappkit/src/utils/formatter.service";
-import { Suspense, useState } from "react";
+import { Suspense, useMemo, useState } from "react";
 import useOpportunity from "src/hooks/resources/useOpportunity";
 import useParticipate from "src/hooks/useParticipate";
 import OpportunityShortCard from "../opportunity/OpportunityShortCard";
@@ -21,7 +21,7 @@ export default function Participate({ opportunity, displayOpportunity, displayMo
   const [mode] = useState<"deposit" | "withdraw">(typeof displayMode === "string" ? displayMode : "deposit");
 
   const {
-    target,
+    targets,
     balance,
     token: inputToken,
     loading,
@@ -45,6 +45,53 @@ export default function Participate({ opportunity, displayOpportunity, displayMo
   //       );
   //   }
   // }, [mode]);
+
+  const interactor = useMemo(() => {
+    if (loading)
+      return (
+        <Group className="w-full justify-center">
+          <Icon remix="RiLoader2Line" className="animate-spin" />
+        </Group>
+      );
+    if (!targets?.length) return;
+    return (
+      <Group>
+        <Input.BigInt
+          className="w-full"
+          look="bold"
+          state={[amount, a => setAmount(a)]}
+          base={inputToken?.decimals ?? 18}
+          header={
+            <Group className="justify-between w-full">
+              <Text>{mode === "deposit" ? "Supply" : "Withdraw"}</Text>
+              <Group>
+                <Text>Balance</Text>
+                {inputToken && <Value format="$0,0.#">{Fmt.toPrice(inputToken.balance, inputToken)}</Value>}
+                <PrimitiveTag
+                  onClick={() => {
+                    setAmount(BigInt(inputToken?.balance ?? "0"));
+                  }}
+                  size="xs">
+                  Max
+                </PrimitiveTag>
+              </Group>
+            </Group>
+          }
+          suffix={<TokenSelect balances state={[tokenAddress, setTokenAddress]} tokens={balance} />}
+          placeholder="0.0"
+        />
+        <Suspense>
+          <Interact
+            disabled={!loading && !targets?.length}
+            target={targets?.[0]}
+            inputToken={inputToken}
+            amount={amount}
+            opportunity={opportunity}
+          />
+        </Suspense>
+      </Group>
+    );
+  }, [opportunity, mode, inputToken, loading, amount, tokenAddress, balance, targets]);
 
   return (
     <>
@@ -71,41 +118,7 @@ export default function Participate({ opportunity, displayOpportunity, displayMo
           </Group>
         </Group>
       )}
-      <Group>
-        <Input.BigInt
-          className="w-full"
-          state={[amount, a => setAmount(a)]}
-          base={inputToken?.decimals ?? 18}
-          header={
-            <Group className="justify-between w-full">
-              <Text>{mode === "deposit" ? "Supply" : "Withdraw"}</Text>
-              <Group>
-                <Text>Balance</Text>
-                {inputToken && <Value format="$0,0.#">{Fmt.toPrice(inputToken.balance, inputToken)}</Value>}
-                <PrimitiveTag
-                  onClick={() => {
-                    setAmount(BigInt(inputToken?.balance ?? "0"));
-                  }}
-                  size="xs">
-                  Max
-                </PrimitiveTag>
-              </Group>
-            </Group>
-          }
-          suffix={<TokenSelect balances state={[tokenAddress, setTokenAddress]} tokens={balance} />}
-          placeholder="0.0"
-        />
-        {/* biome-ignore lint/complexity/noUselessFragments: <explanation> */}
-        <Suspense fallback={<></>}>
-          <Interact
-            disabled={!loading && !target}
-            target={target}
-            inputToken={inputToken}
-            amount={amount}
-            opportunity={opportunity}
-          />
-        </Suspense>
-      </Group>
+      {interactor}
     </>
   );
 }

@@ -2,7 +2,6 @@ import { createColoring } from "dappkit";
 import { createConfig } from "src/config/type";
 import hero from "src/customer/assets/images/hero.jpg?url";
 import { v4 as uuidv4 } from "uuid";
-import { http, createClient, custom } from "viem";
 
 import {
   arbitrum,
@@ -40,20 +39,25 @@ import {
   xLayer,
   zksync,
 } from "viem/chains";
-import { eip712WalletActions } from "viem/zksync";
 import { coinbaseWallet, walletConnect } from "wagmi/connectors";
 
 export default createConfig({
   appName: "Merkl",
   modes: ["dark", "light"],
   defaultTheme: "ignite",
-  opportunityNavigationMode: "direct",
+  opportunityNavigationMode: "supply",
   rewardsNavigationMode: "chain",
   opprtunityPercentage: true,
   opportunityNotification:
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   hideLayerMenuHomePage: false,
   deposit: true,
+  // walletOptions: {
+  //   client(c) {
+  //     if (c.chain?.id === zksync.id) return c.extend(eip712WalletActions());
+  //   },
+  //   // transaction: async (tx, { client }) => await ZyfiService.wrapAdnSendTx(client, tx),
+  // },
   themes: {
     ignite: {
       base: createColoring(["#1755F4", "#FF7900", "#0D1530"], ["#1755F4", "#FF7900", "#FFFFFF"]),
@@ -190,14 +194,6 @@ export default createConfig({
       taiko,
       scroll,
     ],
-    client({ chain }) {
-      if (chain.id === zksync.id)
-        return createClient({
-          chain,
-          transport: custom(window.ethereum!),
-        }).extend(eip712WalletActions());
-      return createClient({ chain, transport: http() });
-    },
     ssr: true,
     connectors: [
       coinbaseWallet(),

@@ -12,8 +12,8 @@ export default function Index() {
   return (
     <Container>
       <Space size="md" />
-      <Group>
-        <Group className="flex-grow">
+      <Group className="grid grid-wrap md:grid-cols-[1fr,minmax(200px,260px)]">
+        <Group>
           <CampaignLibrary opportunity={opportunity} chain={chain} />
         </Group>
         {/* <Group className="grid grid-cols-1 gap-md md:grid-cols-[1fr,300px]"> */}

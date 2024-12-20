@@ -20,7 +20,7 @@ export abstract class InteractionService {
    * @param protocolId
    * @param identifier
    */
-  static async getTarget(chainId: number, protocolId: string, identifier: string) {
+  static async getTargets(chainId: number, protocolId: string, identifier: string) {
     const targets = await InteractionService.#fetch(() =>
       clientApi.v4.interaction.targets.get({
         query: { chainId, protocolId, identifier },
@@ -28,7 +28,7 @@ export abstract class InteractionService {
     );
 
     //TODO: opportunity/:id/target instead of taking the first result and expecting unique
-    return targets?.[0];
+    return targets;
   }
 
   /**

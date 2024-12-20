@@ -20,7 +20,7 @@ export default function useInteractionTransaction(
   const { address: connectedAddress } = useWalletContext();
   const address = useMemo(() => userAddress ?? connectedAddress, [userAddress, connectedAddress]);
 
-  const [transaction, setTransaction] = useState<Transaction>();
+  const [transactions, setTransactions] = useState<{ [payload: string]: Transaction }>();
   const payload: Payload | undefined = useMemo(() => {
     if (!chainId || !protocolId || !address || !amount || !tokenIn || !target?.identifier) return;
     return {
@@ -33,13 +33,20 @@ export default function useInteractionTransaction(
     };
   }, [chainId, protocolId, target, address, tokenIn, amount]);
 
+  const transaction = useMemo(() => {
+    if (!payload) return;
+    return transactions?.[JSON.stringify(payload)];
+  }, [transactions, payload]);
+
   useEffect(() => {
     async function fetchTransaction() {
       if (!payload) return;
 
       const tx = await InteractionService.getTransaction(payload);
 
-      setTransaction(tx);
+      setTransactions(txns => {
+        return { ...txns, [JSON.stringify(payload)]: tx };
+      });
     }
 
     fetchTransaction();

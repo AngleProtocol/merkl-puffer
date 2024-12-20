@@ -1,7 +1,7 @@
 import { useWalletContext } from "dappkit/src/context/Wallet.context";
 import { useMemo } from "react";
 import useBalances from "./useBalances";
-import useInteractionTarget from "./useInteractionTarget";
+import useInteractionTargets from "./useInteractionTarget";
 
 export default function useParticipate(
   chainId: number,
@@ -9,7 +9,7 @@ export default function useParticipate(
   identifier?: string,
   tokenAddress?: string,
 ) {
-  const { target, loading: targetLoading } = useInteractionTarget(chainId, protocolId, identifier);
+  const { targets, loading: targetLoading } = useInteractionTargets(chainId, protocolId, identifier);
   const { balances } = useBalances(chainId);
 
   const { address } = useWalletContext();
@@ -21,7 +21,7 @@ export default function useParticipate(
   const loading = useMemo(() => targetLoading, [targetLoading]);
 
   return {
-    target,
+    targets,
     token,
     balance: balances,
     balances,

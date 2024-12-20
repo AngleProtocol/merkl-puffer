@@ -144,7 +144,7 @@ export default function CampaignTableRow({
         <Space size="md" />
         <Box size="md" className="p-0 bg-main-4 !rounded-md">
           <Group className="flex-nowrap p-lg" size="lg">
-            <Group className="justify-between flex-col size-full">
+            <Group className="justify-between flex-grow flex-col size-full">
               <Text size="sm" look="soft">
                 Campaign Information
               </Text>

@@ -25,7 +25,13 @@ export default function OpportunityLibrary({
 }: OpportunityLibrary) {
   const rows = useMemo(
     () =>
-      opportunities?.map(o => <OpportunityTableRow key={`${o.chainId}_${o.type}_${o.identifier}`} opportunity={o} />),
+      opportunities?.map(o => (
+        <OpportunityTableRow
+          navigationMode={merklConfig.opportunityNavigationMode}
+          key={`${o.chainId}_${o.type}_${o.identifier}`}
+          opportunity={o}
+        />
+      )),
     [opportunities],
   );
 

@@ -27,41 +27,40 @@ export default function Interact({ opportunity, inputToken, amount, target, disa
   const [approvalHash, setApprovalHash] = useState<string>();
 
   const currentInteraction = useMemo(() => {
-    const buttonProps: ButtonProps = { size: "lg", look: "hype", className: "justify-center w-full" };
+    let buttonProps: ButtonProps | undefined = undefined;
+    const commonProps = { size: "lg", look: "hype", className: "justify-center w-full" };
+    const createProps: (bp: ButtonProps) => void = bp => {
+      buttonProps = Object.assign(commonProps, bp ?? {});
+    };
 
-    if (disabled)
-      return (
-        <Button {...buttonProps} disabled>
-          Cannot interact
-        </Button>
-      );
-    if (!transaction)
-      return (
-        <Button {...buttonProps} disabled>
-          Loading...
-        </Button>
-      );
-    if (chainId !== opportunity.chainId)
-      return (
-        <Button {...buttonProps} onClick={() => switchChain(opportunity.chainId)}>
-          Switch Chain
-        </Button>
-      );
+    if (disabled) createProps({ disabled: true, children: "Cannot interact" });
+    else if (!amount || amount === 0n) createProps({ disabled: true, children: "Enter an amount" });
+    else if (!transaction) createProps({ disabled: true, children: "Loading..." });
+    else if (chainId !== opportunity.chainId)
+      createProps({ children: `Switch to ${opportunity.chain.name}`, onClick: () => switchChain(opportunity.chainId) });
 
-    if (!transaction.approved || approvalHash)
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+    if (buttonProps) return <Button {...(buttonProps as any)} />;
+
+    if (!transaction.approved && !approvalHash)
       return (
-        <TransactionButton onExecute={setApprovalHash} {...buttonProps} tx={transaction?.approval}>
+        <TransactionButton
+          onExecute={h => {
+            setApprovalHash(h);
+          }}
+          {...commonProps}
+          tx={transaction?.approval}>
           Approve
         </TransactionButton>
       );
 
     if (transaction.transaction)
       return (
-        <TransactionButton {...buttonProps} tx={transaction?.transaction}>
+        <TransactionButton {...commonProps} tx={transaction?.transaction}>
           Participate
         </TransactionButton>
       );
-  }, [chainId, opportunity.chainId, transaction, disabled, approvalHash, switchChain]);
+  }, [chainId, opportunity.chainId, opportunity.chain, amount, transaction, disabled, approvalHash, switchChain]);
 
   return currentInteraction;
 }
