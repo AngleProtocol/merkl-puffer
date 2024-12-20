@@ -26,7 +26,7 @@ export default function PositionLibrary(props: IProps) {
         </Title>
       }
       footer={count !== undefined && <OpportunityPagination count={count} />}>
-      {!!rows.length ? rows : <Text>No positions detected</Text>}
+      {!!rows.length ? rows : <Text className="p-xl">No position detected</Text>}
     </PositionTable>
   );
 }

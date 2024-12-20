@@ -18,10 +18,6 @@ export default function HistoricalClaimsTableRow({ claim, className, ...props }:
     return chains?.find(c => c.id === claim.token.chainId);
   }, [chains, claim]);
 
-  const value = useMemo(() => {
-    return Number(claim.amount) * (claim.token.price ?? 0);
-  }, [claim]);
-
   return (
     <HistoricalClaimsRow
       {...props}

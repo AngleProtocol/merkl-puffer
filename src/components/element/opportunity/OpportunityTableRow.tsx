@@ -34,7 +34,7 @@ export default function OpportunityTableRow({
   const aprColumn = useMemo(
     () => (
       <Dropdown size="xl" onHover content={<AprModal opportunity={opportunity} />}>
-        <PrimitiveTag look="tint" size="lg">
+        <PrimitiveTag look="hype" size="lg">
           <Value value format="0a%">
             {opportunity.apr / 100}
           </Value>

@@ -1,7 +1,9 @@
+import { useLocation } from "@remix-run/react";
 import { Button, Container, Dropdown, Group, Icon, WalletButton, useTheme } from "dappkit";
 import { Image } from "dappkit";
 import { motion } from "framer-motion";
 import config from "merkl.config";
+import merklConfig from "merkl.config";
 import { useWalletContext } from "packages/dappkit/src/context/Wallet.context";
 import { useMemo, useState } from "react";
 import customerDarkLogo from "src/customer/assets/images/customer-dark-logo.svg";
@@ -33,6 +35,7 @@ export default function Header() {
   const { mode } = useTheme();
   const { chainId, address: user, chains } = useWalletContext();
   const [open, setOpen] = useState<boolean>(false);
+  const location = useLocation();
 
   const chain = useMemo(() => {
     return chains?.find(c => c.id === chainId);
@@ -63,19 +66,27 @@ export default function Header() {
       <Container className="py-xl">
         <Group className="justify-between items-center">
           <motion.div variants={item}>
-            <Dropdown
-              size="md"
-              padding="xs"
-              open={open}
-              content={<LayerMenu nav={routes} setOpen={setOpen} />}
-              className="flex gap-sm md:gap-lg items-center">
+            {location.pathname === "/" && merklConfig.hideLayerMenuHomePage ? (
               <Image
                 imgClassName="w-[140px] md:w-[200px] max-h-[2.5rem]"
                 alt={`${config.appName} logo`}
                 src={mode !== "dark" ? customerDarkLogo : customerLogo}
               />
-              <Icon className="text-main-12" remix="RiArrowDownSLine" />
-            </Dropdown>
+            ) : (
+              <Dropdown
+                size="md"
+                padding="xs"
+                open={open}
+                content={<LayerMenu nav={routes} setOpen={setOpen} />}
+                className="flex gap-sm md:gap-lg items-center">
+                <Image
+                  imgClassName="w-[140px] md:w-[200px] max-h-[2.5rem]"
+                  alt={`${config.appName} logo`}
+                  src={mode !== "dark" ? customerDarkLogo : customerLogo}
+                />
+                <Icon className="text-main-12" remix="RiArrowDownSLine" />
+              </Dropdown>
+            )}
           </motion.div>
 
           <motion.div variants={item}>
@@ -101,7 +112,7 @@ export default function Header() {
                 </Group>
               </Group>
 
-              <Group className="hidden md:flex">
+              <Group className="flex">
                 <WalletButton>
                   <Button to={`/users/${user}`} size="sm" look="soft">
                     <Icon remix="RiArrowRightLine" /> Check claims

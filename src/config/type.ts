@@ -23,9 +23,11 @@ export type MerklConfig<T extends Themes> = {
   tags?: string[];
   defaultTheme: keyof T;
   deposit?: boolean;
+  opportunityNotification?: string;
   opportunityNavigationMode?: OpportunityNavigationMode;
   rewardsNavigationMode?: RewardsNavigationMode;
   opprtunityPercentage: boolean;
+  hideLayerMenuHomePage: boolean;
   modes: Mode[];
   wagmi: Parameters<typeof createWagmiConfig>["0"];
   appName: string;
