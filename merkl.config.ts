@@ -112,11 +112,11 @@ export default createConfig({
       route: "/protocols",
       key: uuidv4(),
     },
-    // bridge: {
-    //   icon: "RiCompassesLine",
-    //   route: "/bridge",
-    //   key: uuidv4(),
-    // },
+    bridge: {
+      icon: "RiCompassesLine",
+      route: "/bridge",
+      key: uuidv4(),
+    },
     docs: {
       icon: "RiFile4Fill",
       external: true,

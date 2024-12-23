@@ -21,7 +21,6 @@ export const clientLoader = Cache.wrap("opportunities", 300);
 
 export default function Index() {
   const { opportunities, chains, count, protocols } = useLoaderData<typeof loader>();
-
   return (
     <Container>
       <Space size="md" />
