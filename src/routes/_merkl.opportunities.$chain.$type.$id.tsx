@@ -14,12 +14,12 @@ import useOpportunity from "src/hooks/resources/useOpportunity";
 import { v4 as uuidv4 } from "uuid";
 
 export async function loader({ params: { id, type, chain: chainId } }: LoaderFunctionArgs) {
-  if (!chainId || Number(chainId).toString() !== chainId || !id || !type) throw "";
+  if (!chainId || !id || !type) throw "";
 
-  const chain = await ChainService.get(Number(chainId));
+  const chain = await ChainService.get({ search: chainId });
 
   const rawOpportunity = await OpportunityService.getCampaignsByParams({
-    chainId: Number(chainId),
+    chainId: chain.id,
     type: type,
     identifier: id,
   });
@@ -79,10 +79,7 @@ export default function Index() {
       <Hero
         icons={opportunity.tokens.map(t => ({ src: t.icon }))}
         breadcrumbs={[
-          {
-            link: config.routes.opportunities?.route ?? "/",
-            name: "Opportunities",
-          },
+          { link: config.routes.opportunities?.route ?? "/", name: "Opportunities" },
           {
             link: "/",
             name: opportunity.name,

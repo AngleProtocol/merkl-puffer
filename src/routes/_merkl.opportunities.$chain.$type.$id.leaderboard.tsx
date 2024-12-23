@@ -7,6 +7,7 @@ import Time from "packages/dappkit/src/components/primitives/Time";
 import { useCallback, useMemo } from "react";
 import { Cache } from "src/api/services/cache.service";
 import { CampaignService } from "src/api/services/campaigns/campaign.service";
+import { ChainService } from "src/api/services/chain.service";
 import { RewardService } from "src/api/services/reward.service";
 import LeaderboardLibrary from "src/components/element/leaderboard/LeaderboardLibrary";
 import Token from "src/components/element/token/Token";
@@ -21,16 +22,18 @@ export type DummyLeaderboard = {
 };
 
 export async function loader({ params: { id, type, chain: chainId }, request }: LoaderFunctionArgs) {
-  if (!chainId || Number(chainId).toString() !== chainId || !id || !type) throw "";
+  if (!chainId || !id || !type) throw "";
+
+  const chain = await ChainService.get({ search: chainId });
 
   const campaigns = await CampaignService.getByParams({
-    chainId: Number(chainId),
+    chainId: chain.id,
     type: type as Campaign["type"],
     mainParameter: id,
   });
 
   const { rewards, count, total } = await RewardService.getManyFromRequest(request, {
-    chainId: Number(chainId),
+    chainId: chain.id,
     campaignId: campaigns?.[0]?.campaignId,
   });
 
