@@ -6,7 +6,8 @@ import { OpportunityService } from "src/api/services/opportunity/opportunity.ser
 import Hero, { defaultHeroSideDatas } from "src/components/composite/Hero";
 
 export async function loader({ params: { id } }: LoaderFunctionArgs) {
-  const chain = await ChainService.get({ search: id });
+  if (!id || Number(id).toString() !== id) throw "";
+  const chain = await ChainService.get(Number(id));
 
   const { opportunities: opportunitiesByApr, count } = await OpportunityService.getMany({
     chainId: chain.id.toString(),
@@ -17,7 +18,12 @@ export async function loader({ params: { id } }: LoaderFunctionArgs) {
 
   const { sum: dailyRewards } = await OpportunityService.getAggregate({ chainId: chain.id.toString() }, "dailyRewards");
 
-  return json({ chain, count, dailyRewards, maxApr: opportunitiesByApr?.[0]?.apr });
+  return json({
+    chain,
+    count,
+    dailyRewards,
+    maxApr: opportunitiesByApr?.[0]?.apr,
+  });
 }
 
 export const clientLoader = Cache.wrap("chain", 300);

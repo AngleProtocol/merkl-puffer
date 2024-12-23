@@ -29,7 +29,11 @@ export abstract class ChainService {
     return chains;
   }
 
-  static async get(query: Parameters<typeof api.v4.chains.index.get>[0]["query"]): Promise<Chain> {
+  static async get(chainId: number): Promise<Chain> {
+    return await ChainService.#fetch(async () => api.v4.chains({ chainId }).get());
+  }
+
+  static async getByName(query: Parameters<typeof api.v4.chains.index.get>[0]["query"]): Promise<Chain> {
     const chains = await ChainService.#fetch(async () => api.v4.chains.index.get({ query }));
 
     if (chains.length === 0) throw new Response("Chain not found", { status: 404 });
