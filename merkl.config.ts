@@ -48,8 +48,7 @@ export default createConfig({
   opportunityNavigationMode: "supply",
   rewardsNavigationMode: "chain",
   opprtunityPercentage: true,
-  opportunityNotification:
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+
   hideLayerMenuHomePage: false,
   deposit: true,
   // walletOptions: {

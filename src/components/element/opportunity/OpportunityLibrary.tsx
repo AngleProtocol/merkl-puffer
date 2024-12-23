@@ -2,6 +2,7 @@ import type { Chain } from "@merkl/api";
 import { Box, Group, Icon, type Order, Text, Title } from "dappkit";
 import merklConfig from "merkl.config";
 import { useMemo } from "react";
+import { I18n } from "src/I18n";
 import type { Opportunity } from "src/api/services/opportunity/opportunity.model";
 import useSearchParamState from "src/hooks/filtering/useSearchParamState";
 import OpportunityFilters, { type OpportunityFilterProps } from "./OpportunityFilters";
@@ -51,11 +52,11 @@ export default function OpportunityLibrary({
 
   return (
     <Group className="flex-col">
-      {!!merklConfig.opportunityNotification && (
+      {!!I18n.trad.get.pages.home.depositInformation && (
         <Group className="border-1 rounded-lg p-lg border-accent-8 flex-wrap items-center">
           <Text look="bold">
             <Icon remix="RiInformation2Fill" className="inline mr-md text-2xl text-accent-11" />
-            {merklConfig.opportunityNotification}
+            {I18n.trad.get.pages.home.depositInformation}
           </Text>
         </Group>
       )}

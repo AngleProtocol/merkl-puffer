@@ -100,7 +100,7 @@ export default function TvlSection({ opportunity }: TvlSectionProps) {
                   </PrimitiveTag>
                 )}
                 <Text look="bold" className="inline-flex justify-end" size="sm">
-                  <Value value format="0.###a">
+                  <Value value format="$0.###a">
                     {breakdown.value}
                   </Value>
                 </Text>

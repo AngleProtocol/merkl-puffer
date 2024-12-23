@@ -23,7 +23,6 @@ export type MerklConfig<T extends Themes> = {
   tags?: string[];
   defaultTheme: keyof T;
   deposit?: boolean;
-  opportunityNotification?: string;
   opportunityNavigationMode?: OpportunityNavigationMode;
   rewardsNavigationMode?: RewardsNavigationMode;
   opprtunityPercentage: boolean;

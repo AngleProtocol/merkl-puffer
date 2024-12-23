@@ -8,7 +8,8 @@ import { ProtocolService } from "src/api/services/protocol.service";
 import Hero, { defaultHeroSideDatas } from "src/components/composite/Hero";
 
 export async function loader({ params: { id }, request }: LoaderFunctionArgs) {
-  const protocol = (await ProtocolService.get({ id: id ?? undefined }))?.[0];
+  const protocol = (await ProtocolService.get({ name: id ?? undefined }))?.[0];
+
   const { opportunities, count } = await OpportunityService.getManyFromRequest(request, { mainProtocolId: id });
 
   const { opportunities: opportunitiesByApr, count: liveCount } = await OpportunityService.getMany({
