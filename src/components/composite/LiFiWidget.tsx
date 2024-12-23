@@ -59,8 +59,8 @@ export function LiFiWidget() {
     },
     fromChain: 1,
     toChain: 324,
-    fromToken: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48", // USDC
-    toToken: "0x1d17CBcF0D6D143135aE902365D2E5e2A16538D4", // USDC
+    fromToken: "0x0000000000000000000000000000000000000000", // Native token
+    toToken: "0x0000000000000000000000000000000000000000", // Native token
   };
 
   return (
