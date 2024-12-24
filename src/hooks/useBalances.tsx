@@ -36,7 +36,7 @@ export default function useBalances(chainId?: number, userAddress?: string) {
           }),
         );
       } catch (_err) {
-        console.log("ERROR");
+        console.error("ERROR");
       }
     }
 

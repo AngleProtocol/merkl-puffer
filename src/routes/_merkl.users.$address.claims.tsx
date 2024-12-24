@@ -10,14 +10,15 @@ export async function loader({ params: { address } }: LoaderFunctionArgs) {
   const claims = await ClaimsService.getForUser(address);
   return json({ claims });
 }
-
 export default function Index() {
   const { claims } = useLoaderData<typeof loader>();
+
+  const claimWiped = claims.filter(claim => claim.amount > 0);
 
   return (
     <Container>
       <Space size="md" />
-      <HistoricalClaimsLibrary claims={claims} />
+      <HistoricalClaimsLibrary claims={claimWiped} />
     </Container>
   );
 }

@@ -14,6 +14,7 @@ export abstract class ClaimsService {
     return data;
   }
 
+  // should be paginated
   static async getForUser(address: string) {
     return await ClaimsService.#fetch(async () => api.v4.claims({ address }).get());
   }

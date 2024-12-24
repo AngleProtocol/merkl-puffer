@@ -65,7 +65,7 @@ export abstract class ZyfiService {
     route: R,
     payload: ZyfiApi[R]["payload"],
   ): Promise<ZyfiApi[R]["response"]> {
-    console.log("hun", {
+    console.info("hun", {
       "Content-Type": "application/json",
       "X-API-Key": (window as { ENV?: { ZYFI_API_KEY?: string } })?.ENV?.ZYFI_API_KEY ?? "",
     });

@@ -2,7 +2,7 @@ import { Text, Title } from "dappkit";
 import { useMemo } from "react";
 import type { ClaimsService } from "src/api/services/claims.service";
 import { v4 as uuidv4 } from "uuid";
-import LeaderboardTableRow from "./HistoricalClaimsRow";
+import HistoricalClaimsTableRow from "./HistoricalClaimsRow";
 import { HistoricalClaimsTable } from "./HistoricalClaimsTable";
 
 export type IProps = {
@@ -13,7 +13,7 @@ export default function HistoricalClaimsLibrary(props: IProps) {
   const { claims } = props;
 
   const rows = useMemo(() => {
-    return claims?.map(claim => <LeaderboardTableRow key={uuidv4()} claim={claim} />);
+    return claims?.map(claim => <HistoricalClaimsTableRow key={uuidv4()} claim={claim} />);
   }, [claims]);
 
   return (
