@@ -19,7 +19,9 @@ export default function PositionLibrary(props: IProps) {
 
   return (
     <PositionTable
+      className="[&>*]:bg-main-4"
       dividerClassName={index => (index < 2 ? "bg-accent-8" : "bg-main-8")}
+      look="soft"
       header={
         <Title h={5} className="!text-main-11 w-full">
           Your Liquidity

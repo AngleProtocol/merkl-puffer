@@ -15,21 +15,21 @@ export const [ClaimRewardsTableByOpportunity, ClaimRewardsByOpportunityRow, clai
     //   compactSize: "minmax(min-content,200px)",
     //   className: "justify-end",
     // },
-    claimed: {
-      name: "Claimed",
-      size: "minmax(min-content,200px)",
-      compactSize: "minmax(min-content,200px)",
-      className: "justify-end",
-    },
     unclaimed: {
       name: "Unclaimed",
       size: "minmax(min-content,200px)",
       compactSize: "minmax(min-content,200px)",
       className: "justify-end",
     },
+    claimed: {
+      name: "Claimed",
+      size: "minmax(min-content,250px)",
+      compactSize: "minmax(min-content,200px)",
+      className: "justify-end",
+    },
     button: {
       name: "",
-      size: "minmax(min-content,200px)",
+      size: "minmax(min-content,100px)",
       compactSize: "minmax(min-content,200px)",
       className: "justify-end",
     },

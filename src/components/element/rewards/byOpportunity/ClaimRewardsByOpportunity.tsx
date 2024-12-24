@@ -1,5 +1,5 @@
 import type { Reward } from "@merkl/api";
-import type { Component } from "dappkit";
+import { type Component, Title } from "dappkit";
 import { Fmt } from "packages/dappkit/src/utils/formatter.service";
 import { useMemo, useState } from "react";
 
@@ -55,7 +55,15 @@ export default function ClaimRewardsByOpportunity({ from, rewards }: claimReward
   }, [rewards, selectedTokens.size, selectedTokens, from]);
 
   return (
-    <ClaimRewardsTableByOpportunity className="[&>*]:bg-main-4" look="soft">
+    <ClaimRewardsTableByOpportunity
+      className="[&>*]:bg-main-4"
+      look="soft"
+      dividerClassName={index => (index < 2 ? "bg-accent-8" : "bg-main-8")}
+      header={
+        <Title h={5} className="!text-main-11 w-full">
+          Your Rewards
+        </Title>
+      }>
       {renderTokenRewards}
     </ClaimRewardsTableByOpportunity>
   );
