@@ -76,7 +76,7 @@ export default function Header() {
               <Dropdown
                 size="md"
                 padding="xs"
-                open={open}
+                state={[open, setOpen]}
                 content={<LayerMenu nav={routes} setOpen={setOpen} />}
                 className="flex gap-sm md:gap-lg items-center">
                 <Image
