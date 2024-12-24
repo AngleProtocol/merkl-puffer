@@ -11,6 +11,7 @@ import {
   useNavigate,
   useRouteError,
 } from "@remix-run/react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { DAppProvider, Group, Icon, Text, Title } from "dappkit";
 import { useEffect } from "react";
 import config from "../merkl.config";
@@ -42,27 +43,30 @@ export async function loader(_args: LoaderFunctionArgs) {
 }
 
 export const clientLoader = Cache.wrap("root", 300);
+const queryClient = new QueryClient();
 
 export default function App() {
   const data = useLoaderData<typeof loader>();
 
   return (
-    <DAppProvider
-      walletOptions={config.walletOptions}
-      chains={data.chains}
-      modes={config.modes}
-      themes={config.themes}
-      sizing={config.sizing}
-      config={config.wagmi}>
-      <LoadingIndicator />
-      <Outlet />
-      <script
-        // biome-ignore lint/security/noDangerouslySetInnerHtml: needed for browser ENV
-        dangerouslySetInnerHTML={{
-          __html: `window.ENV = ${JSON.stringify(data?.ENV)}`,
-        }}
-      />
-    </DAppProvider>
+    <QueryClientProvider client={queryClient}>
+      <DAppProvider
+        walletOptions={config.walletOptions}
+        chains={data.chains}
+        modes={config.modes}
+        themes={config.themes}
+        sizing={config.sizing}
+        config={config.wagmi}>
+        <LoadingIndicator />
+        <Outlet />
+        <script
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: needed for browser ENV
+          dangerouslySetInnerHTML={{
+            __html: `window.ENV = ${JSON.stringify(data?.ENV)}`,
+          }}
+        />
+      </DAppProvider>
+    </QueryClientProvider>
   );
 }
 
