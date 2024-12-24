@@ -16,7 +16,7 @@ import { v4 as uuidv4 } from "uuid";
 export async function loader({ params: { id, type, chain: chainId } }: LoaderFunctionArgs) {
   if (!chainId || !id || !type) throw "";
 
-  const chain = await ChainService.get({ search: chainId });
+  const chain = await ChainService.get({ name: chainId });
 
   const rawOpportunity = await OpportunityService.getCampaignsByParams({
     chainId: chain.id,
@@ -88,11 +88,11 @@ export default function Index() {
         title={styleName}
         description={description}
         tabs={[
-          { label: "Overview", link, key: uuidv4() },
+          { label: "Overview", link, key: "overview" },
           {
             label: "Leaderboard",
             link: `${link}/leaderboard?campaignId=${currentLiveCampaign?.campaignId}`,
-            key: uuidv4(),
+            key: "leaderboard",
           },
         ]}
         tags={tags.map(tag => (

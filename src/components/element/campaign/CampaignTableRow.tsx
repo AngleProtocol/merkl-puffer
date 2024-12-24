@@ -1,6 +1,7 @@
 import type { Campaign, Chain as ChainType } from "@merkl/api";
 import {
   Box,
+  Button,
   type Component,
   Divider,
   Dropdown,
@@ -21,7 +22,7 @@ import { type ReactNode, useCallback, useMemo, useState } from "react";
 import type { Opportunity } from "src/api/services/opportunity/opportunity.model";
 import useCampaign from "src/hooks/resources/useCampaign";
 import { v4 as uuidv4 } from "uuid";
-import Chain from "../chain/Chain";
+import Tag from "../Tag";
 import Token from "../token/Token";
 import { CampaignRow } from "./CampaignTable";
 import CampaignTooltipDates from "./CampaignTooltipDates";
@@ -72,9 +73,14 @@ export default function CampaignTableRow({
       ],
       [
         "Campaign Creator",
-        <Hash key="creator" size="sm" format="short" copy>
-          {campaign.creatorAddress}
-        </Hash>,
+        <Group key="creator" className="gap-xs">
+          <Hash size="sm" format="short" copy>
+            {campaign.creatorAddress}
+          </Hash>
+          <Button to={`${chain.explorers?.[0]?.url}/address/${campaign.creatorAddress}`} external size="xs" look="soft">
+            <Icon remix="RiArrowRightUpLine" />
+          </Button>
+        </Group>,
       ],
       [
         "Merkl Campaign Id",
@@ -98,7 +104,6 @@ export default function CampaignTableRow({
           </Text>
         </Tooltip>,
       ],
-      ["Compute Chain", <Chain chain={campaign.chain} key="computeChain" />],
     ] as const satisfies [string, ReactNode][];
 
     return columns.map(([label, content]) => {
@@ -111,7 +116,7 @@ export default function CampaignTableRow({
         </Group>
       );
     });
-  }, [campaign, amount]);
+  }, [campaign, amount, chain]);
 
   const isCampaignLive = useMemo(() => BigInt(campaign.endTimestamp) * 1000n > moment.now(), [campaign]);
 
@@ -120,7 +125,7 @@ export default function CampaignTableRow({
       {...props}
       className={mergeClass("cursor-pointer py-4", className)}
       onClick={toggleIsOpen}
-      chainColumn={<Chain chain={campaign.distributionChain} />}
+      chainColumn={<Tag type="chain" value={campaign.distributionChain} />}
       dailyRewardsColumn={
         <Group className="align-middle items-center flex-nowrap">
           <OverrideTheme accent={"good"}>
