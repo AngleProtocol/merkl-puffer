@@ -1,3 +1,4 @@
+import config from "merkl.config";
 import { api } from "../index.server";
 import { fetchWithLogs } from "../utils";
 
@@ -44,9 +45,12 @@ export abstract class RewardService {
   }
 
   static async getForUser(address: string, chainId: number) {
+    const chainIds = config.chains?.map(({ id }) => id).join(",");
+    const query: Record<string, any> = { chainId };
+    if (chainIds) query.chainds = chainIds;
     return await RewardService.#fetch(async () =>
       api.v4.users({ address }).rewards.breakdowns.get({
-        query: { chainId },
+        query,
       }),
     );
   }

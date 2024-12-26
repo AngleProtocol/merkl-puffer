@@ -52,6 +52,7 @@ export default createConfig({
   opprtunityPercentage: true,
   hideLayerMenuHomePage: false,
   deposit: true,
+  chains: [],
   themes: {
     ignite: {
       base: createColoring(["#1755F4", "#FF7900", "#0D1530"], ["#1755F4", "#FF7900", "#FFFFFF"]),
