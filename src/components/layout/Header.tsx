@@ -1,5 +1,5 @@
 import { useLocation } from "@remix-run/react";
-import { Button, Container, Dropdown, Group, Icon, WalletButton, useTheme } from "dappkit";
+import { Button, Container, Dropdown, Group, Icon, Select, WalletButton, useTheme } from "dappkit";
 import { Image } from "dappkit";
 import { motion } from "framer-motion";
 import config from "merkl.config";
@@ -8,6 +8,7 @@ import { useWalletContext } from "packages/dappkit/src/context/Wallet.context";
 import { useMemo, useState } from "react";
 import customerDarkLogo from "src/customer/assets/images/customer-dark-logo.svg";
 import customerLogo from "src/customer/assets/images/customer-logo.svg";
+import useChains from "src/hooks/resources/useChains";
 import { v4 as uuidv4 } from "uuid";
 import SwitchMode from "../element/SwitchMode";
 import SearchBar from "../element/functions/SearchBar";
@@ -33,7 +34,7 @@ const item = {
 
 export default function Header() {
   const { mode } = useTheme();
-  const { chainId, address: user, chains } = useWalletContext();
+  const { chainId, address: user, chains, switchChain } = useWalletContext();
   const [open, setOpen] = useState<boolean>(false);
   const location = useLocation();
 
@@ -56,6 +57,22 @@ export default function Header() {
       rest,
     );
   }, [user]);
+
+  const {
+    singleChain,
+    isSingleChain,
+    isOnSingleChain,
+    chains: enabledChains,
+    options: chainOptions,
+  } = useChains(chains);
+
+  const chainSwitcher = useMemo(() => {
+    if (isSingleChain && !isOnSingleChain)
+      return <Button onClick={() => switchChain(singleChain?.id!)}>Switch to {enabledChains?.[0]?.name}</Button>;
+    if (isSingleChain) return <></>;
+
+    return <Select placeholder="Select Chain" state={[chainId, c => switchChain(+c)]} options={chainOptions} />;
+  }, [chainId, switchChain, chainOptions, enabledChains, isSingleChain, isOnSingleChain, singleChain]);
 
   return (
     <motion.header
@@ -113,7 +130,7 @@ export default function Header() {
               </Group>
 
               <Group className="flex">
-                <WalletButton>
+                <WalletButton select={chainSwitcher}>
                   <Button to={`/users/${user}`} size="sm" look="soft">
                     <Icon remix="RiArrowRightLine" /> Check claims
                   </Button>

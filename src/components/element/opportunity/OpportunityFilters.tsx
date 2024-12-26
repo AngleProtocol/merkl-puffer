@@ -4,6 +4,8 @@ import { Button, Group, Icon, Input, Select } from "dappkit/src";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { actions } from "src/config/actions";
 import useSearchParamState from "src/hooks/filtering/useSearchParamState";
+import useChains from "src/hooks/resources/useChains";
+import useProtocols from "src/hooks/resources/useProtocols";
 
 const filters = ["search", "action", "status", "chain", "protocol", "tvl"] as const;
 type OpportunityFilter = (typeof filters)[number];
@@ -57,33 +59,9 @@ export default function OpportunityFilters({ only, protocols, exclude, chains }:
       </>
     ),
   };
-  const chainOptions =
-    chains?.reduce(
-      (obj, chain) =>
-        Object.assign(obj, {
-          [chain.id]: (
-            <>
-              <Icon size="sm" src={chain?.icon} />
-              {chain.name}
-            </>
-          ),
-        }),
-      {},
-    ) ?? [];
 
-  const protocolOptions =
-    protocols?.reduce(
-      (obj, protocol) =>
-        Object.assign(obj, {
-          [protocol.id]: (
-            <>
-              <Icon size="sm" src={protocol?.icon} />
-              {protocol.name}
-            </>
-          ),
-        }),
-      {},
-    ) ?? [];
+  const { options: protocolOptions } = useProtocols(protocols);
+  const { options: chainOptions, isSingleChain } = useChains(chains);
 
   const [actionsFilter] = useSearchParamState<string[]>(
     "action",
@@ -224,7 +202,7 @@ export default function OpportunityFilters({ only, protocols, exclude, chains }:
       {fields.includes("search") && (
         <Form>
           <Input
-            look="soft"
+            look="base"
             name="search"
             value={innerSearch}
             className="min-w-[12ch]"
@@ -256,7 +234,7 @@ export default function OpportunityFilters({ only, protocols, exclude, chains }:
           placeholder="Status"
         />
       )}
-      {fields.includes("chain") && (
+      {fields.includes("chain") && !isSingleChain && (
         <Select
           state={[chainIdsInput, n => setChainIdsInput(n)]}
           allOption={"All chains"}
@@ -282,7 +260,7 @@ export default function OpportunityFilters({ only, protocols, exclude, chains }:
         <Form>
           <Input
             state={[tvlInput, n => (/^\d+$/.test(n) || !n) && setTvlInput(n)]}
-            look="soft"
+            look="base"
             name="tvl"
             value={tvlInput}
             className="min-w-[4ch]"

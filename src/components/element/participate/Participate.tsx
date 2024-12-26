@@ -17,7 +17,7 @@ export type ParticipateProps = {
 
 export default function Participate({ opportunity, displayOpportunity, displayMode, displayLinks }: ParticipateProps) {
   const [tokenAddress, setTokenAddress] = useState();
-  const [amount, setAmount] = useState<bigint>(0n);
+  const [amount, setAmount] = useState<bigint>();
   const [mode] = useState<"deposit" | "withdraw">(typeof displayMode === "string" ? displayMode : "deposit");
 
   const {

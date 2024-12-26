@@ -50,15 +50,8 @@ export default createConfig({
   opportunityNavigationMode: "supply",
   rewardsNavigationMode: "chain",
   opprtunityPercentage: true,
-
   hideLayerMenuHomePage: false,
   deposit: true,
-  // walletOptions: {
-  //   client(c) {
-  //     if (c.chain?.id === zksync.id) return c.extend(eip712WalletActions());
-  //   },
-  //   // transaction: async (tx, { client }) => await ZyfiService.wrapAdnSendTx(client, tx),
-  // },
   themes: {
     ignite: {
       base: createColoring(["#1755F4", "#FF7900", "#0D1530"], ["#1755F4", "#FF7900", "#FFFFFF"]),
@@ -103,11 +96,6 @@ export default createConfig({
       route: "/",
       key: uuidv4(),
     },
-    // opportunities: {
-    //   icon: "RiPlanetFill",
-    //   route: "/opportunities",
-    //   key: uuidv4(),
-    // },
     protocols: {
       icon: "RiVipCrown2Fill",
       route: "/protocols",
