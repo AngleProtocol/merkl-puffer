@@ -1,4 +1,3 @@
-import type { Opportunity } from "@merkl/api";
 import { Link } from "@remix-run/react";
 import type { BoxProps } from "dappkit";
 import { Dropdown, Group, Icon, Icons, PrimitiveTag, Text, Title, Value } from "dappkit";
@@ -6,6 +5,7 @@ import { mergeClass } from "dappkit";
 import config from "merkl.config";
 import { useOverflowingRef } from "packages/dappkit/src/hooks/events/useOverflowing";
 import { useMemo } from "react";
+import type { Opportunity } from "src/api/services/opportunity/opportunity.model";
 import type { OpportunityNavigationMode } from "src/config/opportunity";
 import useOpportunity from "src/hooks/resources/useOpportunity";
 import Tag, { type TagTypes } from "../Tag";

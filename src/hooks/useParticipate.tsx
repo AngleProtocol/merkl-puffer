@@ -10,7 +10,7 @@ export default function useParticipate(
   tokenAddress?: string,
 ) {
   const { targets, loading: targetLoading } = useInteractionTargets(chainId, protocolId, identifier);
-  const { balances } = useBalances(chainId);
+  const { balances, loading: balanceLoading } = useBalances(chainId);
 
   const { address } = useWalletContext();
 
@@ -18,14 +18,13 @@ export default function useParticipate(
     return balances?.find(({ address }) => address === tokenAddress);
   }, [tokenAddress, balances]);
 
-  const loading = useMemo(() => targetLoading, [targetLoading]);
+  const loading = useMemo(() => targetLoading || balanceLoading, [targetLoading, balanceLoading]);
 
   return {
-    targets,
-    token,
     balance: balances,
-    balances,
+    targets,
     address,
     loading,
+    token,
   };
 }

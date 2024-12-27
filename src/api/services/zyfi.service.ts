@@ -1,5 +1,3 @@
-import type { WalletClient } from "viem";
-import { getTransactionCount } from "viem/actions";
 import { zksync } from "viem/zksync";
 
 export type ZyfiApi = {
@@ -65,16 +63,11 @@ export abstract class ZyfiService {
     route: R,
     payload: ZyfiApi[R]["payload"],
   ): Promise<ZyfiApi[R]["response"]> {
-    console.info("hun", {
-      "Content-Type": "application/json",
-      "X-API-Key": (window as { ENV?: { ZYFI_API_KEY?: string } })?.ENV?.ZYFI_API_KEY ?? "",
-    });
-
     const response = await fetch(`https://api.zyfi.org/api/${route}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "X-API-Key": (window as { ENV?: { ZYFI_API_KEY?: string } })?.ENV?.ZYFI_API_KEY ?? "",
+        "X-API-Key": process.env.ZYFI_API_KEY ?? "",
       },
       body: JSON.stringify(payload),
     });
@@ -96,20 +89,15 @@ export abstract class ZyfiService {
     return res;
   }
 
-  static async wrapAdnSendTx(client: WalletClient, [{ data, to }]: Parameters<WalletClient["sendTransaction"]>) {
-    if (!client.account?.address || client.chain?.id !== zksync.id) return;
-
+  static async wrapAndPrepareTx({ data, from, to }: ZyfiApi["erc20_sponsored_paymaster/v1"]["payload"]["txData"]) {
     const check = await ZyfiService.wrapTx({
       data,
-      from: client.account?.address,
+      from,
       to,
     });
-    const nonce = await getTransactionCount(client, {
-      address: client.account?.address,
-    });
 
-    return client.sendTransaction({
-      account: client.account?.address,
+    return {
+      account: from,
       to: check.txData.to,
       value: BigInt(check.txData.value!),
       chain: zksync,
@@ -120,7 +108,6 @@ export abstract class ZyfiService {
       data: check.txData.data,
       paymaster: check.txData.customData.paymasterParams.paymaster,
       paymasterInput: check.txData.customData.paymasterParams.paymasterInput,
-      nonce,
-    });
+    };
   }
 }

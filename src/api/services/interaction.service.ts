@@ -1,5 +1,6 @@
 import { api as clientApi } from "src/api/index.client";
 import { fetchWithLogs } from "../utils";
+import { ZyfiService } from "./zyfi.service";
 
 export abstract class InteractionService {
   static async #fetch<R, T extends { data: R; status: number; response: Response }>(
@@ -12,6 +13,25 @@ export abstract class InteractionService {
     if (status === 500) throw new Response(`${resource} unavailable`, { status });
     if (data == null) throw new Response(`${resource} unavailable`, { status });
     return data;
+  }
+
+  static async get(
+    //TODO: template type the transaction
+    name: "supply",
+    payload: Parameters<typeof clientApi.v4.interaction.transaction.get>[0]["query"],
+    options?: { sponsor?: boolean },
+  ) {
+    const response = await fetch(`/transaction/${name}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ ...payload, ...options }),
+    });
+
+    //TODO: use template type to get correct response type
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+    return (await response.json()) as any;
   }
 
   /**
@@ -34,12 +54,24 @@ export abstract class InteractionService {
   /**
    * Client side
    */
-  static async getTransaction(payload: Parameters<typeof clientApi.v4.interaction.transaction.get>[0]["query"]) {
+  static async getTransaction(
+    payload: Parameters<typeof clientApi.v4.interaction.transaction.get>[0]["query"],
+    sponsor?: boolean,
+  ) {
     const transaction = await InteractionService.#fetch(() =>
       clientApi.v4.interaction.transaction.get({
         query: payload,
       }),
     );
+
+    if (sponsor && !transaction.approved) {
+      transaction.approval = await ZyfiService.wrapAndPrepareTx({ ...transaction.approval, from: payload.userAddress });
+    } else if (sponsor) {
+      transaction.transaction = await ZyfiService.wrapAndPrepareTx({
+        ...transaction.transaction,
+        from: payload.userAddress,
+      });
+    }
 
     return transaction;
   }

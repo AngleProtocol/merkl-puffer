@@ -53,6 +53,12 @@ export default createConfig({
   hideLayerMenuHomePage: false,
   deposit: true,
   chains: [],
+  walletOptions: {
+    sponsorTransactions: true,
+    client(c) {
+      if (c.chain?.id === zksync.id) return c.extend(eip712WalletActions());
+    },
+  },
   themes: {
     ignite: {
       base: createColoring(["#1755F4", "#FF7900", "#0D1530"], ["#1755F4", "#FF7900", "#FFFFFF"]),

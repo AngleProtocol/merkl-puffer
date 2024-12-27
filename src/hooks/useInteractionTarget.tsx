@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { InteractionService } from "src/api/services/interaction.service";
 
 export default function useInteractionTargets(chainId?: number, protocolId?: string, identifier?: string) {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [targets, setTargets] = useState<InteractionTarget[] | undefined>();
 
   useEffect(() => {
@@ -13,9 +13,11 @@ export default function useInteractionTargets(chainId?: number, protocolId?: str
 
       setLoading(true);
 
-      const _targets = await InteractionService.getTargets(chainId, protocolId, identifier);
+      try {
+        const _targets = await InteractionService.getTargets(chainId, protocolId, identifier);
 
-      if (_targets?.length) setTargets(_targets);
+        if (_targets?.length) setTargets(_targets);
+      } catch {}
       setLoading(false);
     }
 

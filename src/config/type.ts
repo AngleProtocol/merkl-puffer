@@ -1,5 +1,6 @@
 import type * as RemixIcon from "@remixicon/react";
 import type { Mode, Themes, sizeScale } from "dappkit";
+import type { WalletOptions } from "packages/dappkit/src/hooks/useWalletState";
 import type { Chain } from "viem";
 import { createConfig as createWagmiConfig } from "wagmi";
 import type { OpportunityNavigationMode } from "./opportunity";
@@ -25,6 +26,7 @@ export type MerklConfig<T extends Themes> = {
   defaultTheme: keyof T;
   deposit?: boolean;
   chains?: Chain[];
+  walletOptions?: WalletOptions;
   opportunityNavigationMode?: OpportunityNavigationMode;
   rewardsNavigationMode?: RewardsNavigationMode;
   opprtunityPercentage: boolean;

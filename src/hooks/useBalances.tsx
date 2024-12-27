@@ -15,6 +15,7 @@ export default function useBalances(chainId?: number, userAddress?: string) {
   const [chainBalances, setChainBalances] = useState<{
     [chainId: number]: { [address: string]: TokenBalances };
   }>();
+  const [loading, setLoading] = useState(false);
 
   const balances = useMemo(() => {
     if (!chainId || !address) return;
@@ -25,6 +26,7 @@ export default function useBalances(chainId?: number, userAddress?: string) {
     async function fetchTokenBalances() {
       if (!chain || !address) return;
 
+      setLoading(true);
       try {
         const tokens = await InteractionService.getBalances(chain, address);
 
@@ -35,9 +37,8 @@ export default function useBalances(chainId?: number, userAddress?: string) {
             }),
           }),
         );
-      } catch (_err) {
-        console.error("ERROR");
-      }
+      } catch {}
+      setLoading(false);
     }
 
     fetchTokenBalances();
@@ -52,5 +53,5 @@ export default function useBalances(chainId?: number, userAddress?: string) {
     [balances],
   );
 
-  return { balanceOf, balances };
+  return { balanceOf, balances, loading };
 }

@@ -1,5 +1,6 @@
 import type { Opportunity } from "@merkl/api";
 import { Button, Group, Icon, Input, PrimitiveTag, Text, Value } from "dappkit";
+import { useWalletContext } from "packages/dappkit/src/context/Wallet.context";
 import { Fmt } from "packages/dappkit/src/utils/formatter.service";
 import { Suspense, useMemo, useState } from "react";
 import useOpportunity from "src/hooks/resources/useOpportunity";
@@ -27,6 +28,7 @@ export default function Participate({ opportunity, displayOpportunity, displayMo
     loading,
   } = useParticipate(opportunity.chainId, opportunity.protocol?.id, opportunity.identifier, tokenAddress);
   const { link } = useOpportunity(opportunity);
+  const { connected } = useWalletContext();
 
   // const switchModeButton = useMemo(() => {
   //   if (typeof displayMode === "boolean" && !displayMode) return;
@@ -65,7 +67,7 @@ export default function Participate({ opportunity, displayOpportunity, displayMo
             <Group className="justify-between w-full">
               <Text>{mode === "deposit" ? "Supply" : "Withdraw"}</Text>
               <Group>
-                <Text>Balance</Text>
+                <Text>Balance:</Text>
                 {inputToken && <Value format="$0,0.#">{Fmt.toPrice(inputToken.balance, inputToken)}</Value>}
                 <PrimitiveTag
                   onClick={() => {
@@ -77,7 +79,7 @@ export default function Participate({ opportunity, displayOpportunity, displayMo
               </Group>
             </Group>
           }
-          suffix={<TokenSelect balances state={[tokenAddress, setTokenAddress]} tokens={balance} />}
+          suffix={connected && <TokenSelect balances state={[tokenAddress, setTokenAddress]} tokens={balance} />}
           placeholder="0.0"
         />
         <Suspense>
@@ -91,7 +93,7 @@ export default function Participate({ opportunity, displayOpportunity, displayMo
         </Suspense>
       </Group>
     );
-  }, [opportunity, mode, inputToken, loading, amount, tokenAddress, balance, targets]);
+  }, [opportunity, mode, inputToken, loading, amount, tokenAddress, balance, targets, connected]);
 
   return (
     <>

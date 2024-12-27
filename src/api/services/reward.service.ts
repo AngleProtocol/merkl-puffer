@@ -46,6 +46,7 @@ export abstract class RewardService {
 
   static async getForUser(address: string, chainId: number) {
     const chainIds = config.chains?.map(({ id }) => id).join(",");
+    // biome-ignore lint/suspicious/noExplicitAny: TODO fix type
     const query: Record<string, any> = { chainId };
     if (chainIds) query.chainIds = chainIds;
     return await RewardService.#fetch(async () =>

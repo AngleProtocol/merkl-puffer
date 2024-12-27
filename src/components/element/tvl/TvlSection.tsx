@@ -13,9 +13,9 @@ export default function TvlSection({ opportunity }: TvlSectionProps) {
 
   const tvlFiltered = useMemo(() => {
     return opportunity.tvlRecord.breakdowns
-      .filter(breakdown => breakdown.type === "PROTOCOL")
-      .sort((a, b) => b.value - a.value)
-      .slice(0, isShowingMore ? opportunity.tvlRecord.breakdowns.length : 3);
+      ?.filter(breakdown => breakdown.type === "PROTOCOL")
+      ?.sort((a, b) => b.value - a.value)
+      ?.slice(0, isShowingMore ? opportunity.tvlRecord.breakdowns.length : 3);
   }, [opportunity, isShowingMore]);
 
   const aprFiltered = useMemo(() => {
