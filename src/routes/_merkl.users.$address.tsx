@@ -111,7 +111,7 @@ export default function Index() {
               Liquidity
             </>
           ),
-          link: `/users/${address}/${chainId}/liquidity`,
+          link: `/users/${address}/liquidity?chainId=${chainId}`,
           key: crypto.randomUUID(),
         },
         {
