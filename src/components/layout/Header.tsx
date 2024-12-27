@@ -1,11 +1,11 @@
-import { useLocation } from "@remix-run/react";
-import { Button, Container, Dropdown, Group, Icon, Select, WalletButton, useTheme } from "dappkit";
+import { useNavigate } from "@remix-run/react";
+import { Button, Container, Dropdown, Group, Icon, SCREEN_BREAKDOWNS, Select, WalletButton, useTheme } from "dappkit";
 import { Image } from "dappkit";
 import { motion } from "framer-motion";
 import config from "merkl.config";
-import merklConfig from "merkl.config";
 import { useWalletContext } from "packages/dappkit/src/context/Wallet.context";
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
+import { useMediaQuery } from "react-responsive";
 import customerDarkLogo from "src/customer/assets/images/customer-dark-logo.svg";
 import customerLogo from "src/customer/assets/images/customer-logo.svg";
 import useChains from "src/hooks/resources/useChains";
@@ -36,7 +36,6 @@ export default function Header() {
   const { mode } = useTheme();
   const { chainId, address: user, chains, switchChain } = useWalletContext();
   const [open, setOpen] = useState<boolean>(false);
-  const location = useLocation();
 
   const chain = useMemo(() => {
     return chains?.find(c => c.id === chainId);
@@ -57,6 +56,11 @@ export default function Header() {
       rest,
     );
   }, [user]);
+
+  const navigate = useNavigate();
+  const navigateToHomepage = useCallback(() => navigate("/"), [navigate]);
+
+  const media = useMediaQuery({ query: `(min-width: ${SCREEN_BREAKDOWNS.LG}px)` });
 
   const {
     singleChain,
@@ -82,12 +86,13 @@ export default function Header() {
       className="w-full sticky left-0 top-0 z-20 backdrop-blur">
       <Container className="py-xl">
         <Group className="justify-between items-center">
-          <motion.div variants={item}>
-            {location.pathname === "/" && merklConfig.hideLayerMenuHomePage ? (
+          <motion.div variants={item} className="cursor-pointer">
+            {media || config.hideLayerMenuHomePage ? (
               <Image
                 imgClassName="w-[140px] md:w-[200px] max-h-[2.5rem]"
                 alt={`${config.appName} logo`}
                 src={mode !== "dark" ? customerDarkLogo : customerLogo}
+                onClick={navigateToHomepage}
               />
             ) : (
               <Dropdown
