@@ -1,3 +1,4 @@
+import config from "merkl.config";
 import { api } from "../index.server";
 import { fetchWithLogs } from "../utils";
 
@@ -16,6 +17,9 @@ export abstract class ClaimsService {
 
   // should be paginated
   static async getForUser(address: string) {
-    return await ClaimsService.#fetch(async () => api.v4.claims({ address }).get());
+    const chainIds = config.chains?.map(({ id }) => id).join(",");
+    const query: Record<string, any> = {};
+    if (chainIds) query.chainIds = chainIds;
+    return await ClaimsService.#fetch(async () => api.v4.claims({ address }).get({ query }));
   }
 }
