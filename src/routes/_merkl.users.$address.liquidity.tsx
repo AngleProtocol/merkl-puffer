@@ -6,9 +6,8 @@ import { LiquidityService } from "src/api/services/liquidity.service";
 import PositionLibrary from "src/components/element/position/PositionLibrary";
 import { isAddress } from "viem";
 
-export async function loader({ params: { address, chainId } }: LoaderFunctionArgs) {
+export async function loader({ params: { address } }: LoaderFunctionArgs) {
   if (!address || !isAddress(address)) throw "";
-  if (!chainId && Number(chainId).toString() === chainId) throw "";
 
   // need to be improved and remove chainId fromUrl
   const defaultChain = config.chains?.[0]?.id ?? 1;

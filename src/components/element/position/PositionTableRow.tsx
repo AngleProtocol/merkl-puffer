@@ -1,52 +1,41 @@
 import type { PositionT } from "@merkl/api/dist/src/modules/v4/liquidity";
-import { type Component, Divider, Group, Icon, Text, Value, mergeClass } from "dappkit";
+import { type Component, Divider, Space, Text, mergeClass } from "dappkit";
+import Collapsible from "packages/dappkit/src/components/primitives/Collapsible";
+import { useCallback, useMemo, useState } from "react";
 import OpportuntiyButton from "../opportunity/OpportunityButton";
 import { PositionRow } from "./PositionTable";
+import { SubPositionTable } from "./subPosition/SubPositionTable";
+import SubPositionTableRow from "./subPosition/SubPositionTableRow";
 
 export type PositionRowProps = Component<{
   row: PositionT;
 }>;
 
 export default function PositionTableRow({ row, className, ...props }: PositionRowProps) {
+  const [open, setOpen] = useState(false);
+
+  const subPositions = useMemo(() => {
+    return <SubPositionTableRow key={crypto.randomUUID()} row={row} />;
+  }, [row]);
+
+  const toggleOpen = useCallback(() => setOpen(o => !o), []);
   return (
     <>
       <Divider look="soft" />
       <PositionRow
         {...props}
+        onClick={toggleOpen}
         className={mergeClass("cursor-pointer", className)}
         sourceColumn={<OpportuntiyButton opportunity={row.opportunity} />}
-        flagsColumn={
-          <Text className="flex-nowrap">
-            todo
-            {/* <PrimitiveTag size="xs" className="pointer-events-none" look="soft">
-              <Text>{row.flags?.id}</Text>
-            </PrimitiveTag>
-            <PrimitiveTag size="xs" className="pointer-events-none" look="soft">
-              <Text>{row.flags?.range}</Text>
-            </PrimitiveTag> */}
-          </Text>
-        }
-        tokensColumn={
-          <Group className="flex-nowrap">
-            {row.tokens.map((token, index) => (
-              <Group key={index.toString()}>
-                {token.breakdown.map((breakdown, index) => (
-                  <Text key={index.toString()} className="flex-nowrap flex gap-md">
-                    {/* <Token
-                      token={token.token}
-                      format="amount_price"
-                      amount={BigInt(breakdown.value * 10 ** token.token.decimals)}
-                    /> */}
-                    <Icon src={token.token.icon} />
-                    {token.token.symbol}
-                    <Value format="0.00a">{breakdown.value}</Value>
-                  </Text>
-                ))}
-              </Group>
-            ))}
-          </Group>
-        }
-      />
+        liquidityColumn={<Text className="flex-nowrap">1230</Text>}
+        supplyShareColumn={<Text>20.5%</Text>}>
+        <Collapsible state={[open, setOpen]}>
+          <Space size="md" />
+          <SubPositionTable dividerClassName={() => "!bg-main-8"} className="[&>*]:bg-main-4" look="soft">
+            {subPositions}
+          </SubPositionTable>
+        </Collapsible>
+      </PositionRow>
     </>
   );
 }

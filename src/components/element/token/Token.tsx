@@ -42,8 +42,8 @@ export default function Token({
               {amoutFormated}
             </Value>
           ))}{" "}
-        {icon && <Icon size={size} rounded src={token.icon} />}
-        {symbol && token.symbol}
+        {icon && <Icon size={size} rounded src={token?.icon} />}
+        {symbol && token?.symbol}
         {format === "price" ||
           (format === "amount_price" && !!amount && (
             <Group className="shrink block">
