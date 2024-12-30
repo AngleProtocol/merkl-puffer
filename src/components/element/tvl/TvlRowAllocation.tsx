@@ -9,7 +9,7 @@ export default function TvlRowAllocation({ opportunity }: IProps) {
   let content: React.ReactNode = null;
   switch (opportunity.type) {
     case "CLAMM": {
-      const tokenTvl = opportunity.tvlRecord.breakdowns.filter(b => b.type === "TOKEN");
+      const tokenTvl = opportunity.tvlRecord?.breakdowns.filter(b => b.type === "TOKEN");
       const token0 = opportunity.tokens[0];
       const token1 = opportunity.tokens[1];
       const tvlBreakdownToken0 = tokenTvl?.find(b => b.identifier === opportunity?.tokens[0]?.address);

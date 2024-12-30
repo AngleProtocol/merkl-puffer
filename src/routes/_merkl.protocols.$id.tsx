@@ -8,7 +8,8 @@ import { ProtocolService } from "src/api/services/protocol.service";
 import Hero, { defaultHeroSideDatas } from "src/components/composite/Hero";
 
 export async function loader({ params: { id }, request }: LoaderFunctionArgs) {
-  const protocol = (await ProtocolService.get({ name: id ?? undefined }))?.[0];
+  if (!id) throw new Error("Protocol not found");
+  const protocol = await ProtocolService.getById(id);
 
   const { opportunities, count } = await OpportunityService.getManyFromRequest(request, { mainProtocolId: id });
 
@@ -41,6 +42,7 @@ export type OutletContextProtocol = {
 export default function Index() {
   const { opportunities, count, protocol, liveOpportunityCount, maxApr, dailyRewards } = useLoaderData<typeof loader>();
 
+  console.log({ protocol });
   return (
     <Hero
       icons={[{ src: protocol?.icon }]}

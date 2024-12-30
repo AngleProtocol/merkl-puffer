@@ -13,6 +13,18 @@ export abstract class ProtocolService {
     );
   }
 
+  // ─── Get First Protocol ──────────────────────────────────────────────
+
+  static async getById(id: string) {
+    return await ProtocolService.#fetch(async () =>
+      api.v4
+        .protocols({
+          id,
+        })
+        .get(),
+    );
+  }
+
   // ─── Get Many Protocols from request ──────────────────────────────────
 
   static async getManyFromRequest(request: Request) {

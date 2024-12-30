@@ -24,7 +24,7 @@ export type DummyLeaderboard = {
 export async function loader({ params: { id, type, chain: chainId }, request }: LoaderFunctionArgs) {
   if (!chainId || !id || !type) throw "";
 
-  const chain = await ChainService.get({ search: chainId });
+  const chain = await ChainService.get({ name: chainId });
 
   const campaigns = await CampaignService.getByParams({
     chainId: chain.id,

@@ -12,14 +12,14 @@ export default function TvlSection({ opportunity }: TvlSectionProps) {
   const [isShowingMore, setIsShowingMore] = useState(false);
 
   const tvlFiltered = useMemo(() => {
-    return opportunity.tvlRecord.breakdowns
+    return opportunity.tvlRecord?.breakdowns
       ?.filter(breakdown => breakdown.type === "PROTOCOL")
       ?.sort((a, b) => b.value - a.value)
-      ?.slice(0, isShowingMore ? opportunity.tvlRecord.breakdowns.length : 3);
+      ?.slice(0, isShowingMore ? opportunity.tvlRecord?.breakdowns?.length : 3);
   }, [opportunity, isShowingMore]);
 
   const aprFiltered = useMemo(() => {
-    return opportunity.aprRecord.breakdowns.filter(breakdown => breakdown.type === "PROTOCOL");
+    return opportunity.aprRecord?.breakdowns.filter(breakdown => breakdown?.type === "PROTOCOL");
   }, [opportunity]);
 
   const getTvlName = (breakdown: Opportunity["tvlRecord"]["breakdowns"][number]) => {
@@ -50,7 +50,7 @@ export default function TvlSection({ opportunity }: TvlSectionProps) {
     }
   };
 
-  const hasForwarders = tvlFiltered.length > 0;
+  const hasForwarders = tvlFiltered?.length > 0;
 
   return (
     <>
@@ -78,7 +78,7 @@ export default function TvlSection({ opportunity }: TvlSectionProps) {
         </>
       )}
       <Group className="flex-col" size="sm">
-        {tvlFiltered.map(breakdown => {
+        {tvlFiltered?.map(breakdown => {
           const aprBreakdown = aprFiltered.find(b => b.identifier === breakdown.identifier);
           return (
             <Fragment key={breakdown.id}>
@@ -110,7 +110,7 @@ export default function TvlSection({ opportunity }: TvlSectionProps) {
         })}
       </Group>
 
-      {tvlFiltered.length >= DEFAULT_ARRAY_SIZE && (
+      {tvlFiltered?.length >= DEFAULT_ARRAY_SIZE && (
         <>
           <Divider look="soft" />
           <Button size="sm" className="mx-auto my-sm" look="soft" onClick={() => setIsShowingMore(!isShowingMore)}>

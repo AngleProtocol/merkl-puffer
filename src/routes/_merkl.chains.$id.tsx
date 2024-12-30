@@ -6,7 +6,7 @@ import { OpportunityService } from "src/api/services/opportunity/opportunity.ser
 import Hero, { defaultHeroSideDatas } from "src/components/composite/Hero";
 
 export async function loader({ params: { id } }: LoaderFunctionArgs) {
-  const chain = await ChainService.get({ search: id });
+  const chain = await ChainService.get({ name: id });
 
   const { opportunities: opportunitiesByApr, count } = await OpportunityService.getMany({
     chainId: chain.id.toString(),

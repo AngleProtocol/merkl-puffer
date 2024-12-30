@@ -18,7 +18,7 @@ export abstract class ClaimsService {
   // should be paginated
   static async getForUser(address: string) {
     const chainIds = config.chains?.map(({ id }) => id).join(",");
-    const query: Record<string, any> = {};
+    const query: Record<string, string> = {};
     if (chainIds) query.chainIds = chainIds;
     return await ClaimsService.#fetch(async () => api.v4.claims({ address }).get({ query }));
   }

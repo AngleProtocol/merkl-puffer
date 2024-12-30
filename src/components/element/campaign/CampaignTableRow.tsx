@@ -131,7 +131,13 @@ export default function CampaignTableRow({
           <OverrideTheme accent={"good"}>
             <Icon className={active ? "text-accent-10" : "text-main-10"} remix="RiCircleFill" />
           </OverrideTheme>
-          <Token size="xl" token={campaign.rewardToken} amount={dailyRewards} format="amount_price" chain={chain} />
+          <Token
+            size="xl"
+            token={campaign.rewardToken}
+            amount={dailyRewards}
+            format="amount_price"
+            chain={campaign.distributionChain}
+          />
           <Icon
             data-state={!isOpen ? "closed" : "opened"}
             className="transition duration-150 ease-out data-[state=opened]:rotate-180"
