@@ -21,14 +21,14 @@ export const [SubPositionTable, SubPositionRow, SubPositionColumns] = createTabl
     className: "justify-end",
   },
   token0: {
-    name: "TOKEN 0",
-    size: "minmax(30px,0.5fr)",
+    name: "Token 1",
+    size: "minmax(30px,0.45fr)",
     compactSize: "minmax(20px,1fr)",
     className: "justify-end",
   },
   token1: {
-    name: "TOKEN 1",
-    size: "minmax(30px,0.5fr)",
+    name: "Token 2",
+    size: "minmax(30px,0.45fr)",
     compactSize: "minmax(20px,1fr)",
     className: "justify-end",
   },

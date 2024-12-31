@@ -46,6 +46,8 @@ export default function AprSection({ opportunity }: AprSectionProps) {
     }
   };
 
+  if (!breakdowns?.length) return null;
+
   return (
     <Group className="flex-col mt-md">
       <Group className="items-center" size="sm">

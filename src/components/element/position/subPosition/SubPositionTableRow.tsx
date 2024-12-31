@@ -24,7 +24,6 @@ export default function SubPositionTableRow({ row, className, ...props }: Positi
     () => parseUnits(tokenBalance1?.value.toString() ?? "", row.tokens[1]?.token?.decimals),
     [tokenBalance1, row?.tokens[1]?.token.decimals],
   );
-
   return (
     <>
       <Divider look="soft" />
