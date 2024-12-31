@@ -1,5 +1,5 @@
 import type { PositionT } from "@merkl/api/dist/src/modules/v4/liquidity";
-import { type Component, Divider, Space, Text, mergeClass } from "dappkit";
+import { type Component, Space, Text, mergeClass } from "dappkit";
 import Collapsible from "packages/dappkit/src/components/primitives/Collapsible";
 import { useCallback, useMemo, useState } from "react";
 import OpportuntiyButton from "../opportunity/OpportunityButton";
@@ -20,22 +20,19 @@ export default function PositionTableRow({ row, className, ...props }: PositionR
 
   const toggleOpen = useCallback(() => setOpen(o => !o), []);
   return (
-    <>
-      <Divider look="soft" />
-      <PositionRow
-        {...props}
-        onClick={toggleOpen}
-        className={mergeClass("cursor-pointer", className)}
-        sourceColumn={<OpportuntiyButton opportunity={row.opportunity} />}
-        liquidityColumn={<Text className="flex-nowrap">1230</Text>}
-        supplyShareColumn={<Text>20.5%</Text>}>
-        <Collapsible state={[open, setOpen]}>
-          <Space size="md" />
-          <SubPositionTable dividerClassName={() => "!bg-main-8"} className="[&>*]:bg-main-4" look="soft">
-            {subPositions}
-          </SubPositionTable>
-        </Collapsible>
-      </PositionRow>
-    </>
+    <PositionRow
+      {...props}
+      onClick={toggleOpen}
+      className={mergeClass("cursor-pointer", className)}
+      sourceColumn={<OpportuntiyButton opportunity={row.opportunity} />}
+      liquidityColumn={<Text className="flex-nowrap">1230</Text>}
+      supplyShareColumn={<Text>20.5%</Text>}>
+      <Collapsible state={[open, setOpen]}>
+        <Space size="md" />
+        <SubPositionTable dividerClassName={() => "!bg-main-8"} className="[&>*]:bg-main-4" look="soft">
+          {subPositions}
+        </SubPositionTable>
+      </Collapsible>
+    </PositionRow>
   );
 }
