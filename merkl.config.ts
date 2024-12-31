@@ -1,4 +1,5 @@
 import { createColoring } from "dappkit";
+import { OpportunityDisplayingMode } from "src/components/element/opportunity/OpportunityFilters";
 import { createConfig } from "src/config/type";
 import hero from "src/customer/assets/images/hero.jpg?url";
 import { v4 as uuidv4 } from "uuid";
@@ -50,6 +51,7 @@ export default createConfig({
   opportunityNavigationMode: "supply",
   rewardsNavigationMode: "chain",
   opprtunityPercentage: true,
+  oppoortunityDisplayingDefault: OpportunityDisplayingMode.GRID,
   hideLayerMenuHomePage: false,
   deposit: true,
   walletOptions: {
@@ -59,6 +61,12 @@ export default createConfig({
     },
   },
   chains: [],
+  opportunity: {
+    featured: {
+      enabled: true,
+      length: 6,
+    },
+  },
   themes: {
     ignite: {
       base: createColoring(["#1755F4", "#FF7900", "#0D1530"], ["#1755F4", "#FF7900", "#FFFFFF"]),

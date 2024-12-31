@@ -1,6 +1,7 @@
 import type * as RemixIcon from "@remixicon/react";
 import type { Mode, Themes, sizeScale } from "dappkit";
 import type { WalletOptions } from "packages/dappkit/src/hooks/useWalletState";
+import type { OpportunityDisplayingMode } from "src/components/element/opportunity/OpportunityFilters";
 import type { Chain } from "viem";
 import { createConfig as createWagmiConfig } from "wagmi";
 import type { OpportunityNavigationMode } from "./opportunity";
@@ -15,6 +16,7 @@ export type routesType = {
   };
 };
 
+// TODO: groups by entity
 export type MerklConfig<T extends Themes> = {
   themes: T;
   sizing: {
@@ -28,6 +30,7 @@ export type MerklConfig<T extends Themes> = {
   chains?: Chain[];
   walletOptions?: WalletOptions;
   opportunityNavigationMode?: OpportunityNavigationMode;
+  opportunityDisplayingDefault?: OpportunityDisplayingMode;
   rewardsNavigationMode?: RewardsNavigationMode;
   opprtunityPercentage: boolean;
   hideLayerMenuHomePage: boolean;
@@ -36,6 +39,12 @@ export type MerklConfig<T extends Themes> = {
   appName: string;
   fonts?: { title: string[]; text: string[]; mono: string[] };
   routes: routesType;
+  opportunity: {
+    featured: {
+      enabled: boolean;
+      length: number;
+    };
+  };
   header: {
     searchbar: {
       enabled: boolean;
