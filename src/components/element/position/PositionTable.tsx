@@ -9,15 +9,16 @@ export const [PositionTable, PositionRow, PositionColumns] = createTable({
     main: true,
   },
   liquidity: {
-    name: "Liquidity",
-    size: "minmax(30px,0.2fr)",
-    compactSize: "minmax(20px,1fr)",
-    className: "justify-start",
-  },
-  supplyShare: {
-    name: "Supply share",
-    size: "minmax(30px,0.2fr)",
+    name: "Your TVL",
+    size: "minmax(30px,0.35fr)",
     compactSize: "minmax(20px,1fr)",
     className: "justify-end",
   },
+  // Disabled for the moment do not have infos yet (ERC20)
+  // supplyShare: {
+  //   name: "Supply share",
+  //   size: "minmax(30px,0.2fr)",
+  //   compactSize: "minmax(20px,1fr)",
+  //   className: "justify-end",
+  // },
 });
