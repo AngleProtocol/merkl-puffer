@@ -68,8 +68,8 @@ export default function OpportunityCell({ opportunity, hideTags, navigationMode 
                 size={4}
                 ref={ref}
                 className={mergeClass(
+                  "font-medium [overflow-wrap:anywhere]",
                   overflowing && "hover:overflow-visible hover:animate-textScroll hover:text-clip",
-                  "font-medium",
                 )}>
                 {opportunity.name}
               </Title>

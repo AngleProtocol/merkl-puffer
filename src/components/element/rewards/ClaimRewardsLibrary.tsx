@@ -39,7 +39,7 @@ export default function ClaimRewardsLibrary({ from, rewards }: ClaimRewardsLibra
 
   return (
     <Group className="flex-row w-full [&>*]:flex-grow">
-      {rewards?.length > 0 ? renderRewards : <Text className="p-xl">No reward detected</Text>}
+      {rewards?.length > 0 ? renderRewards : <Text>No reward detected</Text>}
     </Group>
   );
 }
