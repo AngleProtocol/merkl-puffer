@@ -6,14 +6,14 @@ import Tag from "../Tag";
 export type OpportunityShortCardProps = { opportunity: Opportunity };
 
 export default function OpportunityShortCard({ opportunity }: OpportunityShortCardProps) {
-  const { dailyRewards, icons, rewardIcons, tags } = useOpportunity(opportunity);
+  const { icons, rewardIcons, tags } = useOpportunity(opportunity);
 
   return (
     <Box look="soft" className="bg-main-4">
       <Group className="flex-col">
         <Group>
           <Value size={3} className="text-main-11" format={"$0,0.#a"}>
-            {dailyRewards}
+            {opportunity.dailyRewards}
           </Value>
           <Title h={3}>
             <Icons>{rewardIcons}</Icons>

@@ -1,5 +1,5 @@
 import { useOutletContext } from "@remix-run/react";
-import { Box, Container, Divider, Group, Space, Title } from "dappkit";
+import { Box, Container, Group, Space } from "dappkit";
 import merklConfig from "merkl.config";
 import CampaignLibrary from "src/components/element/campaign/CampaignLibrary";
 import Participate from "src/components/element/participate/Participate";
@@ -12,7 +12,7 @@ export default function Index() {
   return (
     <Container>
       <Space size="md" />
-      <Group className="grid grid-wrap md:grid-cols-[1fr,minmax(200px,260px)]">
+      <Group className="grid grid-wrap grid-cols-[1fr] lg:grid-cols-[minmax(400px,1fr),minmax(300px,360px)]">
         <Group>
           <CampaignLibrary opportunity={opportunity} chain={chain} />
         </Group>
@@ -20,12 +20,6 @@ export default function Index() {
         {merklConfig.deposit && (
           <Group className="flex-col">
             <Box className="w-full">
-              <Group className="p-md">
-                <Title className="!text-main-11" h={5}>
-                  Supply
-                </Title>
-              </Group>
-              <Divider horizontal look="hype" />
               <Participate displayMode={"deposit"} opportunity={opportunity} />
             </Box>
           </Group>

@@ -3,6 +3,7 @@ import { Form, useLocation, useNavigate, useNavigation, useSearchParams } from "
 import { Button, Group, Icon, Input, Select } from "dappkit";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { actions } from "src/config/actions";
+import type { OpportunityView } from "src/config/opportunity";
 import useSearchParamState from "src/hooks/filtering/useSearchParamState";
 import useChains from "src/hooks/resources/useChains";
 import useProtocols from "src/hooks/resources/useProtocols";
@@ -13,30 +14,27 @@ type OpportunityFilter = (typeof filters)[number];
 export type OpportunityFilterProps = {
   only?: OpportunityFilter[];
   chains?: Chain[];
+  view?: OpportunityView;
+  setView?: (v: OpportunityView) => void;
   protocols?: Protocol[];
   exclude?: OpportunityFilter[];
-  displayState: {
-    state: OpportunityDisplayingMode;
-    set: React.Dispatch<React.SetStateAction<OpportunityDisplayingMode>>;
-  };
 };
 
-export enum OpportunityDisplayingMode {
-  GRID = "grid",
-  LIST = "list",
-}
-
 //TODO: burn this to the ground and rebuild it with a deeper comprehension of search param states
-export default function OpportunityFilters({ only, protocols, exclude, chains, displayState }: OpportunityFilterProps) {
+export default function OpportunityFilters({
+  only,
+  protocols,
+  exclude,
+  chains,
+  view,
+  setView,
+}: OpportunityFilterProps) {
   const [_, setSearchParams] = useSearchParams();
   const navigation = useNavigation();
   const navigate = useNavigate();
   const location = useLocation();
   const [applying, setApplying] = useState(false);
   const [clearing, setClearing] = useState(false);
-
-  const setDisplayToGrid = useCallback(() => displayState.set(OpportunityDisplayingMode.GRID), [displayState]);
-  const setDisplayToList = useCallback(() => displayState.set(OpportunityDisplayingMode.LIST), [displayState]);
 
   //TODO: componentify theses
   const actionOptions = Object.entries(actions)
@@ -209,7 +207,7 @@ export default function OpportunityFilters({ only, protocols, exclude, chains, d
   }, [navigation]);
 
   return (
-    <Group className="items-center flex-nowrap justify-between">
+    <Group className="justify-between flex-nowrap">
       <Group className="items-center flex-nowrap">
         {fields.includes("search") && (
           <Form>
@@ -297,19 +295,16 @@ export default function OpportunityFilters({ only, protocols, exclude, chains, d
           Clear filters
         </Button>
       </Group>
-      <Group>
-        <Icon
-          remix={"RiLayoutMasonryFill"}
-          onClick={setDisplayToGrid}
-          className={displayState.state === OpportunityDisplayingMode.LIST ? "cursor-pointer text-main-11" : ""}
-        />
-        <Icon
-          remix={"RiSortDesc"}
-          onClick={setDisplayToList}
-          className={displayState.state === OpportunityDisplayingMode.GRID ? "cursor-pointer text-main-11" : ""}
-          size="xl"
-        />
-      </Group>
+      {view && (
+        <Group className="flex-nowrap">
+          <Button disabled={view === "cells"} look="soft" onClick={() => setView?.("cells")}>
+            <Icon remix="RiDashboardFill" />
+          </Button>
+          <Button disabled={view === "table"} look="soft" onClick={() => setView?.("table")}>
+            <Icon remix="RiSortDesc" />
+          </Button>
+        </Group>
+      )}
     </Group>
   );
 }

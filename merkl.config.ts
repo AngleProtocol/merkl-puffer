@@ -1,5 +1,4 @@
 import { createColoring } from "dappkit";
-import { OpportunityDisplayingMode } from "src/components/element/opportunity/OpportunityFilters";
 import { createConfig } from "src/config/type";
 import hero from "src/customer/assets/images/hero.jpg?url";
 import { v4 as uuidv4 } from "uuid";
@@ -49,9 +48,10 @@ export default createConfig({
   modes: ["dark", "light"],
   defaultTheme: "ignite",
   opportunityNavigationMode: "supply",
+  opportunityCellHideTags: ["token", "action"],
   rewardsNavigationMode: "chain",
+  opportunityLibraryDefaultView: "cells",
   opprtunityPercentage: true,
-  oppoortunityDisplayingDefault: OpportunityDisplayingMode.GRID,
   hideLayerMenuHomePage: false,
   deposit: true,
   walletOptions: {

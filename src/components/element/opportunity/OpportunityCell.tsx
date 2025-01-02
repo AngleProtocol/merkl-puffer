@@ -1,6 +1,6 @@
 import { Link } from "@remix-run/react";
 import type { BoxProps } from "dappkit";
-import { Button, Divider, Dropdown, Group, Icon, Icons, PrimitiveTag, Text, Title, Value } from "dappkit";
+import { Box, Button, Divider, Dropdown, Group, Icon, Icons, PrimitiveTag, Text, Title, Value } from "dappkit";
 import { mergeClass } from "dappkit";
 import { useOverflowingRef } from "packages/dappkit/src/hooks/events/useOverflowing";
 import { useMemo } from "react";
@@ -18,14 +18,14 @@ export type OpportunityTableRowProps = {
   navigationMode?: OpportunityNavigationMode;
 } & BoxProps;
 
-export default function OpportunityTableRow({ opportunity, navigationMode }: OpportunityTableRowProps) {
+export default function OpportunityCell({ opportunity, hideTags, navigationMode }: OpportunityTableRowProps) {
   const { tags, link, icons, rewardsBreakdown } = useOpportunity(opportunity);
 
   const { ref, overflowing } = useOverflowingRef<HTMLHeadingElement>();
 
   const cell = useMemo(
     () => (
-      <Group className="flex-col hover:bg-main-2 bg-main-3 ease rounded-lg !gap-0 h-full cursor-pointer">
+      <Box className="flex-col hover:bg-main-2 bg-main-3 ease !gap-0 h-full cursor-pointer">
         <Group className="p-xl justify-between items-end">
           <Group className="flex-col">
             <Group className="min-w-0 flex-nowrap items-center overflow-hidden">
@@ -47,7 +47,7 @@ export default function OpportunityTableRow({ opportunity, navigationMode }: Opp
             </Text>
           </Group>
 
-          <Dropdown size="xl" onHover content={<AprModal opportunity={opportunity} />}>
+          <Dropdown size="xl" content={<AprModal opportunity={opportunity} />}>
             <PrimitiveTag look="hype" size="lg">
               <Value value format="0a%">
                 {opportunity.apr / 100}
@@ -75,24 +75,26 @@ export default function OpportunityTableRow({ opportunity, navigationMode }: Opp
               </Title>
             </Group>
 
-            <Group className="justify-between">
+            <Group className="justify-between flex-nowrap">
               <Group className="items-center">
                 {tags
                   ?.filter(a => a !== undefined)
-                  ?.filter(({ type }) => type === "protocol")
+                  ?.filter(({ type }) => !hideTags || !hideTags.includes(type))
                   .map(tag => (
                     <Tag filter key={`${tag.type}_${tag.value?.address ?? tag.value}`} {...tag} size="sm" />
                   ))}
               </Group>
-              <Button className="hidden lg:block" look="base">
-                <Icon remix="RiArrowRightLine" />
-              </Button>
+              <Group className="flex-col justify-end">
+                <Button className="hidden lg:block" look="base">
+                  <Icon remix="RiArrowRightLine" />
+                </Button>
+              </Group>
             </Group>
           </Group>
         </Group>
-      </Group>
+      </Box>
     ),
-    [opportunity, overflowing, ref, icons, rewardsBreakdown.map, tags],
+    [opportunity, overflowing, ref, icons, rewardsBreakdown.map, tags, hideTags],
   );
 
   if (navigationMode === "supply")

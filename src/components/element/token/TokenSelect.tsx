@@ -65,7 +65,7 @@ export default function TokenSelect({ tokens, balances, ...props }: TokenSelectP
   return (
     <Select
       search
-      placeholder="Token"
+      placeholder="Select token"
       options={options}
       searchOptions={searchOptions}
       displayOptions={displayOptions}

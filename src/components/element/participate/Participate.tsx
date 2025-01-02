@@ -1,11 +1,11 @@
 import type { Opportunity } from "@merkl/api";
-import { Button, Group, Icon, Input, PrimitiveTag, Text, Value } from "dappkit";
+import { Button, Group, Icon, Input, PrimitiveTag, Text } from "dappkit";
 import { useWalletContext } from "packages/dappkit/src/context/Wallet.context";
-import { Fmt } from "packages/dappkit/src/utils/formatter.service";
 import { Suspense, useMemo, useState } from "react";
 import useOpportunity from "src/hooks/resources/useOpportunity";
 import useParticipate from "src/hooks/useParticipate";
 import OpportunityShortCard from "../opportunity/OpportunityShortCard";
+import Token from "../token/Token";
 import TokenSelect from "../token/TokenSelect";
 import Interact from "./Interact.client";
 
@@ -66,17 +66,26 @@ export default function Participate({ opportunity, displayOpportunity, displayMo
           header={
             <Group className="justify-between w-full">
               <Text>{mode === "deposit" ? "Supply" : "Withdraw"}</Text>
-              <Group>
-                <Text>Balance:</Text>
-                {inputToken && <Value format="$0,0.#">{Fmt.toPrice(inputToken.balance, inputToken)}</Value>}
-                <PrimitiveTag
-                  onClick={() => {
-                    setAmount(BigInt(inputToken?.balance ?? "0"));
-                  }}
-                  size="xs">
-                  Max
-                </PrimitiveTag>
-              </Group>
+              {inputToken && (
+                <Group>
+                  <Text>Balance:</Text>
+
+                  <Token
+                    icon={false}
+                    symbol={false}
+                    format="amount_price"
+                    amount={inputToken.balance}
+                    token={inputToken}
+                  />
+                  <PrimitiveTag
+                    onClick={() => {
+                      setAmount(BigInt(inputToken?.balance ?? "0"));
+                    }}
+                    size="xs">
+                    Max
+                  </PrimitiveTag>
+                </Group>
+              )}
             </Group>
           }
           suffix={connected && <TokenSelect balances state={[tokenAddress, setTokenAddress]} tokens={balance} />}

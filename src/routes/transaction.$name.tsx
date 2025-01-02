@@ -32,9 +32,4 @@ export const action = async ({ params: { name }, request }: ActionFunctionArgs) 
       }
     }
   }
-
-  return new Response(payload);
-  //   switch (name) {
-
-  //   }
 };

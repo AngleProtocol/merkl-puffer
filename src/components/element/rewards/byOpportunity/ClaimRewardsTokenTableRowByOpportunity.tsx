@@ -1,6 +1,7 @@
 import type { Reward } from "@merkl/api";
 import { Button, type Component, Divider, type GetSet } from "dappkit";
 import OpportuntiyButton from "../../opportunity/OpportunityButton";
+import OpportunityParticipateModal from "../../opportunity/OpportunityParticipateModal";
 import Token from "../../token/Token";
 import { ClaimRewardsByOpportunityRow } from "./ClaimRewardsTableByOpportunity";
 
@@ -38,9 +39,11 @@ export default function ClaimRewardsTokenTableRowByOpportunity({
           !!unclaimed && <Token token={token} amount={breakdown.amount - breakdown.claimed} format="amount_price" />
         }
         buttonColumn={
-          <Button look="hype" size="sm">
-            Supply
-          </Button>
+          <OpportunityParticipateModal opportunity={breakdown.opportunity}>
+            <Button look="hype" size="sm">
+              Supply
+            </Button>
+          </OpportunityParticipateModal>
         }
       />
     </>

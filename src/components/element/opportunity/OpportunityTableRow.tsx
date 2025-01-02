@@ -3,6 +3,7 @@ import type { BoxProps } from "dappkit";
 import { Dropdown, Group, Icon, Icons, PrimitiveTag, Text, Title, Value } from "dappkit";
 import { mergeClass } from "dappkit";
 import config from "merkl.config";
+import EventBlocker from "packages/dappkit/src/components/primitives/EventBlocker";
 import { useOverflowingRef } from "packages/dappkit/src/hooks/events/useOverflowing";
 import { useMemo } from "react";
 import type { Opportunity } from "src/api/services/opportunity/opportunity.model";
@@ -33,57 +34,64 @@ export default function OpportunityTableRow({
 
   const aprColumn = useMemo(
     () => (
-      <Dropdown size="xl" onHover content={<AprModal opportunity={opportunity} />}>
-        <PrimitiveTag look="hype" size="lg">
-          <Value value format="0a%">
-            {opportunity.apr / 100}
-          </Value>
-        </PrimitiveTag>
-      </Dropdown>
+      <EventBlocker>
+        <Dropdown size="xl" content={<AprModal opportunity={opportunity} />}>
+          <PrimitiveTag look="hype" size="lg">
+            <Value value format="0a%">
+              {opportunity.apr / 100}
+            </Value>
+          </PrimitiveTag>
+        </Dropdown>
+      </EventBlocker>
     ),
     [opportunity],
   );
 
   const tvlColumn = useMemo(
     () => (
-      <Dropdown size="xl" onHover content={<AprModal opportunity={opportunity} />}>
-        <PrimitiveTag look="base" className="font-mono">
-          <Value value format="$0,0.0a">
-            {opportunity.tvl ?? 0}
-          </Value>
-        </PrimitiveTag>
-      </Dropdown>
+      <EventBlocker>
+        <Dropdown size="xl" content={<AprModal opportunity={opportunity} />}>
+          <PrimitiveTag look="base" className="font-mono">
+            <Value value format="$0,0.0a">
+              {opportunity.tvl ?? 0}
+            </Value>
+          </PrimitiveTag>
+        </Dropdown>
+      </EventBlocker>
     ),
     [opportunity],
   );
 
   const rewardsColumn = useMemo(
     () => (
-      <Dropdown
-        content={
-          <TokenAmountModal
-            tokens={rewardsBreakdown}
-            label={
-              <Group size="sm">
-                <Icon remix="RiGift2Fill" />
-                <Text size="sm" className="text-main-12" bold>
-                  Daily Rewards
-                </Text>
-              </Group>
-            }
-          />
-        }>
-        <PrimitiveTag look="base" className="font-mono">
-          <Value value format="$0,0.0a">
-            {opportunity.dailyRewards ?? 0}
-          </Value>
-          <Icons>
-            {rewardsBreakdown.map(({ token: { icon } }) => (
-              <Icon key={icon} src={icon} />
-            ))}
-          </Icons>
-        </PrimitiveTag>
-      </Dropdown>
+      <EventBlocker>
+        <Dropdown
+          className="py-xl"
+          content={
+            <TokenAmountModal
+              tokens={rewardsBreakdown}
+              label={
+                <Group size="sm">
+                  <Icon remix="RiGift2Fill" />
+                  <Text size="sm" className="text-main-12" bold>
+                    Daily Rewards
+                  </Text>
+                </Group>
+              }
+            />
+          }>
+          <PrimitiveTag look="base" className="font-mono">
+            <Value value format="$0,0.0a">
+              {opportunity.dailyRewards ?? 0}
+            </Value>
+            <Icons>
+              {rewardsBreakdown.map(({ token: { icon } }) => (
+                <Icon key={icon} src={icon} />
+              ))}
+            </Icons>
+          </PrimitiveTag>
+        </Dropdown>
+      </EventBlocker>
     ),
     [opportunity, rewardsBreakdown],
   );

@@ -26,6 +26,16 @@ export abstract class OpportunityService {
     return { opportunities: opportunities.filter(o => o !== null), count };
   }
 
+  // ─── Get Featured opportunities ──────────────────────────────────────────────
+
+  static async getFeatured(
+    overrides?: Parameters<typeof api.v4.opportunities.index.get>[0]["query"],
+  ): Promise<{ opportunities: Opportunity[]; count: number }> {
+    if (config.opportunity.featured.enabled)
+      return await OpportunityService.getMany({ items: config.opportunity.featured.length, ...overrides });
+    return { opportunities: [], count: 0 };
+  }
+
   // ─── Get Opportunities with campaign ──────────────────────────────────────────────
 
   static async getCampaignsByParams(query: {

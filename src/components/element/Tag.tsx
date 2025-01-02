@@ -57,39 +57,41 @@ export default function Tag<T extends keyof TagTypes>({ type, filter, value, ...
     case "chain": {
       const chain = value as TagTypes["chain"];
       return (
-        <Dropdown
-          size="lg"
-          padding="xs"
-          content={
-            <Group className="flex-col">
-              <Group className="w-full justify-between items-center" size="xl">
-                <Group size="sm">
-                  <Icon src={chain?.icon} />
-                  <Text size="sm" className="text-main-12" bold>
-                    {chain?.name}
+        <EventBlocker>
+          <Dropdown
+            size="lg"
+            padding="xs"
+            content={
+              <Group className="flex-col">
+                <Group className="w-full justify-between items-center" size="xl">
+                  <Group size="sm">
+                    <Icon src={chain?.icon} />
+                    <Text size="sm" className="text-main-12" bold>
+                      {chain?.name}
+                    </Text>
+                  </Group>
+                  <Text size="xs">
+                    Chain ID:{" "}
+                    <Hash size="xs" format="full" copy>
+                      {chain?.id?.toString()}
+                    </Hash>
                   </Text>
                 </Group>
-                <Text size="xs">
-                  Chain ID:{" "}
-                  <Hash size="xs" format="full" copy>
-                    {chain?.id?.toString()}
-                  </Hash>
-                </Text>
-              </Group>
 
-              <Divider look="soft" horizontal />
-              <Group className="flex-col">
-                <Button to={`/chains/${chain?.name}`} size="xs" look="soft">
-                  <Icon remix="RiArrowRightLine" /> Check opportunities on {chain.name}
-                </Button>
+                <Divider look="soft" horizontal />
+                <Group className="flex-col">
+                  <Button to={`/chains/${chain?.name}`} size="xs" look="soft">
+                    <Icon remix="RiArrowRightLine" /> Check opportunities on {chain.name}
+                  </Button>
+                </Group>
               </Group>
-            </Group>
-          }>
-          <PrimitiveTag look="base" key={value} {...props}>
-            <Icon size={props?.size} src={chain?.icon} />
-            {chain?.name}
-          </PrimitiveTag>
-        </Dropdown>
+            }>
+            <PrimitiveTag look="base" key={value} {...props}>
+              <Icon size={props?.size} src={chain?.icon} />
+              {chain?.name}
+            </PrimitiveTag>
+          </Dropdown>
+        </EventBlocker>
       );
     }
     case "action": {
@@ -118,53 +120,55 @@ export default function Tag<T extends keyof TagTypes>({ type, filter, value, ...
       const token = value as TagTypes["token"];
       if (!token) return <Button {...props}>{value}</Button>;
       return (
-        <Dropdown
-          size="lg"
-          padding="xs"
-          content={
-            <Group className="flex-col">
-              <Group className="w-full justify-between items-center" size="xl">
-                <Group size="sm">
-                  <Icon size={props?.size} src={token.icon} />
-                  <Text size="sm" className="text-main-12" bold>
-                    {token?.name}
+        <EventBlocker>
+          <Dropdown
+            size="lg"
+            padding="xs"
+            content={
+              <Group className="flex-col">
+                <Group className="w-full justify-between items-center" size="xl">
+                  <Group size="sm">
+                    <Icon size={props?.size} src={token.icon} />
+                    <Text size="sm" className="text-main-12" bold>
+                      {token?.name}
+                    </Text>
+                  </Group>
+                  <Text size="xs">
+                    <Hash copy format="short" size="xs">
+                      {token.address}
+                    </Hash>
                   </Text>
                 </Group>
-                <Text size="xs">
-                  <Hash copy format="short" size="xs">
-                    {token.address}
-                  </Hash>
-                </Text>
+                <Divider look="soft" horizontal />
+                <Group className="flex-col" size="md">
+                  <Button to={`/tokens/${token?.symbol}`} size="xs" look="soft">
+                    <Icon remix="RiArrowRightLine" />
+                    Check opportunities with {token?.symbol}
+                  </Button>
+                  {chains
+                    .find(c => c.id === token.chainId)
+                    ?.explorers?.map(explorer => {
+                      return (
+                        <Button
+                          key={`${explorer.url}`}
+                          to={`${explorer.url}/token/${token.address}`}
+                          external
+                          size="xs"
+                          look="soft">
+                          <Icon remix="RiArrowRightLine" />
+                          Visit explorer
+                        </Button>
+                      );
+                    })}
+                </Group>
               </Group>
-              <Divider look="soft" horizontal />
-              <Group className="flex-col" size="md">
-                <Button to={`/tokens/${token?.symbol}`} size="xs" look="soft">
-                  <Icon remix="RiArrowRightLine" />
-                  Check opportunities with {token?.symbol}
-                </Button>
-                {chains
-                  .find(c => c.id === token.chainId)
-                  ?.explorers?.map(explorer => {
-                    return (
-                      <Button
-                        key={`${explorer.url}`}
-                        to={`${explorer.url}/token/${token.address}`}
-                        external
-                        size="xs"
-                        look="soft">
-                        <Icon remix="RiArrowRightLine" />
-                        Visit explorer
-                      </Button>
-                    );
-                  })}
-              </Group>
-            </Group>
-          }>
-          <PrimitiveTag look="base" key={value} {...props}>
-            <Icon size={props?.size} src={token.icon} />
-            {token?.symbol}
-          </PrimitiveTag>
-        </Dropdown>
+            }>
+            <PrimitiveTag look="base" key={value} {...props}>
+              <Icon size={props?.size} src={token.icon} />
+              {token?.symbol}
+            </PrimitiveTag>
+          </Dropdown>
+        </EventBlocker>
       );
     }
     case "tokenChain": {
