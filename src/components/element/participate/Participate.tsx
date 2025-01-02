@@ -30,6 +30,7 @@ export default function Participate({ opportunity, displayOpportunity, displayMo
   const { link } = useOpportunity(opportunity);
   const { connected } = useWalletContext();
 
+  //TODO: add withdraw
   // const switchModeButton = useMemo(() => {
   //   if (typeof displayMode === "boolean" && !displayMode) return;
   //   switch (mode) {

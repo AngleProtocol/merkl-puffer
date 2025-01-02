@@ -4,6 +4,7 @@ import { Button, type ButtonProps, Checkbox, Group, Text, WalletButton } from "d
 import TransactionButton from "packages/dappkit/src/components/dapp/TransactionButton";
 import { useWalletContext } from "packages/dappkit/src/context/Wallet.context";
 import { useMemo, useState } from "react";
+import useBalances from "src/hooks/useBalances";
 import useInteractionTransaction from "src/hooks/useInteractionTransaction";
 
 export type InteractProps = {
@@ -23,6 +24,7 @@ export default function Interact({ opportunity, inputToken, amount, target, disa
     loading: txLoading,
   } = useInteractionTransaction(opportunity.chainId, opportunity.protocol?.id, target, inputToken, amount);
   const [approvalHash, setApprovalHash] = useState<string>();
+  const { reload: reloadBalances } = useBalances();
 
   const currentInteraction = useMemo(() => {
     let buttonProps: ButtonProps | undefined = undefined;
@@ -49,6 +51,8 @@ export default function Interact({ opportunity, inputToken, amount, target, disa
             setApprovalHash(h);
             reload();
           }}
+          onSuccess={() => reloadBalances()}
+          name={`Approve ${inputToken?.symbol}`}
           {...commonProps}
           tx={transaction?.approval}>
           Approve
@@ -57,14 +61,19 @@ export default function Interact({ opportunity, inputToken, amount, target, disa
 
     if (transaction.transaction)
       return (
-        <TransactionButton {...commonProps} tx={transaction?.transaction}>
+        <TransactionButton
+          onSuccess={() => reloadBalances()}
+          {...commonProps}
+          name={`Supply ${inputToken?.symbol} on ${opportunity.protocol?.name}`}
+          tx={transaction?.transaction}>
           Participate
         </TransactionButton>
       );
   }, [
     chainId,
-    opportunity.chainId,
-    opportunity.chain,
+    opportunity,
+    inputToken,
+    reloadBalances,
     amount,
     transaction,
     disabled,

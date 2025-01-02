@@ -50,6 +50,7 @@ export default function OpportunityLibrary({
   );
 
   const [view, setView] = useState<OpportunityView>(forceView ?? merklConfig.opportunityLibraryDefaultView ?? "table");
+
   const display = useMemo(() => {
     switch (view) {
       case "table":
@@ -77,7 +78,7 @@ export default function OpportunityLibrary({
         );
       case "cells":
         return (
-          <Group className="flex-col">
+          <Group className="flew-col">
             <Group className="grid md:grid-cols-2 lg:grid-cols-3 gap-lg">
               {opportunities?.map(o => (
                 <OpportunityCell
@@ -87,8 +88,13 @@ export default function OpportunityLibrary({
                   opportunity={o}
                 />
               ))}
+
+              {count !== undefined && (
+                <Box content="sm">
+                  <OpportunityPagination count={count} />
+                </Box>
+              )}
             </Group>
-            {count !== undefined && <Box content="sm">{<OpportunityPagination count={count} />}</Box>}
           </Group>
         );
     }
