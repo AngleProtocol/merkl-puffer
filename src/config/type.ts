@@ -45,6 +45,9 @@ export type MerklConfig<T extends Themes> = {
       length: number;
     };
   };
+  bridge: {
+    helperLink?: string;
+  };
   header: {
     searchbar: {
       enabled: boolean;

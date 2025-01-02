@@ -11,6 +11,9 @@ const en = {
       title: "Explore opportunities",
       description: "Browse opportunities, compare rewards, and earn tokens",
     },
+    bridge: {
+      helper: "",
+    },
   },
 };
 

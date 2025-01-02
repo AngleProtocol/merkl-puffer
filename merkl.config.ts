@@ -60,12 +60,15 @@ export default createConfig({
       if (c.chain?.id === zksync.id) return c.extend(eip712WalletActions());
     },
   },
-  chains: [],
+  chains: [arbitrum],
   opportunity: {
     featured: {
-      enabled: true,
+      enabled: false,
       length: 6,
     },
+  },
+  bridge: {
+    helperLink: "",
   },
   themes: {
     ignite: {

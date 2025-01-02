@@ -1,6 +1,7 @@
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { Outlet, json, useLoaderData } from "@remix-run/react";
 import { Button, Dropdown, Group, Hash, Icon, Text, Value } from "dappkit";
+import config from "merkl.config";
 import TransactionButton from "packages/dappkit/src/components/dapp/TransactionButton";
 import { useWalletContext } from "packages/dappkit/src/context/Wallet.context";
 import { useMemo } from "react";
@@ -34,6 +35,8 @@ export type OutletContextRewards = ReturnType<typeof useRewards>;
 export default function Index() {
   const { rewards: raw, address } = useLoaderData<typeof loader>();
   const rewards = useRewards(raw);
+
+  const isSingleChain = config?.chains?.length === 1;
 
   const { chainId, chains, address: user } = useWalletContext();
   const chain = useMemo(() => chains?.find(c => c.id === chainId), [chainId, chains]);
@@ -90,7 +93,7 @@ export default function Index() {
           <Group className="flex-col">
             {isAbleToClaim && (
               <TransactionButton disabled={!claimTransaction} look="hype" size="lg" tx={claimTransaction}>
-                Claim on {chain?.name}
+                {isSingleChain ? "Claim" : `Claim on ${chain?.name}`}
               </TransactionButton>
             )}
           </Group>
