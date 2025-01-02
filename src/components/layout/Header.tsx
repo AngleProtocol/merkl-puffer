@@ -89,7 +89,7 @@ export default function Header() {
           <motion.div variants={item} className="cursor-pointer">
             {media || config.hideLayerMenuHomePage ? (
               <Image
-                imgClassName="w-[140px] md:w-[200px] max-h-[2.5rem]"
+                imgClassName="w-[200px] max-h-[2.5rem]"
                 alt={`${config.appName} logo`}
                 src={mode !== "dark" ? customerDarkLogo : customerLogo}
                 onClick={navigateToHomepage}
@@ -102,7 +102,7 @@ export default function Header() {
                 content={<LayerMenu nav={routes} setOpen={setOpen} />}
                 className="flex gap-sm md:gap-lg items-center">
                 <Image
-                  imgClassName="w-[140px] md:w-[200px] max-h-[2.5rem]"
+                  imgClassName="!w-[140px] md:!w-[200px] max-h-[2.5rem]"
                   alt={`${config.appName} logo`}
                   src={mode !== "dark" ? customerDarkLogo : customerLogo}
                 />

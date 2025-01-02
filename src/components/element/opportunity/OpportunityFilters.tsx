@@ -301,12 +301,12 @@ export default function OpportunityFilters({ only, protocols, exclude, chains, d
         <Icon
           remix={"RiLayoutMasonryFill"}
           onClick={setDisplayToGrid}
-          className={displayState.state === OpportunityDisplayingMode.LIST ? "cursor-pointer " : "text-main-11"}
+          className={displayState.state === OpportunityDisplayingMode.LIST ? "cursor-pointer text-main-11" : ""}
         />
         <Icon
           remix={"RiSortDesc"}
           onClick={setDisplayToList}
-          className={displayState.state === OpportunityDisplayingMode.GRID ? "cursor-pointer" : "text-main-11"}
+          className={displayState.state === OpportunityDisplayingMode.GRID ? "cursor-pointer text-main-11" : ""}
           size="xl"
         />
       </Group>

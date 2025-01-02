@@ -108,10 +108,11 @@ export default function OpportunityLibrary({
   }, [displayingMode, rows, cells, count, sortIdAndOrder, onSort, sortable]);
 
   return (
-    <Group className="flex-col" size={displayingMode === "grid" ? "lg" : "md"}>
+    <Group className="flex-col" size="lg">
       {!!featuredOpportunities.length && (
         <>
-          <Title className="!text-main-11" h={3}>
+          <Space size="lg" />
+          <Title h={3} className="!text-main-11 mb-xl">
             BEST OPPORTUNITIES
           </Title>
           <OpportunityFeatured opportunities={featuredOpportunities} />
@@ -120,7 +121,7 @@ export default function OpportunityLibrary({
       {!!featuredOpportunities.length && (
         <>
           <Space size="xl" />
-          <Title className="!text-main-11" h={3}>
+          <Title h={3} className="!text-main-11 mb-xl">
             ALL OPPORTUNITIES
           </Title>
         </>

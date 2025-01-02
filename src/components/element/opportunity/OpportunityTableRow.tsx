@@ -60,7 +60,6 @@ export default function OpportunityTableRow({
   const rewardsColumn = useMemo(
     () => (
       <Dropdown
-        className="py-xl"
         content={
           <TokenAmountModal
             tokens={rewardsBreakdown}
@@ -101,37 +100,37 @@ export default function OpportunityTableRow({
         tvlColumn={tvlColumn}
         rewardsColumn={rewardsColumn}
         opportunityColumn={
-          <Group className="flex-col w-full text-nowrap whitespace-nowrap text-ellipsis">
-            <Group className="text-nowrap whitespace-nowrap min-w-0 flex-nowrap overflow-hidden max-w-full">
-              <Text className="text-xl">
+          <Group className="flex-col w-full">
+            <Group className="min-w-0 flex-nowrap overflow-hidden max-w-full">
+              <Group className="text-xl items-center">
                 <Icons className="flex-nowrap">{icons}</Icons>
-              </Text>
-              {/* TODO: embed the ellipsis scroll behavior in the Text component as an ellipsis prop */}
-              <Group className="overflow-hidden">
+              </Group>
+              <Group>
                 <Title
                   h={3}
                   size={4}
                   ref={ref}
                   className={mergeClass(
-                    "text-nowrap whitespace-nowrap text-ellipsis min-w-0 inline-block overflow-hidden",
                     overflowing && "hover:overflow-visible hover:animate-textScroll hover:text-clip",
                   )}>
-                  <span className="overflow-visible">
-                    {config.opprtunityPercentage
-                      ? opportunity.name
-                      : opportunity.name.replace(/\s*\d+(\.\d+)?%$/, "").trim()}
-                  </span>
+                  {config.opprtunityPercentage
+                    ? opportunity.name
+                    : opportunity.name.replace(/\s*\d+(\.\d+)?%$/, "").trim()}
                 </Title>
               </Group>
             </Group>
-            <Group>
-              {tags
-                ?.filter(a => a !== undefined)
-                ?.filter(({ type }) => !hideTags || !hideTags.includes(type))
-                .map(tag => (
-                  <Tag filter key={`${tag.type}_${tag.value?.address ?? tag.value}`} {...tag} size="xs" />
-                ))}
-            </Group>
+
+            {tags?.filter(a => a !== undefined)?.filter(({ type }) => !hideTags || !hideTags.includes(type)).length >
+              0 && (
+              <Group>
+                {tags
+                  ?.filter(a => a !== undefined)
+                  ?.filter(({ type }) => !hideTags || !hideTags.includes(type))
+                  .map(tag => (
+                    <Tag filter key={`${tag.type}_${tag.value?.address ?? tag.value}`} {...tag} size="xs" />
+                  ))}
+              </Group>
+            )}
           </Group>
         }
       />

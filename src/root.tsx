@@ -108,7 +108,7 @@ export function ErrorBoundary() {
           sizing={config.sizing}
           config={config.wagmi}>
           <Group className="h-[100vh] flex-col justify-center m-auto w-min">
-            <Title h={1} className="text-nowrap flex flex-nowrap flex-col">
+            <Title h={1} className="flex flex-nowrap flex-col">
               <Icon size="xl" className="!w-[100px] h-[100px]" remix="RiAlertFill" />
               Invalid Url
             </Title>
@@ -126,7 +126,7 @@ export function ErrorBoundary() {
         sizing={config.sizing}
         config={config.wagmi}>
         <Group className="h-[100vh] flex-col justify-center m-auto w-min">
-          <Title h={1} className="text-nowrap flex flex-nowrap flex-col">
+          <Title h={1} className="flex flex-nowrap flex-col">
             <Icon size="xl" className="!w-[100px] h-[100px]" remix="RiAlertFill" />
             An Error occured
           </Title>

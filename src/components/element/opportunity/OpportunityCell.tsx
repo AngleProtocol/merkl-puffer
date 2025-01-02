@@ -28,7 +28,7 @@ export default function OpportunityTableRow({ opportunity, navigationMode }: Opp
       <Group className="flex-col hover:bg-main-2 bg-main-3 ease rounded-lg !gap-0 h-full cursor-pointer">
         <Group className="p-xl justify-between items-end">
           <Group className="flex-col">
-            <Group className="text-nowrap whitespace-nowrap min-w-0 flex-nowrap items-center overflow-hidden">
+            <Group className="min-w-0 flex-nowrap items-center overflow-hidden">
               <Title h={3} size={3} look="soft">
                 <Value value format="0,0.0a">
                   {opportunity.dailyRewards ?? 0}
@@ -59,21 +59,19 @@ export default function OpportunityTableRow({ opportunity, navigationMode }: Opp
         <Divider className="my-0" look="soft" />
         <Group className="flex-col p-xl flex-1">
           <Group className="justify-between flex-col flex-1">
-            <Group className="flex-nowrap overflow-hidden">
+            <Group className="flex-nowrap">
               <Text className="text-3xl">
                 <Icons className="flex-nowrap">{icons}</Icons>
               </Text>
-              {/* TODO: embed the ellipsis scroll behavior in the Text component as an ellipsis prop */}
               <Title
                 h={3}
                 size={4}
                 ref={ref}
                 className={mergeClass(
-                  "text-ellipsis min-w-0 inline-block overflow-hidden",
                   overflowing && "hover:overflow-visible hover:animate-textScroll hover:text-clip",
                   "font-medium",
                 )}>
-                <span className="overflow-visible">{opportunity.name}</span>
+                {opportunity.name}
               </Title>
             </Group>
 
