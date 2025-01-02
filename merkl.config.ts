@@ -60,7 +60,8 @@ export default createConfig({
       if (c.chain?.id === zksync.id) return c.extend(eip712WalletActions());
     },
   },
-  chains: [arbitrum],
+  chains: [],
+  tags: [],
   opportunity: {
     featured: {
       enabled: false,

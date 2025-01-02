@@ -32,12 +32,12 @@ export abstract class ProtocolService {
       ProtocolService.#getQueryFromRequest(request);
     const protocols = await ProtocolService.#fetch(async () =>
       api.v4.protocols.index.get({
-        query: Object.assign({ ...query }, config.tags?.[0] ? { tags: config.tags?.[0] } : {}),
+        query: Object.assign({ ...query }, config.tags?.[0] ? { opportunityTag: config.tags?.[0] } : {}),
       }),
     );
     const count = await ProtocolService.#fetch(async () =>
       api.v4.protocols.count.get({
-        query: Object.assign({ ...query }, config.tags?.[0] ? { tags: config.tags?.[0] } : {}),
+        query: Object.assign({ ...query }, config.tags?.[0] ? { opportunityTag: config.tags?.[0] } : {}),
       }),
     );
 
