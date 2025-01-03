@@ -12,9 +12,9 @@ export type OpportunityParticipateModalProps = {
 export default function OpportunityParticipateModal({ opportunity, children }: OpportunityParticipateModalProps) {
   return (
     <Modal
+      title={<Title h={3}>SIMPLE SUPPLY</Title>}
       modal={
         <Group className="flex-col">
-          <Title h={3}>SIMPLE SUPPLY</Title>
           <Divider horizontal look="bold" className="mb-xl" />
           <Participate opportunity={opportunity} displayLinks displayOpportunity displayMode="deposit" />
           {!!config.supplyCredits && config.supplyCredits.length > 0 && (
