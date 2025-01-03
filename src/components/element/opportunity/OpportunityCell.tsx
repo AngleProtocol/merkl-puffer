@@ -2,6 +2,7 @@ import { Link } from "@remix-run/react";
 import type { BoxProps } from "dappkit";
 import { Box, Button, Divider, Dropdown, Group, Icon, Icons, PrimitiveTag, Text, Title, Value } from "dappkit";
 import { mergeClass } from "dappkit";
+import config from "merkl.config";
 import { useOverflowingRef } from "packages/dappkit/src/hooks/events/useOverflowing";
 import { useMemo } from "react";
 import type { Opportunity } from "src/api/services/opportunity/opportunity.model";
@@ -34,7 +35,7 @@ export default function OpportunityCell({
           <Group className="flex-col">
             <Group className="min-w-0 flex-nowrap items-center overflow-hidden">
               <Title h={3} size={3} look="soft">
-                <Value value format="$0,0.0a">
+                <Value value format={config.decimalFormat.dollar}>
                   {opportunity.dailyRewards ?? 0}
                 </Value>
               </Title>

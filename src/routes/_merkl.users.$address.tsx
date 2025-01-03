@@ -87,7 +87,7 @@ export default function Index() {
             {isAddress(config.rewardsTotalClaimableMode ?? "") && !!token ? (
               <Token size="xl" token={token} amount={BigInt(rewards.earned)} format="amount_price" showZero />
             ) : (
-              <Value format="$0,0.0a" size={2} className="text-main-12">
+              <Value format={config.decimalFormat.dollar} size={2} className="text-main-12">
                 {rewards.earned}
               </Value>
             )}
@@ -99,7 +99,7 @@ export default function Index() {
             {isAddress(config.rewardsTotalClaimableMode ?? "") && !!token ? (
               <Token size="xl" token={token} amount={BigInt(rewards.unclaimed)} format="amount_price" showZero />
             ) : (
-              <Value format="$0,0.0a" size={2} className="text-main-12">
+              <Value format={config.decimalFormat.dollar} size={2} className="text-main-12">
                 {rewards.unclaimed}
               </Value>
             )}

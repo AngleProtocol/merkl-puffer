@@ -57,6 +57,9 @@ export type MerklConfig<T extends Themes> = {
   bridge: {
     helperLink?: string;
   };
+  decimalFormat: {
+    dollar: string;
+  };
   header: {
     searchbar: {
       enabled: boolean;

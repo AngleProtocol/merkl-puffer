@@ -52,7 +52,7 @@ export default function OpportunityTableRow({
       <EventBlocker>
         <Dropdown size="xl" content={<AprModal opportunity={opportunity} />}>
           <PrimitiveTag look="base" className="font-mono">
-            <Value value format="$0,0.0a">
+            <Value value format={config.decimalFormat.dollar}>
               {opportunity.tvl ?? 0}
             </Value>
           </PrimitiveTag>
@@ -81,7 +81,7 @@ export default function OpportunityTableRow({
             />
           }>
           <PrimitiveTag look="base" className="font-mono">
-            <Value value format="$0,0.0a">
+            <Value value format={config.decimalFormat.dollar}>
               {opportunity.dailyRewards ?? 0}
             </Value>
             <Icons>

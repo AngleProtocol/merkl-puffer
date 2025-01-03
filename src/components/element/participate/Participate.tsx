@@ -1,6 +1,6 @@
 import type { Opportunity } from "@merkl/api";
 import { Button, Group, Icon, Input, PrimitiveTag, Text, Value } from "dappkit";
-
+import config from "merkl.config";
 import { useWalletContext } from "packages/dappkit/src/context/Wallet.context";
 import { Fmt } from "packages/dappkit/src/utils/formatter.service";
 import { Suspense, useMemo, useState } from "react";
@@ -99,7 +99,7 @@ export default function Participate({ opportunity, displayOpportunity, displayMo
                       </PrimitiveTag>
                     )}
                     {!!BigInt(inputToken?.balance ?? "0") && (
-                      <Value className="text-right" look={"soft"} size="sm" format="$0,0.##">
+                      <Value className="text-right" look={"soft"} size="sm" format={config.decimalFormat.dollar}>
                         {Fmt.toPrice(inputToken?.balance, inputToken)}
                       </Value>
                     )}

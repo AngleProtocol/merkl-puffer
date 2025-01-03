@@ -1,4 +1,5 @@
 import type { Chain, Token as TokenType } from "@merkl/api";
+import config from "merkl.config";
 import { Button, Dropdown, Group, Icon, type IconProps, PrimitiveTag, Value, sizeScale } from "packages/dappkit/src";
 import { useMemo } from "react";
 import { formatUnits } from "viem";
@@ -54,7 +55,7 @@ export default function Token({
                   className="text-right"
                   look={"soft"}
                   size={sizeScale[Math.max(sizeScale.indexOf(size ?? "md") - 1, 0)]}
-                  format="$0,0.##">
+                  format={config.decimalFormat.dollar}>
                   {amountUSD}
                 </Value>
               </PrimitiveTag>

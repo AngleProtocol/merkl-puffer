@@ -72,6 +72,9 @@ export default createConfig({
   bridge: {
     helperLink: "",
   },
+  decimalFormat: {
+    dollar: "$0,0.##a",
+  },
   themes: {
     ignite: {
       base: createColoring(["#1755F4", "#FF7900", "#0D1530"], ["#1755F4", "#FF7900", "#FFFFFF"]),

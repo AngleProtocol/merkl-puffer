@@ -82,7 +82,7 @@ export default function useOpportunity(opportunity: Opportunity) {
           !!opportunity.dailyRewards && {
             label: "Daily rewards",
             data: (
-              <Value format="$0.00a" size={4} className="!text-main-12">
+              <Value format={config.decimalFormat.dollar} size={4} className="!text-main-12">
                 {opportunity.dailyRewards}
               </Value>
             ),
@@ -100,7 +100,7 @@ export default function useOpportunity(opportunity: Opportunity) {
           !!opportunity.tvl && {
             label: "Total value locked",
             data: (
-              <Value format="$0.00a" size={4} className="!text-main-12">
+              <Value format={config.decimalFormat.dollar} size={4} className="!text-main-12">
                 {opportunity.tvl}
               </Value>
             ),

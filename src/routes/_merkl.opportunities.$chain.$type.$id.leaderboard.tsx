@@ -2,6 +2,7 @@ import type { Campaign } from "@merkl/api";
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json, useLoaderData } from "@remix-run/react";
 import { Box, Container, Group, Icon, OverrideTheme, PrimitiveTag, Select, Space, Title, Value } from "dappkit";
+import config from "merkl.config";
 import moment from "moment";
 import Time from "packages/dappkit/src/components/primitives/Time";
 import { useCallback, useMemo } from "react";
@@ -120,7 +121,7 @@ export default function Index() {
           ],
           [
             "Total Rewards Distributed",
-            <Value value key="users" format="$0a">
+            <Value value key="users" format={config.decimalFormat.dollar}>
               {totalRewardsAllCampaigns}
             </Value>,
           ],

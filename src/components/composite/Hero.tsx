@@ -140,7 +140,7 @@ export function defaultHeroSideDatas(count: number, maxApr: number, dailyRewards
     },
     !!dailyRewards && {
       data: (
-        <Value format="$0.00a" size={4} className="!text-main-12">
+        <Value format={config.decimalFormat.dollar} size={4} className="!text-main-12">
           {dailyRewards}
         </Value>
       ),
