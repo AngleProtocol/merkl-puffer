@@ -17,13 +17,19 @@ export const [ClaimRewardsTableByOpportunity, ClaimRewardsByOpportunityRow, clai
     // },
     unclaimed: {
       name: "Unclaimed",
-      size: "minmax(min-content,200px)",
+      size: "minmax(min-content,0.5fr)",
+      compactSize: "minmax(min-content,200px)",
+      className: "justify-end",
+    },
+    pending: {
+      name: "Claimable Soon",
+      size: "minmax(min-content,0.5fr)",
       compactSize: "minmax(min-content,200px)",
       className: "justify-end",
     },
     claimed: {
       name: "Claimed",
-      size: "minmax(min-content,250px)",
+      size: "minmax(min-content,0.5fr)",
       compactSize: "minmax(min-content,200px)",
       className: "justify-end",
     },
