@@ -61,6 +61,7 @@ export function LiFiWidget() {
     toChain: 324,
     fromToken: "0x0000000000000000000000000000000000000000", // Native token
     toToken: "0x0000000000000000000000000000000000000000", // Native token
+    poweredBy: "jumper",
   };
 
   return (
