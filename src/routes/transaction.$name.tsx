@@ -49,9 +49,9 @@ export const action = async ({ params: { name }, request }: ActionFunctionArgs) 
 
         return json(tx);
       } catch (_err) {
-        console.error(_err);
+        console.log(_err);
 
-        return new Response("An error occured", { status: 500 });
+        return new Response(_err, { status: 500 });
       }
     }
   }

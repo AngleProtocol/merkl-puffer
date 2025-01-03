@@ -1,4 +1,5 @@
 import config from "merkl.config";
+import merklConfig from "merkl.config";
 import { Group, Icon, Select, type SelectProps, Text, Title, Value } from "packages/dappkit/src";
 import { Fmt } from "packages/dappkit/src/utils/formatter.service";
 import { useMemo } from "react";
@@ -10,17 +11,28 @@ export type TokenSelectProps = {
 } & SelectProps<string>;
 
 export default function TokenSelect({ tokens, balances, ...props }: TokenSelectProps) {
-  const sortedTokens = useMemo(
-    () =>
-      tokens?.sort((a, b) => {
+  const sortedTokens = useMemo(() => {
+    const tokensWithBalance = tokens
+      .filter(({ balance }) => balance > 0)
+      .sort((a, b) => {
         if (a.price && b.price) return Fmt.toPrice(b.balance, b) - Fmt.toPrice(a.balance, a);
-        if (a.price) return -1;
-        if (b.price) return 1;
+        if (a.price && a.balance && Fmt.toPrice(a.balance, a)) return -1;
+        if (b.price && b.balance && Fmt.toPrice(b.balance, b)) return 1;
 
         return b.balance - a.balance;
-      }),
-    [tokens],
-  );
+      });
+    const tokensWithNoBalance = tokens.filter(({ balance }) => balance === "0" || !balance || balance <= 0n);
+
+    const tokensInPriority = !merklConfig?.tokenSymbolPriority?.length
+      ? tokensWithNoBalance
+      : merklConfig?.tokenSymbolPriority
+          .map(s => tokensWithNoBalance.find(({ symbol }) => symbol === s))
+          .filter(t => t !== undefined);
+
+    const otherTokens = tokensWithNoBalance.filter(s => merklConfig?.tokenSymbolPriority?.includes(s));
+
+    return [...tokensWithBalance, ...tokensInPriority, ...otherTokens];
+  }, [tokens]);
 
   const options = useMemo(
     () =>

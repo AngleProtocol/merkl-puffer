@@ -48,6 +48,7 @@ export default createConfig({
   modes: ["dark", "light"],
   defaultTheme: "ignite",
   opportunityNavigationMode: "supply",
+  tokenSymbolPriority: ["ZK", "USDC", "USDC.e", "ETH", "WETH", "WBTC", "wstETH", "USDT", "USDe", "weETH", "DAI"],
   opportunityCellHideTags: ["token", "action"],
   rewardsNavigationMode: "chain",
   opportunityLibraryDefaultView: "cells",

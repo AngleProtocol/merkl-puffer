@@ -93,7 +93,12 @@ export default function ClaimRewardsChainTableRow({
           <EventBlocker>
             {isAbleToClaim &&
               (isOnCorrectChain ? (
-                <TransactionButton disabled={!claimTransaction} className="ml-xl" look="hype" tx={claimTransaction}>
+                <TransactionButton
+                  name="Claim Rewards"
+                  disabled={!claimTransaction}
+                  className="ml-xl"
+                  look="hype"
+                  tx={claimTransaction}>
                   Claim
                 </TransactionButton>
               ) : (

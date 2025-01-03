@@ -88,13 +88,12 @@ export default function OpportunityLibrary({
                   opportunity={o}
                 />
               ))}
-
-              {count !== undefined && (
-                <Box content="sm">
-                  <OpportunityPagination count={count} />
-                </Box>
-              )}
             </Group>
+            {count !== undefined && (
+              <Box content="sm" className="w-full">
+                <OpportunityPagination count={count} />
+              </Box>
+            )}
           </Group>
         );
     }
