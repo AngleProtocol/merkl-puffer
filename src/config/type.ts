@@ -37,6 +37,12 @@ export type MerklConfig<T extends Themes> = {
   opprtunityPercentage: boolean;
   hideLayerMenuHomePage: boolean;
   hideSpyMode?: boolean;
+  supplyCredits: {
+    id: string;
+    name: string;
+    image: string;
+    url: string;
+  }[];
   modes: Mode[];
   wagmi: Parameters<typeof createWagmiConfig>["0"];
   appName: string;

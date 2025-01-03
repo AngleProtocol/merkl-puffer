@@ -27,8 +27,8 @@ export default function Token({
   symbol = true,
   chain,
 }: TokenProps) {
-  const amoutFormated = amount ? formatUnits(amount, token.decimals) : "0";
-  const amountUSD = !amount ? 0 : (token.price ?? 0) * Number.parseFloat(amoutFormated ?? "0");
+  const amountFormatted = amount ? formatUnits(amount, token.decimals) : "0";
+  const amountUSD = !amount ? 0 : (token.price ?? 0) * Number.parseFloat(amountFormatted ?? "0");
 
   const display = useMemo(
     () => (
@@ -41,7 +41,7 @@ export default function Token({
               look={"bold"}
               size={size}
               format="0,0.###a">
-              {amoutFormated}
+              {amountFormatted}
             </Value>
           ))}{" "}
         {icon && <Icon size={size} rounded src={token?.icon} />}
@@ -49,7 +49,7 @@ export default function Token({
         {format === "price" ||
           (format === "amount_price" && !!amount && (
             <Group className="shrink block">
-              <PrimitiveTag size={sizeScale[Math.max(sizeScale.indexOf(size ?? "md") - 1, 0)]}>
+              <PrimitiveTag noClick size={sizeScale[Math.max(sizeScale.indexOf(size ?? "md") - 1, 0)]}>
                 <Value
                   className="text-right"
                   look={"soft"}
@@ -62,7 +62,7 @@ export default function Token({
           ))}
       </>
     ),
-    [token, format, amoutFormated, amountUSD, amount, symbol, icon, size, showZero],
+    [token, format, amountFormatted, amountUSD, amount, symbol, icon, size, showZero],
   );
 
   if (value) return display;
