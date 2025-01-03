@@ -7,6 +7,10 @@ BigInt.prototype.toJSON = function () {
   return this.toString();
 };
 
+BigInt.prototype.toJSON = function () {
+  return this.toString();
+};
+
 export const action = async ({ params: { name }, request }: ActionFunctionArgs) => {
   const payload = await request.json();
 
@@ -45,7 +49,7 @@ export const action = async ({ params: { name }, request }: ActionFunctionArgs) 
 
         return json(tx);
       } catch (_err) {
-        console.log(_err);
+        console.error(_err);
 
         return new Response("An error occured", { status: 500 });
       }

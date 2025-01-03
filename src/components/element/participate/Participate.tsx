@@ -2,6 +2,7 @@ import type { Opportunity } from "@merkl/api";
 import { Button, Group, Icon, Input, PrimitiveTag, Text, Value } from "dappkit";
 
 import { useWalletContext } from "packages/dappkit/src/context/Wallet.context";
+import { Fmt } from "packages/dappkit/src/utils/formatter.service";
 import { Suspense, useMemo, useState } from "react";
 import { I18n } from "src/I18n";
 import useOpportunity from "src/hooks/resources/useOpportunity";
@@ -87,7 +88,7 @@ export default function Participate({ opportunity, displayOpportunity, displayMo
                   look="soft"
                   size="xs">
                   <Group className="items-center">
-                    {!!amount && (
+                    {!!inputToken && (
                       <PrimitiveTag noClick size="sm">
                         <Value
                           fallback={v => (v as string).includes("0.000") && "< 0.001"}
@@ -95,14 +96,14 @@ export default function Participate({ opportunity, displayOpportunity, displayMo
                           size="sm"
                           look="bold"
                           format="0,0.###a">
-                          {amountFormatted}
+                          {Fmt.toNumber(inputToken?.balance, inputToken.decimals).toString()}
                         </Value>{" "}
                         {inputToken?.symbol}
                       </PrimitiveTag>
                     )}
-                    {!!amount && (
+                    {!!BigInt(inputToken?.balance ?? "0") && (
                       <Value className="text-right" look={"soft"} size="sm" format="$0,0.#">
-                        {amountUSD}
+                        {Fmt.toPrice(inputToken?.balance, inputToken)}
                       </Value>
                     )}
                     Max
@@ -135,7 +136,7 @@ export default function Participate({ opportunity, displayOpportunity, displayMo
         <Group className="w-full justify-between">
           <Group>
             {opportunity.protocol && (
-              <Button external to={opportunity.protocol?.url} disabled={!opportunity.protocol?.url} look="bold">
+              <Button external to={visitUrl} disabled={!visitUrl} look="bold">
                 Visit {opportunity.protocol.name} for advanced settings
                 <Icon remix="RiArrowRightUpLine" />
               </Button>
