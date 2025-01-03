@@ -1,11 +1,12 @@
 import type { Opportunity } from "@merkl/api";
-import { Button, Group, Icon, Input, PrimitiveTag, Text } from "dappkit";
+import { Button, Group, Icon, Input, PrimitiveTag, Text, Value } from "dappkit";
 import { useWalletContext } from "packages/dappkit/src/context/Wallet.context";
 import { Suspense, useMemo, useState } from "react";
+import { I18n } from "src/I18n";
 import useOpportunity from "src/hooks/resources/useOpportunity";
 import useParticipate from "src/hooks/useParticipate";
+import { formatUnits } from "viem";
 import OpportunityShortCard from "../opportunity/OpportunityShortCard";
-import Token from "../token/Token";
 import TokenSelect from "../token/TokenSelect";
 import Interact from "./Interact.client";
 
@@ -62,35 +63,50 @@ export default function Participate({ opportunity, displayOpportunity, displayMo
         </Group>
       );
     if (!targets?.length) return;
+
+    const amountFormatted = amount ? formatUnits(amount, inputToken?.decimals ?? 18) : undefined;
+    const amountUSD = !amount ? 0 : (inputToken?.price ?? 0) * Number.parseFloat(amountFormatted ?? "0");
     return (
-      <Group>
+      <Group className="mt-lg">
         <Input.BigInt
-          className="w-full"
+          className="w-full gap-xs"
+          inputClassName="font-title font-bold italic text-[clamp(38px,0.667vw+1.125rem,46px)] !leading-none"
           look="bold"
+          size="lg"
           state={[amount, a => setAmount(a)]}
           base={inputToken?.decimals ?? 18}
           header={
             <Group className="justify-between w-full">
-              <Text>{mode === "deposit" ? "Supply" : "Withdraw"}</Text>
+              <Text size={5}>{mode === "deposit" ? "Supply" : "Withdraw"}</Text>
               {inputToken && (
-                <Group>
-                  <Text>Balance:</Text>
-
-                  <Token
-                    icon={false}
-                    symbol={false}
-                    format="amount_price"
-                    amount={inputToken.balance}
-                    token={inputToken}
-                  />
-                  <PrimitiveTag
-                    onClick={() => {
-                      setAmount(BigInt(inputToken?.balance ?? "0"));
-                    }}
-                    size="xs">
+                <Button
+                  onClick={() => {
+                    setAmount(BigInt(inputToken?.balance ?? "0"));
+                  }}
+                  look="soft"
+                  size="xs">
+                  <Group className="items-center">
+                    {!!amount && (
+                      <PrimitiveTag noClick size="sm">
+                        <Value
+                          fallback={v => (v as string).includes("0.000") && "< 0.001"}
+                          className="text-right items-center flex font-bold"
+                          size="sm"
+                          look="bold"
+                          format="0,0.###a">
+                          {amountFormatted}
+                        </Value>{" "}
+                        {inputToken?.symbol}
+                      </PrimitiveTag>
+                    )}
+                    {!!amount && (
+                      <Value className="text-right" look={"soft"} size="sm" format="$0,0.#">
+                        {amountUSD}
+                      </Value>
+                    )}
                     Max
-                  </PrimitiveTag>
-                </Group>
+                  </Group>
+                </Button>
               )}
             </Group>
           }
@@ -113,6 +129,7 @@ export default function Participate({ opportunity, displayOpportunity, displayMo
   return (
     <>
       {displayOpportunity && <OpportunityShortCard opportunity={opportunity} />}
+
       {displayLinks && (
         <Group className="w-full justify-between">
           <Group>
@@ -124,10 +141,18 @@ export default function Participate({ opportunity, displayOpportunity, displayMo
             )}
           </Group>
           <Group className="flex-col justify-center">
-            <Button to={link} size="md" look="soft">
-              Opportunity overview <Icon remix="RiArrowRightLine" />
+            <Button to={link} look="soft" size="sm">
+              Pool overview <Icon remix="RiArrowRightLine" />
             </Button>
           </Group>
+        </Group>
+      )}
+      {!!I18n.trad.get.pages.home.depositInformation && (
+        <Group className="rounded-md p-md bg-main-5 flex-nowrap items-start">
+          <Icon remix="RiInformation2Fill" className="text-lg text-accent-11 flex-shrink-0" />
+          <Text look="bold" size="xs">
+            {I18n.trad.get.pages.home.depositInformation}
+          </Text>
         </Group>
       )}
       {interactor}

@@ -36,6 +36,12 @@ export type MerklConfig<T extends Themes> = {
   rewardsTotalClaimableMode?: string; // Address of the token you want to display the totals of
   opprtunityPercentage: boolean;
   hideLayerMenuHomePage: boolean;
+  supplyCredits: {
+    id: string;
+    name: string;
+    image: string;
+    url: string;
+  }[];
   hideSpyMode?: boolean;
   modes: Mode[];
   wagmi: Parameters<typeof createWagmiConfig>["0"];
