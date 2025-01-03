@@ -2,6 +2,7 @@ import type { Chain } from "@merkl/api";
 import { type LoaderFunctionArgs, type MetaFunction, json } from "@remix-run/node";
 import { Meta, Outlet, useLoaderData } from "@remix-run/react";
 import { Button, Group, Icon } from "dappkit";
+import merklConfig from "merkl.config";
 import { useMemo } from "react";
 import { Cache } from "src/api/services/cache.service";
 import { ChainService } from "src/api/services/chain.service";
@@ -80,7 +81,7 @@ export default function Index() {
       <Hero
         icons={opportunity.tokens.map(t => ({ src: t.icon }))}
         breadcrumbs={[
-          { link: config.routes.opportunities?.route ?? "/", name: "Opportunities" },
+          { link: merklConfig.routes.opportunities?.route ?? "/", name: "Opportunities" },
           {
             link: "/",
             name: opportunity.name,
