@@ -14,7 +14,7 @@ export default function OpportunityParticipateModal({ opportunity, children }: O
       modal={
         <Group className="flex-col">
           <Group className="p-md">
-            <Title h={3}>SUPPLY</Title>
+            <Title h={3}>SIMPLE SUPPLY</Title>
           </Group>
           <Divider horizontal look="hype" />
           {!!I18n.trad.get.pages.home.depositInformation && (

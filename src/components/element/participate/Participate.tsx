@@ -118,14 +118,14 @@ export default function Participate({ opportunity, displayOpportunity, displayMo
                 disabled={!opportunity.protocol?.url}
                 size="md"
                 look="base">
-                Visit {opportunity.protocol.name}
+                Visit {opportunity.protocol.name} for advanced settings
                 <Icon remix="RiArrowRightUpLine" />
               </Button>
             )}
           </Group>
           <Group className="flex-col justify-center">
             <Button to={link} size="md" look="soft">
-              More info <Icon remix="RiArrowRightLine" />
+              Opportunity overview <Icon remix="RiArrowRightLine" />
             </Button>
           </Group>
         </Group>
