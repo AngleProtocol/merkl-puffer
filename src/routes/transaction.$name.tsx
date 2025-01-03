@@ -1,11 +1,28 @@
-import type { ActionFunctionArgs } from "@remix-run/node";
+import { type ActionFunctionArgs, json } from "@remix-run/node";
 import { api } from "src/api/index.server";
 import { ZyfiService } from "src/api/services/zyfi.service";
+import { encodeFunctionData, parseAbi } from "viem";
+
+BigInt.prototype.toJSON = function () {
+  return this.toString();
+};
 
 export const action = async ({ params: { name }, request }: ActionFunctionArgs) => {
   const payload = await request.json();
 
   switch (name) {
+    case "claim": {
+      const abi = parseAbi(["function claim(address[],address[],uint256[],bytes32[][]) view returns (uint256)"]);
+
+      return json({
+        to: payload.distributor,
+        data: encodeFunctionData({
+          abi,
+          functionName: "claim",
+          args: payload.args,
+        }),
+      });
+    }
     case "supply": {
       try {
         const { data: tx } = await api.v4.interaction.transaction.get({
@@ -26,8 +43,10 @@ export const action = async ({ params: { name }, request }: ActionFunctionArgs) 
           });
         }
 
-        return tx;
-      } catch {
+        return json(tx);
+      } catch (_err) {
+        console.log(_err);
+
         return new Response("An error occured", { status: 500 });
       }
     }

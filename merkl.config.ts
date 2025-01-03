@@ -41,7 +41,7 @@ import {
   zksync,
 } from "viem/chains";
 import { eip712WalletActions } from "viem/zksync";
-import { coinbaseWallet, walletConnect } from "wagmi/connectors";
+import { walletConnect } from "wagmi/connectors";
 
 export default createConfig({
   appName: "Merkl",
@@ -56,6 +56,7 @@ export default createConfig({
   supplyCredits: [],
   deposit: true,
   walletOptions: {
+    hideInjectedWallets: ["phantom"],
     sponsorTransactions: true,
     client(c) {
       if (c.chain?.id === zksync.id) return c.extend(eip712WalletActions());
@@ -212,7 +213,6 @@ export default createConfig({
     },
     ssr: true,
     connectors: [
-      coinbaseWallet(),
       walletConnect({
         customStoragePrefix: "wagmi",
         projectId: "26c912aadd2132cd869a5edc00aeea0f",

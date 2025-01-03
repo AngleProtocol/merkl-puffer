@@ -34,10 +34,10 @@ export default function Interact({ opportunity, inputToken, amount, target, disa
     };
 
     if (disabled) createProps({ disabled: true, children: "Cannot interact" });
-    else if (!amount || amount === 0n) createProps({ disabled: true, children: "Enter an amount" });
+    else if (!user) return <WalletButton {...commonProps} />;
     else if (chainId !== opportunity.chainId)
       createProps({ children: `Switch to ${opportunity.chain.name}`, onClick: () => switchChain(opportunity.chainId) });
-    else if (!user) return <WalletButton {...commonProps} />;
+    else if (!amount || amount === 0n) createProps({ disabled: true, children: "Enter an amount" });
     else if (!transaction && !txLoading) createProps({ disabled: true, children: "Cannot interact" });
     else if (!transaction || txLoading) createProps({ disabled: true, children: "Loading..." });
 
