@@ -105,7 +105,7 @@ export default function ClaimRewardsChainTableRow({
       }
       unclaimedColumn={
         unclaimed === 0 ? undefined : (
-          <Value size="lg" format="$0,0.#" look="bold" className="font-title">
+          <Value size="lg" format="$0,0.##" look="bold" className="font-title">
             {unclaimed}
           </Value>
         )

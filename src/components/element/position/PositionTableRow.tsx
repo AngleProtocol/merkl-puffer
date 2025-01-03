@@ -63,7 +63,7 @@ export default function PositionTableRow({ row, className, ...props }: PositionR
                   className="text-right"
                   look={"soft"}
                   size={sizeScale[Math.max(sizeScale.indexOf("md") - 1, 0)]}
-                  format="$0,0.#">
+                  format="$0,0.##">
                   {price0 + price1}
                 </Value>
               </PrimitiveTag>

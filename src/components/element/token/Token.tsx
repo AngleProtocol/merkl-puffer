@@ -54,7 +54,7 @@ export default function Token({
                   className="text-right"
                   look={"soft"}
                   size={sizeScale[Math.max(sizeScale.indexOf(size ?? "md") - 1, 0)]}
-                  format="$0,0.#">
+                  format="$0,0.##">
                   {amountUSD}
                 </Value>
               </PrimitiveTag>

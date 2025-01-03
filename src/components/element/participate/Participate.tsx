@@ -7,7 +7,6 @@ import { Suspense, useMemo, useState } from "react";
 import { I18n } from "src/I18n";
 import useOpportunity from "src/hooks/resources/useOpportunity";
 import useParticipate from "src/hooks/useParticipate";
-import { formatUnits } from "viem";
 import OpportunityShortCard from "../opportunity/OpportunityShortCard";
 import TokenSelect from "../token/TokenSelect";
 import Interact from "./Interact.client";
@@ -66,8 +65,6 @@ export default function Participate({ opportunity, displayOpportunity, displayMo
       );
     if (!targets?.length) return;
 
-    const amountFormatted = amount ? formatUnits(amount, inputToken?.decimals ?? 18) : undefined;
-    const amountUSD = !amount ? 0 : (inputToken?.price ?? 0) * Number.parseFloat(amountFormatted ?? "0");
     return (
       <Group className="mt-lg">
         <Input.BigInt
@@ -102,7 +99,7 @@ export default function Participate({ opportunity, displayOpportunity, displayMo
                       </PrimitiveTag>
                     )}
                     {!!BigInt(inputToken?.balance ?? "0") && (
-                      <Value className="text-right" look={"soft"} size="sm" format="$0,0.#">
+                      <Value className="text-right" look={"soft"} size="sm" format="$0,0.##">
                         {Fmt.toPrice(inputToken?.balance, inputToken)}
                       </Value>
                     )}
