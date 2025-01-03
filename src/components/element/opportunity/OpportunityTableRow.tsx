@@ -23,12 +23,12 @@ export type OpportunityTableRowProps = {
 
 export default function OpportunityTableRow({
   hideTags,
-  opportunity,
+  opportunity: opportunityRaw,
   className,
   navigationMode,
   ...props
 }: OpportunityTableRowProps) {
-  const { tags, link, icons, rewardsBreakdown } = useOpportunity(opportunity);
+  const { tags, link, icons, rewardsBreakdown, opportunity } = useOpportunity(opportunityRaw);
 
   const { ref, overflowing } = useOverflowingRef<HTMLHeadingElement>();
 
@@ -128,22 +128,19 @@ export default function OpportunityTableRow({
               </Group>
             </Group>
 
-            {tags?.filter(a => a !== undefined)?.filter(({ type }) => !hideTags || !hideTags.includes(type)).length >
-              0 && (
-              <Group>
-                {tags
-                  ?.filter(a => a !== undefined)
-                  ?.filter(({ type }) => !hideTags || !hideTags.includes(type))
-                  .map(tag => (
-                    <Tag filter key={`${tag.type}_${tag.value?.address ?? tag.value}`} {...tag} size="xs" />
-                  ))}
-              </Group>
-            )}
+            <Group className="items-center">
+              {tags
+                ?.filter(a => a !== undefined)
+                ?.filter(({ type }) => !hideTags || !hideTags.includes(type))
+                .map(tag => (
+                  <Tag filter key={`${tag.type}_${tag.value?.address ?? tag.value}`} {...tag} size="sm" />
+                ))}
+            </Group>
           </Group>
         }
       />
     ),
-    [opportunity, aprColumn, tvlColumn, hideTags, className, rewardsColumn, icons, overflowing, ref],
+    [opportunity, aprColumn, tvlColumn, hideTags, className, rewardsColumn, icons, overflowing, ref, tags],
   );
 
   if (navigationMode === "supply")

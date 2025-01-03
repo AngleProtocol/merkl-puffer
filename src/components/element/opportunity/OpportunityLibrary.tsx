@@ -69,6 +69,7 @@ export default function OpportunityLibrary({
             footer={count !== undefined && <OpportunityPagination count={count} />}>
             {opportunities?.map(o => (
               <OpportunityTableRow
+                hideTags={merklConfig.opportunityCellHideTags}
                 navigationMode={merklConfig.opportunityNavigationMode}
                 key={`${o.chainId}_${o.type}_${o.identifier}`}
                 opportunity={o}

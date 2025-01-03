@@ -18,8 +18,12 @@ export type OpportunityTableRowProps = {
   navigationMode?: OpportunityNavigationMode;
 } & BoxProps;
 
-export default function OpportunityCell({ opportunity, hideTags, navigationMode }: OpportunityTableRowProps) {
-  const { tags, link, icons, rewardsBreakdown } = useOpportunity(opportunity);
+export default function OpportunityCell({
+  opportunity: opportunityRaw,
+  hideTags,
+  navigationMode,
+}: OpportunityTableRowProps) {
+  const { tags, link, icons, rewardsBreakdown, opportunity } = useOpportunity(opportunityRaw);
 
   const { ref, overflowing } = useOverflowingRef<HTMLHeadingElement>();
 
@@ -30,7 +34,7 @@ export default function OpportunityCell({ opportunity, hideTags, navigationMode 
           <Group className="flex-col">
             <Group className="min-w-0 flex-nowrap items-center overflow-hidden">
               <Title h={3} size={3} look="soft">
-                <Value value format="0,0.0a">
+                <Value value format="$0,0.0a">
                   {opportunity.dailyRewards ?? 0}
                 </Value>
               </Title>

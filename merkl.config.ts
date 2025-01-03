@@ -61,7 +61,6 @@ export default createConfig({
     },
   },
   chains: [],
-  tags: [],
   opportunity: {
     featured: {
       enabled: false,

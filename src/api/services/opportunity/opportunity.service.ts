@@ -48,8 +48,8 @@ export abstract class OpportunityService {
       api.v4.opportunities({ id: `${chainId}-${type}-${identifier}` }).campaigns.get(),
     );
 
-    //TODO: updates tags to take an array
-    if (config.tags && !opportunityWithCampaigns.tags.includes(config.tags?.[0]))
+    // TODO: updates tags to take an array
+    if (config.tags?.length && config.tags && !opportunityWithCampaigns.tags.includes(config.tags?.[0]))
       throw new Response("Opportunity inaccessible", { status: 403 });
 
     return opportunityWithCampaigns;
