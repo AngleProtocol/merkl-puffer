@@ -7,8 +7,8 @@ import { getAddress, isAddress } from "viem";
 function getValueOf(chainRewards: Reward["rewards"], amount: (t: Reward["rewards"][number]) => bigint) {
   return chainRewards.reduce((sum: number, reward) => {
     if (isAddress(config.rewardsTotalClaimableMode ?? "")) {
-      if (reward.token.address === getAddress(config.rewardsTotalClaimableMode)) {
-        return sum + amount(reward);
+      if (reward.token.address === getAddress(config.rewardsTotalClaimableMode ?? "")) {
+        return sum + Number.parseFloat(amount(reward).toString());
       }
       return sum;
     }
@@ -22,13 +22,15 @@ export default function useRewards(rewards: Reward[]) {
       ({ earned, unclaimed }, chain) => {
         const valueUnclaimed = getValueOf(chain.rewards, token => token.amount - token.claimed);
         const valueEarned = getValueOf(chain.rewards, token => token.amount);
-
         return {
           earned: earned + valueEarned,
           unclaimed: unclaimed + valueUnclaimed,
         };
       },
-      { earned: 0, unclaimed: 0 },
+      {
+        earned: 0,
+        unclaimed: 0,
+      },
     );
   }, [rewards]);
 

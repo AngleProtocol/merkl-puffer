@@ -85,7 +85,7 @@ export default function Index() {
           {/* TODO: Make it dynamic */}
           <Group className="flex-col">
             {isAddress(config.rewardsTotalClaimableMode ?? "") && !!token ? (
-              <Token size="xl" token={token} amount={rewards.earned} format="amount_price" showZero />
+              <Token size="xl" token={token} amount={BigInt(rewards.earned)} format="amount_price" showZero />
             ) : (
               <Value format="$0,0.0a" size={2} className="text-main-12">
                 {rewards.earned}
@@ -97,7 +97,7 @@ export default function Index() {
           </Group>
           <Group className="flex-col">
             {isAddress(config.rewardsTotalClaimableMode ?? "") && !!token ? (
-              <Token size="xl" token={token} amount={rewards.unclaimed} format="amount_price" showZero />
+              <Token size="xl" token={token} amount={BigInt(rewards.unclaimed)} format="amount_price" showZero />
             ) : (
               <Value format="$0,0.0a" size={2} className="text-main-12">
                 {rewards.unclaimed}

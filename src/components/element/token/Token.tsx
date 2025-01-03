@@ -34,7 +34,7 @@ export default function Token({
     () => (
       <>
         {format === "amount" ||
-          (format === "amount_price" && (!amount || (amount === 0n && showZero)) && (
+          (format === "amount_price" && (amount || (amount === 0n && showZero)) && (
             <Value
               fallback={v => (v as string).includes("0.000") && "< 0.001"}
               className="text-right items-center flex font-title"
