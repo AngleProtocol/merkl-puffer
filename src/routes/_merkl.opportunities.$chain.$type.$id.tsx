@@ -1,7 +1,6 @@
 import type { Chain } from "@merkl/api";
 import { type LoaderFunctionArgs, type MetaFunction, json } from "@remix-run/node";
 import { Meta, Outlet, useLoaderData } from "@remix-run/react";
-import { Button, Group } from "dappkit";
 import config from "merkl.config";
 import { useMemo } from "react";
 import { Cache } from "src/api/services/cache.service";
@@ -10,7 +9,6 @@ import type { OpportunityWithCampaigns } from "src/api/services/opportunity/oppo
 import { OpportunityService } from "src/api/services/opportunity/opportunity.service";
 import Hero from "src/components/composite/Hero";
 import Tag from "src/components/element/Tag";
-import OpportunityParticipateModal from "src/components/element/opportunity/OpportunityParticipateModal";
 import { ErrorHeading } from "src/components/layout/ErrorHeading";
 import useOpportunity from "src/hooks/resources/useOpportunity";
 import { v4 as uuidv4 } from "uuid";
@@ -87,16 +85,7 @@ export default function Index() {
             name: opportunity.name,
           },
         ]}
-        title={
-          <Group className="items-center flex-nowrap" size="lg">
-            <span className="flex-1">{styleName}</span>
-            <OpportunityParticipateModal opportunity={opportunity}>
-              <Button className="inline-flex" look="hype" size="md">
-                Simple supply
-              </Button>
-            </OpportunityParticipateModal>
-          </Group>
-        }
+        title={styleName}
         description={description}
         tabs={[
           { label: "Overview", link, key: "overview" },

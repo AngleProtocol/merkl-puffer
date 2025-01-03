@@ -53,7 +53,6 @@ export default createConfig({
   opportunityLibraryDefaultView: "cells",
   opprtunityPercentage: true,
   hideLayerMenuHomePage: false,
-  supplyCredits: [],
   deposit: true,
   walletOptions: {
     sponsorTransactions: true,

@@ -36,6 +36,8 @@ export default function Hero({
   const location = useLocation();
   return (
     <>
+      {/* TODO: Align lines & descriptions on all pages  */}
+      {/* TODO: On sub-pages (all pages except Opportunities): Replace the banner by a color  */}
       <Group
         className={`${
           location?.pathname === "/" || location?.pathname === "/opportunities" ? "bg-cover" : "bg-main-6"
@@ -65,7 +67,7 @@ export default function Hero({
             <Group className="grow items-center justify-between gap-xl lg:gap-xl*4">
               <Group className="flex-col flex-1 gap-xl lg:gap-lg">
                 <Group>
-                  <Group className="items-start gap-0 md:gap-lg flex-nowrap">
+                  <Group className="items-center gap-0 md:gap-lg">
                     {!!icons && (
                       <Icons size="lg">
                         {icons?.length > 1
