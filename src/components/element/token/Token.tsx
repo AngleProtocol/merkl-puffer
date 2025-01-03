@@ -13,6 +13,7 @@ export type TokenProps = {
   icon?: boolean;
   size?: IconProps["size"];
   chain?: Chain;
+  showZero: boolean;
 };
 
 export default function Token({
@@ -21,18 +22,19 @@ export default function Token({
   amount,
   format = "amount",
   value,
+  showZero = false,
   icon = true,
   symbol = true,
   chain,
 }: TokenProps) {
-  const amoutFormated = amount ? formatUnits(amount, token.decimals) : undefined;
+  const amoutFormated = amount ? formatUnits(amount, token.decimals) : "0";
   const amountUSD = !amount ? 0 : (token.price ?? 0) * Number.parseFloat(amoutFormated ?? "0");
 
   const display = useMemo(
     () => (
       <>
         {format === "amount" ||
-          (format === "amount_price" && !!amount && (
+          (format === "amount_price" && (!amount || (amount === 0n && showZero)) && (
             <Value
               fallback={v => (v as string).includes("0.000") && "< 0.001"}
               className="text-right items-center flex font-title"
@@ -60,7 +62,7 @@ export default function Token({
           ))}
       </>
     ),
-    [token, format, amoutFormated, amountUSD, amount, symbol, icon, size],
+    [token, format, amoutFormated, amountUSD, amount, symbol, icon, size, showZero],
   );
 
   if (value) return display;

@@ -60,7 +60,9 @@ export default function Header() {
   const navigate = useNavigate();
   const navigateToHomepage = useCallback(() => navigate("/"), [navigate]);
 
-  const media = useMediaQuery({ query: `(min-width: ${SCREEN_BREAKDOWNS.LG}px)` });
+  const media = useMediaQuery({
+    query: `(min-width: ${SCREEN_BREAKDOWNS.LG}px)`,
+  });
 
   const {
     singleChain,
@@ -135,7 +137,7 @@ export default function Header() {
               </Group>
 
               <Group className="flex">
-                <WalletButton select={chainSwitcher}>
+                <WalletButton select={chainSwitcher} hideSpyMode={config.hideSpyMode}>
                   <Button to={`/users/${user}`} size="sm" look="soft">
                     <Icon remix="RiArrowRightLine" /> Check claims
                   </Button>

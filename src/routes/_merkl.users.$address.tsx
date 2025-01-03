@@ -6,8 +6,10 @@ import TransactionButton from "packages/dappkit/src/components/dapp/TransactionB
 import { useWalletContext } from "packages/dappkit/src/context/Wallet.context";
 import { useMemo } from "react";
 import { RewardService } from "src/api/services/reward.service";
+import { TokenService } from "src/api/services/token.service";
 import Hero from "src/components/composite/Hero";
 import AddressEdit from "src/components/element/AddressEdit";
+import Token from "src/components/element/token/Token";
 import useReward from "src/hooks/resources/useReward";
 import useRewards from "src/hooks/resources/useRewards";
 import { v4 as uuidv4 } from "uuid";
@@ -17,8 +19,15 @@ export async function loader({ params: { address } }: LoaderFunctionArgs) {
   if (!address || !isAddress(address)) throw "";
 
   const rewards = await RewardService.getForUser(address, 1);
+  const token = !!config.rewardsTotalClaimableMode
+    ? (
+        await TokenService.getMany({
+          address: config.rewardsTotalClaimableMode,
+        })
+      )?.[0]
+    : null;
 
-  return json({ rewards, address });
+  return json({ rewards, address, token });
 }
 
 export const meta: MetaFunction<typeof loader> = ({ data, error }) => {
@@ -33,7 +42,7 @@ export const meta: MetaFunction<typeof loader> = ({ data, error }) => {
 export type OutletContextRewards = ReturnType<typeof useRewards>;
 
 export default function Index() {
-  const { rewards: raw, address } = useLoaderData<typeof loader>();
+  const { rewards: raw, address, token } = useLoaderData<typeof loader>();
   const rewards = useRewards(raw);
 
   const isSingleChain = config?.chains?.length === 1;
@@ -75,17 +84,25 @@ export default function Index() {
         <Group className="w-full gap-xl md:gap-xl*4 items-center">
           {/* TODO: Make it dynamic */}
           <Group className="flex-col">
-            <Value format="$0,0.0a" size={2} className="text-main-12">
-              {rewards.earned}
-            </Value>
+            {isAddress(config.rewardsTotalClaimableMode ?? "") && !!token ? (
+              <Token size="xl" token={token} amount={rewards.earned} format="amount_price" showZero />
+            ) : (
+              <Value format="$0,0.0a" size={2} className="text-main-12">
+                {rewards.earned}
+              </Value>
+            )}
             <Text size="xl" bold className="not-italic">
               Total earned
             </Text>
           </Group>
           <Group className="flex-col">
-            <Value format="$0,0.0a" size={2} className="text-main-12">
-              {rewards.unclaimed}
-            </Value>
+            {isAddress(config.rewardsTotalClaimableMode ?? "") && !!token ? (
+              <Token size="xl" token={token} amount={rewards.unclaimed} format="amount_price" showZero />
+            ) : (
+              <Value format="$0,0.0a" size={2} className="text-main-12">
+                {rewards.unclaimed}
+              </Value>
+            )}
             <Text size={"xl"} bold className="not-italic">
               Claimable
             </Text>

@@ -33,8 +33,10 @@ export type MerklConfig<T extends Themes> = {
   opportunityLibraryDefaultView?: OpportunityView;
   opportunityCellHideTags?: (keyof TagTypes)[];
   rewardsNavigationMode?: RewardsNavigationMode;
+  rewardsTotalClaimableMode?: string; // Address of the token you want to display the totals of
   opprtunityPercentage: boolean;
   hideLayerMenuHomePage: boolean;
+  hideSpyMode?: boolean;
   modes: Mode[];
   wagmi: Parameters<typeof createWagmiConfig>["0"];
   appName: string;

@@ -49,6 +49,11 @@ export default function Participate({ opportunity, displayOpportunity, displayMo
   //   }
   // }, [mode]);
 
+  const visitUrl = useMemo(() => {
+    if (!!opportunity.depositUrl) return opportunity.depositUrl;
+    if (!!opportunity.protocol?.url) return opportunity.protocol?.url;
+  }, [opportunity]);
+
   const interactor = useMemo(() => {
     if (loading)
       return (
@@ -112,12 +117,7 @@ export default function Participate({ opportunity, displayOpportunity, displayMo
         <Group className="w-full justify-between">
           <Group>
             {opportunity.protocol && (
-              <Button
-                external
-                to={opportunity.protocol?.url}
-                disabled={!opportunity.protocol?.url}
-                size="md"
-                look="base">
+              <Button external to={visitUrl} disabled={!visitUrl} size="md" look="base">
                 Visit {opportunity.protocol.name} for advanced settings
                 <Icon remix="RiArrowRightUpLine" />
               </Button>

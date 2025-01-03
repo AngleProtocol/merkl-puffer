@@ -42,7 +42,6 @@ export type OutletContextProtocol = {
 export default function Index() {
   const { opportunities, count, protocol, liveOpportunityCount, maxApr, dailyRewards } = useLoaderData<typeof loader>();
 
-  console.log({ protocol });
   return (
     <Hero
       icons={[{ src: protocol?.icon }]}
