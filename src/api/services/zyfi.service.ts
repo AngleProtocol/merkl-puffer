@@ -89,12 +89,15 @@ export abstract class ZyfiService {
     return res;
   }
 
-  static async wrapAndPrepareTx({ data, from, to }: ZyfiApi["erc20_sponsored_paymaster/v1"]["payload"]["txData"]) {
+  static async wrapAndPrepareTx({ data, from, to, value}: ZyfiApi["erc20_sponsored_paymaster/v1"]["payload"]["txData"]) {
     const check = await ZyfiService.wrapTx({
       data,
       from,
       to,
+      value
     });
+
+    console.log("check", check)
 
     return {
       account: from,
