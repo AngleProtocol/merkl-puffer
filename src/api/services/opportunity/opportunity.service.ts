@@ -106,7 +106,7 @@ export abstract class OpportunityService {
       sort: url.searchParams.get("sort")?.split("-")[0],
       order: url.searchParams.get("sort")?.split("-")[1],
       name: url.searchParams.get("search") ?? undefined,
-      test: url.searchParams.get("test") ?? undefined,
+      test: config.alwaysShowTestTokens ? true : (url.searchParams.get("test") ?? undefined),
       page: url.searchParams.get("page") ? Math.max(Number(url.searchParams.get("page")) - 1, 0) : undefined,
       ...override,
     };

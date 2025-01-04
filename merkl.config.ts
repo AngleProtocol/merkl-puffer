@@ -124,6 +124,7 @@ export default createConfig({
     spacing: { xs: 2, sm: 4, md: 8, lg: 12, xl: 16 },
     radius: { xs: 3, sm: 6, md: 9, lg: 12, xl: 15 },
   },
+  alwaysShowTestTokens: true,
   images: {
     hero: hero,
   },

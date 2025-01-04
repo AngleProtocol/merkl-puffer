@@ -28,6 +28,7 @@ export type MerklConfig<T extends Themes> = {
   defaultTheme: keyof T;
   deposit?: boolean;
   chains?: Chain[];
+  alwaysShowTestTokens?: boolean;
   walletOptions?: WalletOptions;
   tokenSymbolPriority: string[];
   opportunityNavigationMode?: OpportunityNavigationMode;
