@@ -52,12 +52,13 @@ export default createConfig({
   opportunityCellHideTags: ["token", "action"],
   rewardsNavigationMode: "chain",
   opportunityLibraryDefaultView: "cells",
+  // opportunityLibraryExcludeFilters: ["protocol","action"],
   opprtunityPercentage: true,
   hideLayerMenuHomePage: false,
   supplyCredits: [],
   deposit: true,
   walletOptions: {
-    hideInjectedWallets: ["phantom"],
+    hideInjectedWallets: ["phantom", "coinbase wallet"],
     sponsorTransactions: true,
     client(c) {
       if (c.chain?.id === zksync.id) return c.extend(eip712WalletActions());
@@ -72,6 +73,18 @@ export default createConfig({
   },
   bridge: {
     helperLink: "",
+  },
+  dashboard: {
+    liquidityTab: {
+      enabled: false,
+    },
+  },
+  tagsDetails: {
+    token: {
+      visitOpportunities: {
+        enabled: false,
+      },
+    },
   },
   decimalFormat: {
     dollar: "$0,0.##a",
@@ -155,6 +168,9 @@ export default createConfig({
   header: {
     searchbar: {
       enabled: true,
+    },
+    bridge: {
+      enabled: false,
     },
   },
   socials: {

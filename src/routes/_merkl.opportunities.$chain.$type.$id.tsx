@@ -75,6 +75,11 @@ export default function Index() {
 
   const currentLiveCampaign = opportunity.campaigns?.[0];
 
+  const visitUrl = useMemo(() => {
+    if (!!opportunity.depositUrl) return opportunity.depositUrl;
+    if (!!opportunity.protocol?.url) return opportunity.protocol?.url;
+  }, [opportunity]);
+
   return (
     <>
       <Meta />
@@ -90,16 +95,18 @@ export default function Index() {
         title={
           <Group className="items-center flex-nowrap" size="lg">
             <span className="flex-1">{styleName}</span>
-            {!!opportunity.protocol?.url && (
-              <Button to={opportunity.protocol?.url} external>
+            {!!visitUrl && (
+              <Button to={visitUrl} external>
                 <Icon remix="RiArrowRightUpLine" size="sm" />
               </Button>
             )}
-            <OpportunityParticipateModal opportunity={opportunity}>
-              <Button className="inline-flex" look="hype" size="md">
-                Simple supply
-              </Button>
-            </OpportunityParticipateModal>
+            {!(merklConfig.hideInteractor ?? true) && (
+              <OpportunityParticipateModal opportunity={opportunity}>
+                <Button className="inline-flex" look="hype" size="md">
+                  Supply
+                </Button>
+              </OpportunityParticipateModal>
+            )}
           </Group>
         }
         description={description}

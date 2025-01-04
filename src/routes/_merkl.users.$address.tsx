@@ -12,7 +12,6 @@ import AddressEdit from "src/components/element/AddressEdit";
 import Token from "src/components/element/token/Token";
 import useReward from "src/hooks/resources/useReward";
 import useRewards from "src/hooks/resources/useRewards";
-import { v4 as uuidv4 } from "uuid";
 import { isAddress } from "viem";
 
 export async function loader({ params: { address } }: LoaderFunctionArgs) {
@@ -58,6 +57,45 @@ export default function Index() {
     [isUserRewards, reward],
   );
 
+  // Dynamically filter tabs based on config
+  const tabs = useMemo(() => {
+    const baseTabs = [
+      {
+        label: (
+          <>
+            <Icon size="sm" remix="RiGift2Fill" />
+            Rewards
+          </>
+        ),
+        link: `/users/${address}`,
+        key: crypto.randomUUID(),
+      },
+      {
+        label: (
+          <>
+            <Icon size="sm" remix="RiDropFill" />
+            Liquidity
+          </>
+        ),
+        link: `/users/${address}/liquidity?chainId=${chainId}`,
+        key: "LiquidityUserChain",
+      },
+      {
+        label: (
+          <>
+            <Icon size="sm" remix="RiListCheck3" />
+            Claims
+          </>
+        ),
+        link: `/users/${address}/claims`,
+        key: crypto.randomUUID(),
+      },
+    ];
+
+    // Remove the Liquidity tab if disabled in the config
+    return baseTabs.filter(tab => !(tab.key === "LiquidityUserChain" && !config.dashboard.liquidityTab.enabled));
+  }, [address, chainId]);
+
   return (
     <Hero
       breadcrumbs={[
@@ -92,7 +130,7 @@ export default function Index() {
               </Value>
             )}
             <Text size="xl" bold className="not-italic">
-              Total earned
+              Lifetime Earned
             </Text>
           </Group>
           <Group className="flex-col">
@@ -104,51 +142,20 @@ export default function Index() {
               </Value>
             )}
             <Text size={"xl"} bold className="not-italic">
-              Claimable
+              Total Claimable
             </Text>
           </Group>
           <Group className="flex-col">
             {isAbleToClaim && (
               <TransactionButton disabled={!claimTransaction} look="hype" size="lg" tx={claimTransaction}>
-                {isSingleChain ? "Claim" : `Claim on ${chain?.name}`}
+                {isSingleChain ? "Claim Now" : `Claim on ${chain?.name}`}
               </TransactionButton>
             )}
           </Group>
         </Group>
       }
       description={""}
-      tabs={[
-        {
-          label: (
-            <>
-              <Icon size="sm" remix="RiGift2Fill" />
-              Rewards
-            </>
-          ),
-          link: `/users/${address}`,
-          key: uuidv4(),
-        },
-        {
-          label: (
-            <>
-              <Icon size="sm" remix="RiDropFill" />
-              Liquidity
-            </>
-          ),
-          link: `/users/${address}/liquidity?chainId=${chainId}`,
-          key: crypto.randomUUID(),
-        },
-        {
-          label: (
-            <>
-              <Icon size="sm" remix="RiListCheck3" />
-              Claims
-            </>
-          ),
-          link: `/users/${address}/claims`,
-          key: crypto.randomUUID(),
-        },
-      ]}>
+      tabs={tabs}>
       <Outlet context={rewards} />
     </Hero>
   );

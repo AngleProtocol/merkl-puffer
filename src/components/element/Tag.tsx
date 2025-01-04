@@ -3,6 +3,7 @@ import type { Chain } from "@merkl/api";
 import { useSearchParams } from "@remix-run/react";
 import { Button, Divider, Dropdown, Group, Hash, Icon, PrimitiveTag, Text } from "dappkit";
 import type { Component, PrimitiveTagProps } from "dappkit";
+import merklConfig from "merkl.config";
 import EventBlocker from "packages/dappkit/src/components/primitives/EventBlocker";
 import { useWalletContext } from "packages/dappkit/src/context/Wallet.context";
 import type { Opportunity } from "src/api/services/opportunity/opportunity.model";
@@ -139,28 +140,34 @@ export default function Tag<T extends keyof TagTypes>({ type, filter, value, ...
                     </Hash>
                   </Text>
                 </Group>
-                <Divider look="soft" horizontal />
-                <Group className="flex-col" size="md">
-                  <Button to={`/tokens/${token?.symbol}`} size="xs" look="soft">
-                    <Icon remix="RiArrowRightLine" />
-                    Check opportunities with {token?.symbol}
-                  </Button>
-                  {chains
-                    .find(c => c.id === token.chainId)
-                    ?.explorers?.map(explorer => {
-                      return (
-                        <Button
-                          key={`${explorer.url}`}
-                          to={`${explorer.url}/token/${token.address}`}
-                          external
-                          size="xs"
-                          look="soft">
+                {(chains.find(c => c.id === token.chainId && c.explorers?.length > 0) ||
+                  (merklConfig?.tagsDetails?.token?.visitOpportunities?.enabled ?? false)) && (
+                  <>
+                    <Divider look="soft" horizontal />
+                    <Group className="flex-col" size="md">
+                      {/* Conditionally render the "Check opportunities" link */}
+                      {(merklConfig?.tagsDetails?.token?.visitOpportunities?.enabled ?? false) && (
+                        <Button to={`/tokens/${token?.symbol}`} size="xs" look="soft">
                           <Icon remix="RiArrowRightLine" />
-                          Visit explorer
+                          Check opportunities with {token?.symbol}
                         </Button>
-                      );
-                    })}
-                </Group>
+                      )}
+                      {chains
+                        .find(c => c.id === token.chainId)
+                        ?.explorers?.map(explorer => (
+                          <Button
+                            key={`${explorer.url}`}
+                            to={`${explorer.url}/token/${token.address}`}
+                            external
+                            size="xs"
+                            look="soft">
+                            <Icon remix="RiArrowRightLine" />
+                            Visit explorer
+                          </Button>
+                        ))}
+                    </Group>
+                  </>
+                )}
               </Group>
             }>
             <PrimitiveTag look="base" key={value} {...props}>

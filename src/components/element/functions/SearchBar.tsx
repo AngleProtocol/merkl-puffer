@@ -11,7 +11,6 @@ const titles: { [S in Searchable]: ReactNode } = {
   chain: "Chains",
   opportunity: "Opportunities",
   protocol: "Protocols",
-  token: "Tokens",
 };
 
 function OpportunityResult({ opportunity }: { opportunity: Opportunity }) {
@@ -76,15 +75,6 @@ export default function SearchBar({ icon = false }: SearchBarProps) {
                         );
                       case "opportunity":
                         return <OpportunityResult opportunity={results[i]} />;
-                      case "token":
-                        return (
-                          <>
-                            <Button to={`/tokens/${results[i].symbol}`} look="soft">
-                              <Icon src={results[i].icon} /> {results[i].symbol} <Icon remix="RiArrowRightLine" />
-                            </Button>
-                            <Divider look="soft" />
-                          </>
-                        );
                       case "protocol":
                         return (
                           <>

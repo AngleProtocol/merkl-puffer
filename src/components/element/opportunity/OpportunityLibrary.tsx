@@ -25,13 +25,23 @@ export default function OpportunityLibrary({
   opportunities,
   count,
   only,
-  exclude,
+  exclude = [],
   chains,
   protocols,
   hideFilters,
   forceView,
 }: OpportunityLibrary) {
   const sortable = ["apr", "tvl", "rewards"] as const satisfies typeof opportunityColumns;
+
+  // Merge global and local exclusions
+  const mergedExclusions = useMemo(() => {
+    // Get global exclusions from config
+    const globalExclusions = merklConfig?.opportunityLibraryExcludeFilters || [];
+    // Combine global and local exclusions
+    const combinedExclusions = [...globalExclusions, ...exclude];
+    // Remove duplicates
+    return Array.from(new Set(combinedExclusions));
+  }, [exclude]);
 
   const [sortIdAndOrder, setSortIdAndOrder] = useSearchParamState<[id: (typeof sortable)[number], order: Order]>(
     "sort",
@@ -103,7 +113,10 @@ export default function OpportunityLibrary({
     <Group className="flex-col w-full">
       {!hideFilters && (
         <Box content="sm" className="justify-between w-full overflow-x-scroll">
-          <OpportunityFilters {...{ only, exclude, chains, protocols, view, setView }} />
+          <OpportunityFilters
+            {...{ only, chains, protocols, view, setView }}
+            exclude={mergedExclusions} // Pass merged exclusions
+          />
         </Box>
       )}
       {display}

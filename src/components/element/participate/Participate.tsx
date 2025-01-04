@@ -16,9 +16,16 @@ export type ParticipateProps = {
   displayOpportunity?: boolean;
   displayMode?: boolean | "withdraw" | "deposit";
   displayLinks?: boolean;
+  hideInteractor?: boolean;
 };
 
-export default function Participate({ opportunity, displayOpportunity, displayMode, displayLinks }: ParticipateProps) {
+export default function Participate({
+  opportunity,
+  displayOpportunity,
+  displayMode,
+  displayLinks,
+  hideInteractor,
+}: ParticipateProps) {
   const [tokenAddress, setTokenAddress] = useState();
   const [amount, setAmount] = useState<bigint>();
   const [mode] = useState<"deposit" | "withdraw">(typeof displayMode === "string" ? displayMode : "deposit");
@@ -134,14 +141,14 @@ export default function Participate({ opportunity, displayOpportunity, displayMo
           <Group>
             {opportunity.protocol && (
               <Button external to={visitUrl} disabled={!visitUrl} look="bold">
-                Visit {opportunity.protocol.name} for advanced settings
+                Supply on {opportunity.protocol.name} app
                 <Icon remix="RiArrowRightUpLine" />
               </Button>
             )}
           </Group>
           <Group className="flex-col justify-center">
             <Button to={link} look="soft" size="sm">
-              Pool overview <Icon remix="RiArrowRightLine" />
+              Opportunity overview <Icon remix="RiArrowRightLine" />
             </Button>
           </Group>
         </Group>
@@ -154,7 +161,7 @@ export default function Participate({ opportunity, displayOpportunity, displayMo
           </Text>
         </Group>
       )}
-      {interactor}
+      {!hideInteractor && interactor}
     </>
   );
 }

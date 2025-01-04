@@ -37,6 +37,9 @@ export type MerklConfig<T extends Themes> = {
   rewardsTotalClaimableMode?: string; // Address of the token you want to display the totals of
   opprtunityPercentage: boolean;
   hideLayerMenuHomePage: boolean;
+  hideInteractor?: boolean; // Whether the interactor with a given opportunity must be displayed or not
+  hideBridgePage?: boolean; // Whether the bridge page should be added or not
+  opportunityLibraryExcludeFilters?: string[]; // Which filters to systematically exclude from the OpportunityLibrary
   hideSpyMode?: boolean;
   supplyCredits: {
     id: string;
@@ -58,11 +61,26 @@ export type MerklConfig<T extends Themes> = {
   bridge: {
     helperLink?: string;
   };
+  dashboard: {
+    liquidityTab: {
+      enabled: boolean;
+    };
+  };
+  tagsDetails: {
+    token: {
+      visitOpportunities: {
+        enabled: boolean;
+      };
+    };
+  };
   decimalFormat: {
     dollar: string;
   };
   header: {
     searchbar: {
+      enabled: boolean;
+    };
+    bridge: {
       enabled: boolean;
     };
   };
