@@ -1,17 +1,24 @@
-import { Box, Group, Icons, Text, Title, Value } from "packages/dappkit/src";
+import config from "merkl.config";
+import { Box, Button, Group, Icon, Icons, Text, Title, Value } from "packages/dappkit/src";
+import { useMemo } from "react";
 import type { Opportunity } from "src/api/services/opportunity/opportunity.model";
 import useOpportunity from "src/hooks/resources/useOpportunity";
 import Tag from "../Tag";
 
-export type OpportunityShortCardProps = { opportunity: Opportunity };
+export type OpportunityShortCardProps = { opportunity: Opportunity; displayLinks?: boolean };
 
-export default function OpportunityShortCard({ opportunity }: OpportunityShortCardProps) {
+export default function OpportunityShortCard({ opportunity, displayLinks }: OpportunityShortCardProps) {
   const { icons, rewardIcons, tags } = useOpportunity(opportunity);
+
+  const visitUrl = useMemo(() => {
+    if (!!opportunity.depositUrl) return opportunity.depositUrl;
+    if (!!opportunity.protocol?.url) return opportunity.protocol?.url;
+  }, [opportunity]);
 
   return (
     <Box look="soft" size="lg" className="rounded-sm bg-main-0 border-main-6 border-1">
       <Group className="items-center">
-        <Value size={3} className="text-main-11" format={"$0,0.#a"}>
+        <Value size={3} className="text-main-11" format={config.decimalFormat.dollar}>
           {opportunity.dailyRewards}
         </Value>
         <Title h={4}>
@@ -44,6 +51,16 @@ export default function OpportunityShortCard({ opportunity }: OpportunityShortCa
           {opportunity.name}
         </Text>
       </Group>
+      {displayLinks && (
+        <Group className="p-md">
+          {visitUrl && (
+            <Button external to={visitUrl} disabled={!visitUrl} look="bold">
+              Supply on {opportunity.protocol?.name ? opportunity.protocol.name : "the protocol"} app
+              <Icon remix="RiArrowRightUpLine" />
+            </Button>
+          )}
+        </Group>
+      )}
     </Box>
   );
 }

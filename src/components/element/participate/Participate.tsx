@@ -100,7 +100,7 @@ export default function Participate({
                           size="sm"
                           look="bold"
                           format="0,0.###a">
-                          {Fmt.toNumber(inputToken?.balance, inputToken.decimals).toString()}
+                          {Fmt.toNumber(inputToken?.balance, inputToken.decimals)}
                         </Value>{" "}
                         {inputToken?.symbol}
                       </PrimitiveTag>
@@ -134,18 +134,10 @@ export default function Participate({
 
   return (
     <>
-      {displayOpportunity && <OpportunityShortCard opportunity={opportunity} />}
+      {displayOpportunity && <OpportunityShortCard opportunity={opportunity} displayLinks={displayLinks} />}
 
       {displayLinks && (
-        <Group className="w-full justify-between">
-          <Group>
-            {visitUrl && (
-              <Button external to={visitUrl} disabled={!visitUrl} look="bold">
-                Supply on {opportunity.protocol?.name ? opportunity.protocol.name : "the protocol"} app
-                <Icon remix="RiArrowRightUpLine" />
-              </Button>
-            )}
-          </Group>
+        <Group className="w-full p-md justify-between">
           <Group className="flex-col justify-center">
             <Button to={link} look="soft" size="sm">
               Opportunity overview <Icon remix="RiArrowRightLine" />

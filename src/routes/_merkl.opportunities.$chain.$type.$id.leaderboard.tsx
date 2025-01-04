@@ -26,8 +26,9 @@ export async function loader({ params: { id, type, chain: chainId }, request }: 
   if (!chainId || !id || !type) throw "";
 
   const chain = await ChainService.get({ name: chainId });
+  const campaignId = new URL(request.url).searchParams.get("campaignId");
 
-  const campaigns = await CampaignService.getByParams({
+  const campaigns = await CampaignService.getByOpportunity(request, {
     chainId: chain.id,
     type: type as Campaign["type"],
     mainParameter: id,
@@ -35,7 +36,7 @@ export async function loader({ params: { id, type, chain: chainId }, request }: 
 
   const { rewards, count, total } = await RewardService.getManyFromRequest(request, {
     chainId: chain.id,
-    campaignId: campaigns?.[0]?.campaignId,
+    campaignId: campaignId ?? campaigns?.[0]?.campaignId,
   });
 
   return json({
@@ -58,7 +59,7 @@ export default function Index() {
   );
 
   const selectedCampaign = useMemo(
-    () => campaigns?.find(campaign => campaign?.campaignId === campaignId),
+    () => campaigns?.find(campaign => campaign?.campaignId === campaignId) ?? campaigns?.[0],
     [campaigns, campaignId],
   );
 

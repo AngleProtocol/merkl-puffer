@@ -56,8 +56,10 @@ export abstract class CampaignService {
     return data;
   }
 
-  static async getByParams(query: Parameters<typeof api.v4.campaigns.index.get>[0]["query"]) {
-    return await CampaignService.#fetch(async () => api.v4.campaigns.index.get({ query }));
+  static async getByOpportunity(request: Request, query: Parameters<typeof api.v4.campaigns.index.get>[0]["query"]) {
+    return await CampaignService.#fetch(async () =>
+      api.v4.campaigns.index.get({ query: CampaignService.#getQueryFromRequest(request, query) }),
+    );
   }
 
   // ------ Fetch a campaign by ID
