@@ -43,12 +43,10 @@ export default function Header() {
 
   // Dynamically filter routes based on the config
   const routes = useMemo(() => {
-    const { home, bridge, ...rest } = config.routes;
+    const { home, opportunities, protocols, bridge, ...rest } = config.routes;
 
     return Object.assign(
       { home },
-      // Include bridge route only if enabled in config
-      config.header.bridge.enabled ? { bridge } : {},
       {
         dashboard: {
           icon: "RiDashboardFill",
@@ -56,6 +54,10 @@ export default function Header() {
           key: uuidv4(),
         },
       },
+      config.header.opportunities.enabled ? { opportunities } : {},
+      { protocols },
+      // Include bridge route only if enabled in config
+      config.header.bridge.enabled ? { bridge } : {},
       rest,
     );
   }, [user]);

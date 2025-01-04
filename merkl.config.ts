@@ -133,6 +133,11 @@ export default createConfig({
       route: "/",
       key: uuidv4(),
     },
+    opportunities: {
+      icon: "RiPlanetFill",
+      route: "/opportunities",
+      key: uuidv4(),
+    },
     protocols: {
       icon: "RiVipCrown2Fill",
       route: "/protocols",
@@ -168,6 +173,9 @@ export default createConfig({
   header: {
     searchbar: {
       enabled: true,
+    },
+    opportunities: {
+      enabled: false,
     },
     bridge: {
       enabled: false,
