@@ -133,6 +133,20 @@ export default function Index() {
               Lifetime Earned
             </Text>
           </Group>
+
+          <Group className="flex-col">
+            {isAddress(config.rewardsTotalClaimableMode ?? "") && !!token ? (
+              <Token size="xl" token={token} amount={BigInt(rewards.pending)} format="amount_price" showZero />
+            ) : (
+              <Value format={config.decimalFormat.dollar} size={2} className="text-main-12">
+                {rewards.pending}
+              </Value>
+            )}
+            <Text size="xl" bold className="not-italic">
+              Pending Rewards
+            </Text>
+          </Group>
+
           <Group className="flex-col">
             {isAddress(config.rewardsTotalClaimableMode ?? "") && !!token ? (
               <Token size="xl" token={token} amount={BigInt(rewards.unclaimed)} format="amount_price" showZero />
