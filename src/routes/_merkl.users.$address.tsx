@@ -14,10 +14,10 @@ import useReward from "src/hooks/resources/useReward";
 import useRewards from "src/hooks/resources/useRewards";
 import { isAddress } from "viem";
 
-export async function loader({ params: { address } }: LoaderFunctionArgs) {
+export async function loader({ params: { address }, request }: LoaderFunctionArgs) {
   if (!address || !isAddress(address)) throw "";
 
-  const rewards = await RewardService.getForUser(address, 1);
+  const rewards = await RewardService.getForUser(request, address, 1);
   const token = !!config.rewardsTotalClaimableMode
     ? (
         await TokenService.getMany({

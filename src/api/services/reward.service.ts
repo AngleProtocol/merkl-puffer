@@ -44,12 +44,13 @@ export abstract class RewardService {
     return query;
   }
 
-  static async getForUser(address: string, chainId: number) {
+  static async getForUser(request: Request, address: string, chainId: number) {
     const url = new URL(request.url);
     const chainIds = config.chains?.map(({ id }) => id).join(",");
-    const query: Record<string, string> = { chainId: chainId.toString(),
+    const query: Record<string, any> = {
+      chainId: chainId.toString(),
       test: config.alwaysShowTestTokens ? true : (url.searchParams.get("test") ?? undefined),
-     };
+    };
     if (chainIds) query.chainIds = chainIds;
     return await RewardService.#fetch(async () =>
       api.v4.users({ address }).rewards.breakdowns.get({
