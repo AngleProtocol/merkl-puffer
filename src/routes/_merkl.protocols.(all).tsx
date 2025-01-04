@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from "uuid";
 import { Outlet, json, useLoaderData } from "@remix-run/react";
 
 export const meta: MetaFunction = () => {
-  return [{ title: "Protocols on Merkl" }];
+  return [{ title: "Merkl | Protocols" }];
 };
 
 export async function loader({ request }: LoaderFunctionArgs) {

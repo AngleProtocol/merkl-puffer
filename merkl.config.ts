@@ -178,7 +178,7 @@ export default createConfig({
       enabled: false,
     },
     bridge: {
-      enabled: false,
+      enabled: true,
     },
   },
   socials: {

@@ -139,9 +139,9 @@ export default function Participate({
       {displayLinks && (
         <Group className="w-full justify-between">
           <Group>
-            {opportunity.protocol && (
+            {visitUrl && (
               <Button external to={visitUrl} disabled={!visitUrl} look="bold">
-                Supply on {opportunity.protocol.name} app
+                Supply on {opportunity.protocol?.name ? opportunity.protocol.name : "the protocol"} app
                 <Icon remix="RiArrowRightUpLine" />
               </Button>
             )}

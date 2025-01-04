@@ -96,7 +96,8 @@ export default function Index() {
           <Group className="items-center flex-nowrap" size="lg">
             <span className="flex-1">{styleName}</span>
             {!!visitUrl && (
-              <Button to={visitUrl} external>
+              <Button to={visitUrl} external className="inline-flex" look="hype" size="md">
+                Supply
                 <Icon remix="RiArrowRightUpLine" size="sm" />
               </Button>
             )}
