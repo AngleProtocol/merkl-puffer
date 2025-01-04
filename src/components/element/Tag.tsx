@@ -1,10 +1,9 @@
 import type { Token } from "@merkl/api";
 import type { Chain } from "@merkl/api";
 import { useSearchParams } from "@remix-run/react";
-import { Button, Divider, Dropdown, Group, Hash, Icon, PrimitiveTag, Text } from "dappkit";
+import { Button, Divider, Dropdown, EventBlocker, Group, Hash, Icon, PrimitiveTag, Text } from "dappkit";
 import type { Component, PrimitiveTagProps } from "dappkit";
 import merklConfig from "merkl.config";
-import EventBlocker from "packages/dappkit/src/components/primitives/EventBlocker";
 import { useWalletContext } from "packages/dappkit/src/context/Wallet.context";
 import type { Opportunity } from "src/api/services/opportunity/opportunity.model";
 import { actions } from "src/config/actions";
@@ -182,53 +181,55 @@ export default function Tag<T extends keyof TagTypes>({ type, filter, value, ...
       const token = value as TagTypes["tokenChain"];
       if (!token) return <Button {...props}>{value}</Button>;
       return (
-        <Dropdown
-          size="lg"
-          padding="xs"
-          content={
-            <Group className="flex-col">
-              <Group size="xs" className="flex-col">
-                <Group className="justify-between" size="xl">
-                  <Text size="xs">Token</Text>
-                  <Hash format="short" size="xs" copy>
-                    {token.address}
-                  </Hash>
+        <EventBlocker>
+          <Dropdown
+            size="lg"
+            padding="xs"
+            content={
+              <Group className="flex-col">
+                <Group size="xs" className="flex-col">
+                  <Group className="justify-between" size="xl">
+                    <Text size="xs">Token</Text>
+                    <Hash format="short" size="xs" copy>
+                      {token.address}
+                    </Hash>
+                  </Group>
+                  <Group size="sm">
+                    <Icon size={props?.size} src={token.icon} />
+                    <Text size="sm" className="text-main-12" bold>
+                      {token?.name}
+                    </Text>
+                  </Group>
                 </Group>
-                <Group size="sm">
-                  <Icon size={props?.size} src={token.icon} />
-                  <Text size="sm" className="text-main-12" bold>
-                    {token?.name}
-                  </Text>
+                <Divider look="soft" horizontal />
+                <Group className="flex-col" size="md">
+                  <Button to={`/chains/${token.chain?.name}`} size="xs" look="soft">
+                    <Icon remix="RiArrowRightLine" /> Check opportunities on {token.chain?.name}
+                  </Button>
+                  {chains
+                    .find(c => c.id === token.chainId)
+                    ?.explorers?.map(explorer => {
+                      return (
+                        <Button
+                          key={`${explorer.url}`}
+                          to={`${explorer.url}/token/${token.address}`}
+                          external
+                          size="xs"
+                          look="soft">
+                          <Icon remix="RiArrowRightLine" />
+                          Visit explorer
+                        </Button>
+                      );
+                    })}
                 </Group>
               </Group>
-              <Divider look="soft" horizontal />
-              <Group className="flex-col" size="md">
-                <Button to={`/chains/${token.chain?.name}`} size="xs" look="soft">
-                  <Icon remix="RiArrowRightLine" /> Check opportunities on {token.chain?.name}
-                </Button>
-                {chains
-                  .find(c => c.id === token.chainId)
-                  ?.explorers?.map(explorer => {
-                    return (
-                      <Button
-                        key={`${explorer.url}`}
-                        to={`${explorer.url}/token/${token.address}`}
-                        external
-                        size="xs"
-                        look="soft">
-                        <Icon remix="RiArrowRightLine" />
-                        Visit explorer
-                      </Button>
-                    );
-                  })}
-              </Group>
-            </Group>
-          }>
-          <PrimitiveTag look="base" key={value} {...props}>
-            <Icon size={props?.size} src={token.chain.icon} />
-            {token.chain.name}
-          </PrimitiveTag>
-        </Dropdown>
+            }>
+            <PrimitiveTag look="base" key={value} {...props}>
+              <Icon size={props?.size} src={token.chain.icon} />
+              {token.chain.name}
+            </PrimitiveTag>
+          </Dropdown>
+        </EventBlocker>
       );
     }
     case "protocol": {
@@ -236,38 +237,40 @@ export default function Tag<T extends keyof TagTypes>({ type, filter, value, ...
 
       if (!protocol) return <Button {...props}>{value}</Button>;
       return (
-        <Dropdown
-          size="lg"
-          padding="xs"
-          content={
-            <Group className="flex-col">
-              <Group size="sm">
-                <Icon size={props?.size} src={protocol?.icon} />
-                <Text size="sm" className="text-main-12" bold>
-                  {value?.name}
-                </Text>
-              </Group>
-              <Divider className="border-main-6" horizontal />
-              {/* <Text size="xs">{token?.description}</Text> */}
-              <Group className="flex-col" size="md">
-                <Button to={`/protocols/${protocol?.id}`} size="xs" look="soft">
-                  <Icon remix="RiArrowRightLine" />
-                  Check opportunities on {protocol?.name}
-                </Button>
-                {protocol.url && (
-                  <Button external to={protocol.url} size="xs" look="soft">
+        <EventBlocker>
+          <Dropdown
+            size="lg"
+            padding="xs"
+            content={
+              <Group className="flex-col">
+                <Group size="sm">
+                  <Icon size={props?.size} src={protocol?.icon} />
+                  <Text size="sm" className="text-main-12" bold>
+                    {value?.name}
+                  </Text>
+                </Group>
+                <Divider className="border-main-6" horizontal />
+                {/* <Text size="xs">{token?.description}</Text> */}
+                <Group className="flex-col" size="md">
+                  <Button to={`/protocols/${protocol?.id}`} size="xs" look="soft">
                     <Icon remix="RiArrowRightLine" />
-                    Visit {protocol?.name}
+                    Check opportunities on {protocol?.name}
                   </Button>
-                )}
+                  {protocol.url && (
+                    <Button external to={protocol.url} size="xs" look="soft">
+                      <Icon remix="RiArrowRightLine" />
+                      Visit {protocol?.name}
+                    </Button>
+                  )}
+                </Group>
               </Group>
-            </Group>
-          }>
-          <PrimitiveTag look="bold" key={value} {...props}>
-            <Icon src={protocol?.icon} />
-            {value?.name}
-          </PrimitiveTag>
-        </Dropdown>
+            }>
+            <PrimitiveTag look="base" key={value} {...props}>
+              <Icon src={protocol?.icon} />
+              {value?.name}
+            </PrimitiveTag>
+          </Dropdown>
+        </EventBlocker>
       );
     }
     default:

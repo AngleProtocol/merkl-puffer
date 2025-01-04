@@ -46,7 +46,7 @@ export type OutletContextOpportunity = {
 
 export default function Index() {
   const { rawOpportunity, chain } = useLoaderData<typeof loader>();
-  const { tags, description, link, herosData, opportunity } = useOpportunity(rawOpportunity);
+  const { tags, description, link, herosData, opportunity, iconTokens } = useOpportunity(rawOpportunity);
 
   const styleName = useMemo(() => {
     const spaced = opportunity.name.split(" ");
@@ -84,7 +84,7 @@ export default function Index() {
     <>
       <Meta />
       <Hero
-        icons={opportunity.tokens.map(t => ({ src: t.icon }))}
+        icons={iconTokens.map(t => ({ src: t.icon }))}
         breadcrumbs={[
           { link: merklConfig.routes.opportunities?.route ?? "/", name: "Opportunities" },
           {
@@ -107,6 +107,21 @@ export default function Index() {
                   Supply
                 </Button>
               </OpportunityParticipateModal>
+            )}
+            {(merklConfig.showCopyOpportunityIdToClipboard ?? false) && (
+              <Button
+                className="inline-flex"
+                look="hype"
+                size="md"
+                onClick={async () => {
+                  try {
+                    await navigator.clipboard.writeText(opportunity.id);
+                  } catch (err) {
+                    console.error("Failed to copy text: ", err);
+                  }
+                }}>
+                <Icon remix="RiClipboardLine" size="sm" />
+              </Button>
             )}
           </Group>
         }

@@ -37,9 +37,17 @@ export default function useOpportunity(opportunity: Opportunity) {
     [opportunity],
   );
 
+  const iconTokens = useMemo(() => {
+    // If there is more than 1 icons, remove undefined ones
+    let tokens = opportunity.tokens;
+    if (tokens.length > 1) tokens = tokens.filter(token => !!token.icon);
+    if (tokens.length < 1) tokens = opportunity.tokens;
+    return tokens;
+  }, [opportunity]);
+
   const icons = useMemo(
-    () => opportunity.tokens.map(({ icon, address }) => <Icon key={address} rounded src={icon} />),
-    [opportunity],
+    () => iconTokens.map(({ icon, address }) => <Icon key={address} rounded src={icon} />),
+    [iconTokens],
   );
 
   const rewardIcons = useMemo(
@@ -132,6 +140,7 @@ export default function useOpportunity(opportunity: Opportunity) {
   return {
     link,
     icons,
+    iconTokens,
     rewardIcons,
     description,
     rewardsBreakdown,
