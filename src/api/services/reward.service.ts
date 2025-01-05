@@ -1,4 +1,5 @@
 import config from "merkl.config";
+import { DEFAULT_ITEMS_PER_PAGE } from "src/constants/pagination";
 import { api } from "../index.server";
 import { fetchWithLogs } from "../utils";
 
@@ -29,7 +30,7 @@ export abstract class RewardService {
     const filters = Object.assign(
       {
         campaignId,
-        items: items ?? 50,
+        items: items ?? DEFAULT_ITEMS_PER_PAGE,
         page,
       },
       override ?? {},

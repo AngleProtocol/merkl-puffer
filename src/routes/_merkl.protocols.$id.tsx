@@ -20,7 +20,7 @@ export async function loader({ params: { id }, request }: LoaderFunctionArgs) {
     order: "desc",
   });
 
-  const { sum } = await OpportunityService.getAggregate({ id }, "dailyRewards");
+  const { sum } = await OpportunityService.getAggregate({ mainProtocolId: id }, "dailyRewards");
 
   return json({
     opportunities,

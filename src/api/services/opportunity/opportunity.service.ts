@@ -1,5 +1,6 @@
 import type { Opportunity } from "@merkl/api";
 import config from "merkl.config";
+import { DEFAULT_ITEMS_PER_PAGE } from "src/constants/pagination";
 import { api } from "../../index.server";
 import { fetchWithLogs } from "../../utils";
 
@@ -102,7 +103,7 @@ export abstract class OpportunityService {
       action: url.searchParams.get("action") ?? undefined,
       chainId: url.searchParams.get("chain") ?? undefined,
       minimumTvl: url.searchParams.get("tvl") ?? undefined,
-      items: url.searchParams.get("items") ? Number(url.searchParams.get("items")) : 50,
+      items: url.searchParams.get("items") ? Number(url.searchParams.get("items")) : DEFAULT_ITEMS_PER_PAGE,
       sort: url.searchParams.get("sort")?.split("-")[0],
       order: url.searchParams.get("sort")?.split("-")[1],
       name: url.searchParams.get("search") ?? undefined,

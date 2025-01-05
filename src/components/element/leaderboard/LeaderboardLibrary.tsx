@@ -4,7 +4,7 @@ import { Group, Text, Title } from "dappkit";
 import { useMemo } from "react";
 import type { RewardService } from "src/api/services/reward.service";
 import { v4 as uuidv4 } from "uuid";
-import OpportunityPagination from "../opportunity/OpportunityPagination";
+import Pagination from "../opportunity/Pagination";
 import { LeaderboardTable } from "./LeaderboardTable";
 import LeaderboardTableRow from "./LeaderboardTableRow";
 
@@ -44,7 +44,7 @@ export default function LeaderboardLibrary(props: IProps) {
               Leaderboard
             </Title>
           }
-          footer={count !== undefined && <OpportunityPagination count={count} />}>
+          footer={count !== undefined && <Pagination count={count} />}>
           {rows}
         </LeaderboardTable>
       ) : (

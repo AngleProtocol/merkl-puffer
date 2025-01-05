@@ -7,9 +7,8 @@ import type { OpportunityView } from "src/config/opportunity";
 import useSearchParamState from "src/hooks/filtering/useSearchParamState";
 import OpportunityCell from "./OpportunityCell";
 import OpportunityFilters, { type OpportunityFilterProps } from "./OpportunityFilters";
-import OpportunityPagination from "./OpportunityPagination";
-import { OpportunityTable, type opportunityColumns } from "./OpportunityTable";
 import OpportunityTableRow from "./OpportunityTableRow";
+import Pagination from "./Pagination";
 
 export type Displays = "grid" | "list";
 
@@ -75,7 +74,7 @@ export default function OpportunityLibrary({
             order={(sortIdAndOrder ?? [])?.[1]}
             sort={(sortIdAndOrder ?? [])?.[0] ?? "rewards"}
             onSort={onSort}
-            footer={count !== undefined && <OpportunityPagination count={count} />}>
+            footer={count !== undefined && <Pagination count={count} />}>
             {opportunities?.map(o => (
               <OpportunityTableRow
                 hideTags={merklConfig.opportunityCellHideTags}
@@ -101,7 +100,7 @@ export default function OpportunityLibrary({
             </Group>
             {count !== undefined && (
               <Box content="sm" className="w-full">
-                <OpportunityPagination count={count} />
+                <Pagination count={count} />
               </Box>
             )}
           </Group>
