@@ -119,7 +119,7 @@ export default function Hero({
         </Container>
       </Group>
 
-      {tabs?.length > 0 && <Tabs tabs={tabs} look="base" size="lg" />}
+      {!!tabs?.length && <Tabs tabs={tabs} look="base" size="lg" />}
 
       <div>{children}</div>
     </>

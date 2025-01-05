@@ -33,7 +33,7 @@ export default function ProtocolFilters(_props: OpportunityFilterProps) {
         name="search"
         size="lg"
         value={innerSearch}
-        state={[innerSearch, setInnerSearch]}
+        state={[innerSearch, v => setInnerSearch(v ?? "")]}
         suffix={<Icon size="sm" remix="RiSearchLine" />}
         onClick={onSearchSubmit}
         placeholder="Search a protocol"

@@ -3,6 +3,7 @@ import { type LoaderFunctionArgs, type MetaFunction, json } from "@remix-run/nod
 import { Meta, Outlet, useLoaderData } from "@remix-run/react";
 import { Button, Group, Icon } from "dappkit";
 import merklConfig from "merkl.config";
+import useClipboard from "packages/dappkit/src/hooks/useClipboard";
 import { useMemo } from "react";
 import { Cache } from "src/api/services/cache.service";
 import { ChainService } from "src/api/services/chain.service";
@@ -47,6 +48,8 @@ export type OutletContextOpportunity = {
 export default function Index() {
   const { rawOpportunity, chain } = useLoaderData<typeof loader>();
   const { tags, description, link, herosData, opportunity, iconTokens } = useOpportunity(rawOpportunity);
+
+  const { copy: copyCall, isCopied } = useClipboard();
 
   const styleName = useMemo(() => {
     const spaced = opportunity.name.split(" ");
@@ -109,18 +112,8 @@ export default function Index() {
               </OpportunityParticipateModal>
             )}
             {(merklConfig.showCopyOpportunityIdToClipboard ?? false) && (
-              <Button
-                className="inline-flex"
-                look="hype"
-                size="md"
-                onClick={async () => {
-                  try {
-                    await navigator.clipboard.writeText(opportunity.id);
-                  } catch (err) {
-                    console.error("Failed to copy text: ", err);
-                  }
-                }}>
-                <Icon remix="RiClipboardLine" size="sm" />
+              <Button className="inline-flex" look="hype" size="md" onClick={async () => copyCall(opportunity.id)}>
+                <Icon remix={isCopied ? "RiCheckboxCircleFill" : "RiFileCopyFill"} size="sm" />
               </Button>
             )}
           </Group>

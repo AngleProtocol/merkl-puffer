@@ -1,5 +1,5 @@
-import type { LoaderFunctionArgs } from "@remix-run/node";
-import { json, useLoaderData } from "@remix-run/react";
+import { type LoaderFunctionArgs, json } from "@remix-run/node";
+import { useLoaderData } from "@remix-run/react";
 import { Container, Space } from "packages/dappkit/src";
 import { Cache } from "src/api/services/cache.service";
 import { ProtocolService } from "src/api/services/protocol.service";

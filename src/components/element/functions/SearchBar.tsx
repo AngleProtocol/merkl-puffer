@@ -99,7 +99,6 @@ export default function SearchBar({ icon = false }: SearchBarProps) {
 
   return (
     <Modal
-      size="xl"
       className="h-full p-xl*2 w-[95vw] md:w-[70vw] lg:w-[50vw] xl:w-[40vw] z-20 [&>*]:max-h-full [&>*]:animate-drop [&>*]:origin-top"
       state={[opened, setOpened]}
       modal={

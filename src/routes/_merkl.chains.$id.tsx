@@ -39,7 +39,7 @@ export default function Index() {
       navigation={{ label: "Back to opportunities", link: "/" }}
       title={chain.name}
       description={`Earn rewards by supplying liquidity on ${chain.name}`}
-      sideDatas={defaultHeroSideDatas(count, maxApr, dailyRewards)}>
+      sideDatas={defaultHeroSideDatas(count, maxApr, Number.parseFloat(dailyRewards))}>
       <Outlet />
     </Hero>
   );

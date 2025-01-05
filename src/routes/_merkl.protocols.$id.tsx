@@ -54,7 +54,7 @@ export default function Index() {
         (protocol?.description !== "" && protocol?.description) ||
         `Earn rewards by supplying liquidity on ${protocol?.name}`
       }
-      sideDatas={defaultHeroSideDatas(liveOpportunityCount, maxApr, dailyRewards)}>
+      sideDatas={defaultHeroSideDatas(liveOpportunityCount, maxApr, Number.parseFloat(dailyRewards))}>
       <Outlet context={{ opportunities, count }} />
     </Hero>
   );

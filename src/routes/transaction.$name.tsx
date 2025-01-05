@@ -3,14 +3,6 @@ import { api } from "src/api/index.server";
 import { ZyfiService } from "src/api/services/zyfi.service";
 import { encodeFunctionData, parseAbi } from "viem";
 
-BigInt.prototype.toJSON = function () {
-  return this.toString();
-};
-
-BigInt.prototype.toJSON = function () {
-  return this.toString();
-};
-
 export const action = async ({ params: { name }, request }: ActionFunctionArgs) => {
   const payload = await request.json();
 
@@ -48,10 +40,10 @@ export const action = async ({ params: { name }, request }: ActionFunctionArgs) 
         }
 
         return json(tx);
-      } catch (_err) {
-        console.log(_err);
+      } catch (err) {
+        console.error(err);
 
-        return new Response(_err, { status: 500 });
+        return new Response("Failed to prepare transaction", { status: 500 });
       }
     }
   }

@@ -7,6 +7,7 @@ import type { OpportunityView } from "src/config/opportunity";
 import useSearchParamState from "src/hooks/filtering/useSearchParamState";
 import OpportunityCell from "./OpportunityCell";
 import OpportunityFilters, { type OpportunityFilterProps } from "./OpportunityFilters";
+import { OpportunityTable, type opportunityColumns } from "./OpportunityTable";
 import OpportunityTableRow from "./OpportunityTableRow";
 import Pagination from "./Pagination";
 

@@ -4,6 +4,7 @@ import { useMemo } from "react";
 import Pagination from "../opportunity/Pagination";
 import ProtocolCell from "./ProtocolCell";
 import ProtocolFilters from "./ProtocolFilters";
+
 export type ProtocolLibraryProps = {
   protocols: Protocol[];
   count: number;

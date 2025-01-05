@@ -76,7 +76,7 @@ export default function Index() {
         </>
       }
       description={`Earn rewards by using ${token.symbol} as liquidity, or directly earn ${token.symbol} as rewards`}
-      sideDatas={defaultHeroSideDatas(count, maxApr, dailyRewards)}
+      sideDatas={defaultHeroSideDatas(count, maxApr, Number.parseFloat(dailyRewards))}
       // tags={tags.map(tag => <Tag key={`${tag.type}_${tag.value?.address ?? tag.value}`} {...tag} size="lg" />)}
     >
       <Outlet />

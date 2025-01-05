@@ -9,7 +9,7 @@ import useChains from "src/hooks/resources/useChains";
 import useProtocols from "src/hooks/resources/useProtocols";
 
 const filters = ["search", "action", "status", "chain", "protocol", "tvl"] as const;
-type OpportunityFilter = (typeof filters)[number];
+export type OpportunityFilter = (typeof filters)[number];
 
 export type OpportunityFilterProps = {
   only?: OpportunityFilter[];
@@ -216,7 +216,7 @@ export default function OpportunityFilters({
               name="search"
               value={innerSearch}
               className="min-w-[12ch]"
-              state={[innerSearch, v => setInnerSearch(v)]}
+              state={[innerSearch, v => setInnerSearch(v ?? "")]}
               suffix={<Icon remix="RiSearchLine" />}
               onClick={onSearchSubmit}
               size="sm"
@@ -269,7 +269,7 @@ export default function OpportunityFilters({
         {fields.includes("tvl") && (
           <Form>
             <Input
-              state={[tvlInput, n => (/^\d+$/.test(n) || !n) && setTvlInput(n)]}
+              state={[tvlInput, n => (/^\d+$/.test(n ?? "") || !n) && setTvlInput(n ?? "")]}
               look="base"
               name="tvl"
               value={tvlInput}

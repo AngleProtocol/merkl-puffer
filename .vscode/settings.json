@@ -13,5 +13,8 @@
   "editor.foldingImportsByDefault": true,
   "editor.foldingHighlight": true,
   "editor.foldingStrategy": "auto",
-  "files.eol": "\n"
+  "files.eol": "\n",
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  }
 }

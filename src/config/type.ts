@@ -2,6 +2,7 @@ import type * as RemixIcon from "@remixicon/react";
 import type { Mode, Themes, sizeScale } from "dappkit";
 import type { WalletOptions } from "packages/dappkit/src/hooks/useWalletState";
 import type { TagTypes } from "src/components/element/Tag";
+import type { OpportunityFilter } from "src/components/element/opportunity/OpportunityFilters";
 import type { Chain } from "viem";
 import { createConfig as createWagmiConfig } from "wagmi";
 import type { OpportunityNavigationMode, OpportunityView } from "./opportunity";
@@ -41,7 +42,7 @@ export type MerklConfig<T extends Themes> = {
   hideLayerMenuHomePage: boolean;
   hideInteractor?: boolean; // Whether the interactor with a given opportunity must be displayed or not
   hideBridgePage?: boolean; // Whether the bridge page should be added or not
-  opportunityLibraryExcludeFilters?: string[]; // Which filters to systematically exclude from the OpportunityLibrary
+  opportunityLibraryExcludeFilters?: OpportunityFilter[]; // Which filters to systematically exclude from the OpportunityLibrary
   hideSpyMode?: boolean;
   supplyCredits: {
     id: string;
