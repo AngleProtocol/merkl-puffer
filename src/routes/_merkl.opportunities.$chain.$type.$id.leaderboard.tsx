@@ -1,5 +1,5 @@
 import type { Campaign } from "@merkl/api";
-import type { LoaderFunctionArgs } from "@remix-run/node";
+import { type LoaderFunctionArgs, json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { Box, Container, Group, Icon, OverrideTheme, PrimitiveTag, Select, Space, Title, Value } from "dappkit";
 import config from "merkl.config";

@@ -33,7 +33,8 @@ export default function useOpportunity(opportunity: Opportunity) {
   }, [opportunity]);
 
   const link = useMemo(
-    () => `/opportunities/${opportunity.chain?.name?.toLowerCase?.()}/${opportunity.type}/${opportunity.identifier}`,
+    () =>
+      `/opportunities/${opportunity.chain?.name?.toLowerCase?.().replace(" ", "-")}/${opportunity.type}/${opportunity.identifier}`,
     [opportunity],
   );
 

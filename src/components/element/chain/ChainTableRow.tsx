@@ -14,7 +14,7 @@ export type ChainTableRowProps = {
 
 export default function ChainTableRow({ hideTags, chain, className, ...props }: ChainTableRowProps) {
   return (
-    <Link to={`/chains/${chain.name}`}>
+    <Link to={`/chains/${chain.name.replace(" ", "-").toLowerCase()}`}>
       <ChainRow
         size="lg"
         content="sm"

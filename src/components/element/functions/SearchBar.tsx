@@ -66,7 +66,10 @@ export default function SearchBar({ icon = false }: SearchBarProps) {
                       case "chain":
                         return (
                           <>
-                            <Button to={`/chains/${results[i].name}`} look="soft" className="gap-lg">
+                            <Button
+                              to={`/chains/${results[i].name.replace(" ", "-").toLowerCase()}`}
+                              look="soft"
+                              className="gap-lg">
                               <Icon src={results[i].icon} /> {results[i].name}
                               <Icon remix="RiArrowRightLine" />
                             </Button>

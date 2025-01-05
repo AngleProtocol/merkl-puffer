@@ -50,7 +50,7 @@ export abstract class RewardService {
     const chainIds = config.chains?.map(({ id }) => id).join(",");
     const query: Record<string, any> = {
       chainId: chainId.toString(),
-      test: config.alwaysShowTestTokens ? true : (url.searchParams.get("test") ?? undefined),
+      test: config.alwaysShowTestTokens ? true : (url.searchParams.get("test") ?? false),
     };
     if (chainIds) query.chainIds = chainIds;
     return await RewardService.#fetch(async () =>

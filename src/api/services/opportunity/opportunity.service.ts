@@ -111,13 +111,15 @@ export abstract class OpportunityService {
       sort: url.searchParams.get("sort")?.split("-")[0],
       order: url.searchParams.get("sort")?.split("-")[1],
       name: url.searchParams.get("search") ?? undefined,
-      test: config.alwaysShowTestTokens ? true : (url.searchParams.get("test") ?? undefined),
+      test: config.alwaysShowTestTokens ? true : (url.searchParams.get("test") ?? false),
       page: url.searchParams.get("page") ? Math.max(Number(url.searchParams.get("page")) - 1, 0) : undefined,
       ...override,
     };
 
     // Remove null/undefined values
-    const query = Object.fromEntries(Object.entries(filters).filter(([, value]) => value != null));
+    const query = Object.fromEntries(
+      Object.entries(filters).filter(([, value]) => value !== undefined && value !== null),
+    );
 
     return query;
   }

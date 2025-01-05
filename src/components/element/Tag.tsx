@@ -80,7 +80,7 @@ export default function Tag<T extends keyof TagTypes>({ type, filter, value, ...
 
                 <Divider look="soft" horizontal />
                 <Group className="flex-col">
-                  <Button to={`/chains/${chain?.name}`} size="xs" look="soft">
+                  <Button to={`/chains/${chain?.name.replace(" ", "-").toLowerCase()}`} size="xs" look="soft">
                     <Icon remix="RiArrowRightLine" /> Check opportunities on {chain.name}
                   </Button>
                 </Group>
@@ -203,7 +203,7 @@ export default function Tag<T extends keyof TagTypes>({ type, filter, value, ...
                 </Group>
                 <Divider look="soft" horizontal />
                 <Group className="flex-col" size="md">
-                  <Button to={`/chains/${token.chain?.name}`} size="xs" look="soft">
+                  <Button to={`/chains/${token.chain?.name.replace(" ", "-").toLowerCase()}`} size="xs" look="soft">
                     <Icon remix="RiArrowRightLine" /> Check opportunities on {token.chain?.name}
                   </Button>
                   {chains

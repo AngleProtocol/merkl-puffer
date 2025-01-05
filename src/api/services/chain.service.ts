@@ -30,7 +30,13 @@ export abstract class ChainService {
   }
 
   static async get(query: Parameters<typeof api.v4.chains.index.get>[0]["query"]): Promise<Chain> {
-    const chains = await ChainService.#fetch(async () => api.v4.chains.index.get({ query }));
+    const chains = await ChainService.#fetch(async () =>
+      api.v4.chains.index.get({
+        query: {
+          name: query.name?.replace("-", " "),
+        },
+      }),
+    );
 
     if (chains.length === 0) throw new Response("Chain not found", { status: 404 });
 
