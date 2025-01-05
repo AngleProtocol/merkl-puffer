@@ -82,7 +82,7 @@ export default createConfig({
   tagsDetails: {
     token: {
       visitOpportunities: {
-        enabled: false,
+        enabled: true,
       },
     },
   },
@@ -249,7 +249,7 @@ export default createConfig({
         metadata: {
           name: "Merkl Lite",
           description: "Merkl Lite",
-          url: "https://app.merkl.xyz.com",
+          url: "https://app.merkl.xyz",
           icons: [],
         },
       }),

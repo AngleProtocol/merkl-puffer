@@ -52,10 +52,10 @@ export default function OpportunityShortCard({ opportunity, displayLinks }: Oppo
         </Text>
       </Group>
       {displayLinks && (
-        <Group className="p-md">
+        <Group className="py-md">
           {visitUrl && (
             <Button external to={visitUrl} disabled={!visitUrl} look="bold">
-              Supply on {opportunity.protocol?.name ? opportunity.protocol.name : "the protocol"} app
+              Supply on {opportunity.protocol?.name ? opportunity.protocol.name : "the protocol"}
               <Icon remix="RiArrowRightUpLine" />
             </Button>
           )}

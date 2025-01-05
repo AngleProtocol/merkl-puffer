@@ -119,52 +119,56 @@ export default function Index() {
       ]}
       navigation={{ label: "Back to opportunities", link: "/" }}
       title={
-        <Group className="w-full gap-xl md:gap-xl*4 items-center">
+        <Group className="w-full items-center flex justify-between gap-xl md:gap-xl*4">
           {/* TODO: Make it dynamic */}
-          <Group className="flex-col">
-            {isAddress(config.rewardsTotalClaimableMode ?? "") && !!token ? (
-              <Token size="xl" token={token} amount={BigInt(rewards.earned)} format="amount_price" showZero />
-            ) : (
-              <Value format={config.decimalFormat.dollar} size={2} className="text-main-12">
-                {rewards.earned}
-              </Value>
-            )}
-            <Text size="xl" bold className="not-italic">
-              Lifetime Earned
-            </Text>
+          <Group className="gap-xl md:gap-xl*4 items-center">
+            <Group className="flex-col">
+              {isAddress(config.rewardsTotalClaimableMode ?? "") && !!token ? (
+                <Token size="xl" token={token} amount={BigInt(rewards.unclaimed)} format="amount_price" showZero />
+              ) : (
+                <Value format={config.decimalFormat.dollar} size={2} className="text-main-12">
+                  {rewards.unclaimed}
+                </Value>
+              )}
+              <Text size={"xl"} bold className="not-italic">
+                Total Claimable
+              </Text>
+            </Group>
+            <Group className="flex-col">
+              {isAbleToClaim && (
+                <TransactionButton disabled={!claimTransaction} look="hype" size="lg" tx={claimTransaction}>
+                  {isSingleChain ? "Claim Now" : `Claim on ${chain?.name}`}
+                </TransactionButton>
+              )}
+            </Group>
           </Group>
 
-          <Group className="flex-col">
-            {isAddress(config.rewardsTotalClaimableMode ?? "") && !!token ? (
-              <Token size="xl" token={token} amount={BigInt(rewards.pending)} format="amount_price" showZero />
-            ) : (
-              <Value format={config.decimalFormat.dollar} size={2} className="text-main-12">
-                {rewards.pending}
-              </Value>
-            )}
-            <Text size="xl" bold className="not-italic">
-              Pending Rewards
-            </Text>
-          </Group>
+          <Group className="gap-xl md:gap-xl*4 items-center">
+            <Group className="flex-col">
+              {isAddress(config.rewardsTotalClaimableMode ?? "") && !!token ? (
+                <Token size="xl" token={token} amount={BigInt(rewards.earned)} format="amount_price" showZero />
+              ) : (
+                <Value format={config.decimalFormat.dollar} size={2} className="text-main-12">
+                  {rewards.earned}
+                </Value>
+              )}
+              <Text size="xl" bold className="not-italic">
+                Lifetime Earned
+              </Text>
+            </Group>
 
-          <Group className="flex-col">
-            {isAddress(config.rewardsTotalClaimableMode ?? "") && !!token ? (
-              <Token size="xl" token={token} amount={BigInt(rewards.unclaimed)} format="amount_price" showZero />
-            ) : (
-              <Value format={config.decimalFormat.dollar} size={2} className="text-main-12">
-                {rewards.unclaimed}
-              </Value>
-            )}
-            <Text size={"xl"} bold className="not-italic">
-              Total Claimable
-            </Text>
-          </Group>
-          <Group className="flex-col">
-            {isAbleToClaim && (
-              <TransactionButton disabled={!claimTransaction} look="hype" size="lg" tx={claimTransaction}>
-                {isSingleChain ? "Claim Now" : `Claim on ${chain?.name}`}
-              </TransactionButton>
-            )}
+            <Group className="flex-col">
+              {isAddress(config.rewardsTotalClaimableMode ?? "") && !!token ? (
+                <Token size="xl" token={token} amount={BigInt(rewards.pending)} format="amount_price" showZero />
+              ) : (
+                <Value format={config.decimalFormat.dollar} size={2} className="text-main-12">
+                  {rewards.pending}
+                </Value>
+              )}
+              <Text size="xl" bold className="not-italic">
+                Pending Rewards
+              </Text>
+            </Group>
           </Group>
         </Group>
       }

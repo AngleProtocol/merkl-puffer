@@ -64,32 +64,31 @@ export default function Hero({
             </Group>
             <Group className="grow items-center justify-between gap-xl lg:gap-xl*4">
               <Group className="flex-col flex-1 gap-xl lg:gap-lg">
-                <Group>
-                  <Group className="items-start gap-0 md:gap-lg flex-nowrap">
-                    {!!icons && (
-                      <Icons size="lg">
-                        {icons?.length > 1
-                          ? icons?.map(icon => (
-                              <Icon
-                                className="hidden md:block text-main-12 !w-lg*4 !h-lg*4"
-                                key={`${Object.values(icon)}`}
-                                {...icon}
-                              />
-                            ))
-                          : icons?.map(icon => (
-                              <Icon
-                                className="hidden md:block text-main-12 !w-xl*4 !h-xl*4"
-                                key={`${Object.values(icon)}`}
-                                {...icon}
-                              />
-                            ))}
-                      </Icons>
-                    )}
-                    <Title h={1} size={2}>
-                      {title}
-                    </Title>
-                  </Group>
+                <Group className="items-start gap-0 md:gap-lg flex-nowrap w-full">
+                  {!!icons && (
+                    <Icons size="lg">
+                      {icons?.length > 1
+                        ? icons?.map(icon => (
+                            <Icon
+                              className="hidden md:block text-main-12 !w-lg*4 !h-lg*4"
+                              key={`${Object.values(icon)}`}
+                              {...icon}
+                            />
+                          ))
+                        : icons?.map(icon => (
+                            <Icon
+                              className="hidden md:block text-main-12 !w-xl*4 !h-xl*4"
+                              key={`${Object.values(icon)}`}
+                              {...icon}
+                            />
+                          ))}
+                    </Icons>
+                  )}
+                  <Title h={1} size={2} className="flex-1">
+                    {title}
+                  </Title>
                 </Group>
+
                 {!!description && (
                   <>
                     <Divider look="base" />
