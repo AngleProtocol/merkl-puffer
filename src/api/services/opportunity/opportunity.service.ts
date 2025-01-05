@@ -56,7 +56,11 @@ export abstract class OpportunityService {
   }) {
     const { chainId, type, identifier } = query;
     const opportunityWithCampaigns = await OpportunityService.#fetch(async () =>
-      api.v4.opportunities({ id: `${chainId}-${type}-${identifier}` }).campaigns.get(),
+      api.v4.opportunities({ id: `${chainId}-${type}-${identifier}` }).campaigns.get({
+        query: {
+          test: config.alwaysShowTestTokens ?? false,
+        },
+      }),
     );
 
     // TODO: updates tags to take an array
