@@ -22,7 +22,11 @@ export abstract class OpportunityService {
         query: Object.assign({ ...query }, config.tags?.[0] ? { tags: config.tags?.[0] } : {}),
       }),
     );
-    const count = await OpportunityService.#fetch(async () => api.v4.opportunities.count.get({ query }));
+    const count = await OpportunityService.#fetch(async () =>
+      api.v4.opportunities.count.get({
+        query: Object.assign({ ...query }, config.tags?.[0] ? { tags: config.tags?.[0] } : {}),
+      }),
+    );
 
     return { opportunities: opportunities.filter(o => o !== null), count };
   }
