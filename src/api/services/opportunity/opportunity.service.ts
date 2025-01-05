@@ -34,10 +34,16 @@ export abstract class OpportunityService {
   // ─── Get Featured opportunities ──────────────────────────────────────────────
 
   static async getFeatured(
+    request: Request,
     overrides?: Parameters<typeof api.v4.opportunities.index.get>[0]["query"],
   ): Promise<{ opportunities: Opportunity[]; count: number }> {
     if (config.opportunity.featured.enabled)
-      return await OpportunityService.getMany({ items: config.opportunity.featured.length, ...overrides });
+      return await OpportunityService.getMany(
+        Object.assign(OpportunityService.#getQueryFromRequest(request), {
+          items: config.opportunity.featured.length,
+          ...overrides,
+        }),
+      );
     return { opportunities: [], count: 0 };
   }
 

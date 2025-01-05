@@ -11,7 +11,7 @@ export async function loader({ params: { symbol }, request }: LoaderFunctionArgs
   const opportunityFilters = { tokens: symbol } as const;
 
   const { opportunities, count } = await OpportunityService.getManyFromRequest(request, opportunityFilters);
-  const { opportunities: featuredOpportunities } = await OpportunityService.getFeatured(opportunityFilters);
+  const { opportunities: featuredOpportunities } = await OpportunityService.getFeatured(request, opportunityFilters);
 
   //TODO: embed this in client/service
   const chains = await ChainService.getAll();

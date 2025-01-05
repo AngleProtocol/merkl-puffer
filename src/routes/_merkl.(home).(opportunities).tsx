@@ -11,11 +11,11 @@ import { ErrorContent } from "src/components/layout/ErrorContent";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const { opportunities, count } = await OpportunityService.getManyFromRequest(request);
-  const { opportunities: featuredOpportunities } = await OpportunityService.getFeatured();
+  const { opportunities: featuredOpportunities } = await OpportunityService.getFeatured(request);
 
   //TODO: embed this in client/service
   const chains = await ChainService.getAll();
-  const protocols = await ProtocolService.getAll();
+  const { protocols } = await ProtocolService.getManyFromRequest(request);
 
   return json({ opportunities, chains, count, protocols, featuredOpportunities });
 }

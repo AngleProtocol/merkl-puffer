@@ -15,10 +15,9 @@ export async function loader({ params: { id: chainId }, request }: LoaderFunctio
   } as const;
 
   const { opportunities, count } = await OpportunityService.getManyFromRequest(request, opportunityFilters);
-  const { opportunities: featuredOpportunities } = await OpportunityService.getFeatured(opportunityFilters);
+  const { opportunities: featuredOpportunities } = await OpportunityService.getFeatured(request, opportunityFilters);
 
-  //TODO: embed this in client/service
-  const protocols = await ProtocolService.getAll();
+  const { protocols } = await ProtocolService.getManyFromRequest(request);
 
   return json({ opportunities, count, protocols, featuredOpportunities });
 }
