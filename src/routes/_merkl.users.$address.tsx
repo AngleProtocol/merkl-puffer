@@ -1,5 +1,5 @@
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
-import { Outlet, json, useLoaderData } from "@remix-run/react";
+import { Outlet, json, useFetcher, useLoaderData } from "@remix-run/react";
 import { Button, Divider, Dropdown, Group, Hash, Icon, Text, Value } from "dappkit";
 import config from "merkl.config";
 import TransactionButton from "packages/dappkit/src/components/dapp/TransactionButton";
@@ -17,7 +17,7 @@ import { isAddress } from "viem";
 export async function loader({ params: { address }, request }: LoaderFunctionArgs) {
   if (!address || !isAddress(address)) throw "";
 
-  const rewards = await RewardService.getForUser(request, address, 1);
+  const rewards = await RewardService.getForUser(request, address);
   const token = !!config.rewardsTotalClaimableMode
     ? (
         await TokenService.getMany({
@@ -41,8 +41,17 @@ export const meta: MetaFunction<typeof loader> = ({ data, error }) => {
 export type OutletContextRewards = ReturnType<typeof useRewards>;
 
 export default function Index() {
-  const { rewards: raw, address, token } = useLoaderData<typeof loader>();
-  const rewards = useRewards(raw);
+  const { rewards: raw, address, token: rawToken } = useLoaderData<typeof loader>();
+  const fetcher = useFetcher<typeof loader>();
+
+  const handleRefreshData = async () => {
+    await fetcher.submit(null, { method: "post", action: `/claim/${address}?chainId=${chainId}` });
+  };
+
+  const rawRewards = useMemo(() => fetcher?.data?.rewards ?? raw, [raw, fetcher?.data?.rewards]);
+  const token = useMemo(() => fetcher?.data?.token ?? rawToken, [rawToken, fetcher?.data?.token]);
+
+  const rewards = useRewards(rawRewards);
 
   const isSingleChain = config?.chains?.length === 1;
 
@@ -141,7 +150,8 @@ export default function Index() {
                   disabled={!claimTransaction}
                   look="hype"
                   size="lg"
-                  tx={claimTransaction}>
+                  tx={claimTransaction}
+                  onSuccess={_hash => handleRefreshData()}>
                   {isSingleChain ? "Claim Now" : `Claim on ${chain?.name}`}
                   <Icon remix="RiHandCoinFill" />
                 </TransactionButton>
