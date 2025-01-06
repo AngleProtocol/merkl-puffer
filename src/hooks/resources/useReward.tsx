@@ -13,10 +13,11 @@ export default function useReward(reward?: Reward, userAddress?: string, tokenAd
 
     const rewards = reward.rewards.filter(({ token: { address } }) => !tokenAddresses || tokenAddresses?.has(address));
     const addresses = rewards.map(({ token }) => token.address as `0x${string}`);
-    const accumulatedRewards = rewards.map(({ amount }) => amount);
+    const accumulatedRewards = rewards.map(({ amount }) => amount.toString());
     const proofs = rewards.map(({ proofs }) => proofs as `0x${string}`[]);
 
     return {
+      userAddress,
       distributor: reward.distributor,
       args: [addresses.map(() => userAddress as `0x${string}`), addresses, accumulatedRewards, proofs],
     };

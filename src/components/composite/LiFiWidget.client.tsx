@@ -1,5 +1,5 @@
-import { type WidgetConfig, WidgetSkeleton } from "@lifi/widget";
-import { Suspense, lazy } from "react";
+import type { WidgetConfig } from "@lifi/widget";
+import { lazy } from "react";
 
 export const LifiConfig: Partial<WidgetConfig> = {
   variant: "wide",
@@ -58,9 +58,5 @@ const LiFiWidgetLazy = lazy(async () => {
 });
 
 export function LiFiWidget() {
-  return (
-    <Suspense fallback={<WidgetSkeleton config={LifiConfig} />}>
-      <LiFiWidgetLazy config={LifiConfig} integrator="Merkl" />
-    </Suspense>
-  );
+  return <LiFiWidgetLazy config={LifiConfig} integrator="Merkl" />;
 }

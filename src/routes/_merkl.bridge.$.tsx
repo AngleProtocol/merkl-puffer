@@ -1,9 +1,9 @@
 import type { MetaFunction } from "@remix-run/node";
 import config from "merkl.config";
 import { Button, Group, Icon, Space, Text } from "packages/dappkit/src";
-import { ClientOnly } from "remix-utils/client-only";
+import { Suspense } from "react";
 import { I18n } from "src/I18n";
-import { LiFiWidget } from "src/components/composite/LiFiWidget";
+import { LiFiWidget } from "src/components/composite/LiFiWidget.client";
 
 export const meta: MetaFunction = () => {
   return [{ title: "Merkl" }];
@@ -29,7 +29,14 @@ export default function Index() {
         </>
       )}
       <Space size="xl" />
-      <ClientOnly>{() => <LiFiWidget />}</ClientOnly>
+      <Suspense
+        fallback={
+          <Group className="justify-center w-full">
+            <Icon remix="RiLoader2Line" className="animate-spin text-main-12" />
+          </Group>
+        }>
+        <LiFiWidget />
+      </Suspense>
     </>
   );
 }

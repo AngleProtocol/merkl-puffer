@@ -3,21 +3,31 @@ import { api } from "src/api/index.server";
 import { ZyfiService } from "src/api/services/zyfi.service";
 import { encodeFunctionData, parseAbi } from "viem";
 
+BigInt.prototype.toJSON = function () {
+  return this.toString();
+};
+
 export const action = async ({ params: { name }, request }: ActionFunctionArgs) => {
   const payload = await request.json();
 
   switch (name) {
     case "claim": {
       const abi = parseAbi(["function claim(address[],address[],uint256[],bytes32[][]) view returns (uint256)"]);
-
-      return json({
+      const tx = {
         to: payload.distributor,
+        from: payload.userAddress,
         data: encodeFunctionData({
           abi,
           functionName: "claim",
           args: payload.args,
         }),
-      });
+      };
+      if (payload.sponsor) {
+        const sponsoredTx = await ZyfiService.wrapAndPrepareTx(tx);
+
+        return json(sponsoredTx);
+      }
+      return json(tx);
     }
     case "supply": {
       try {
