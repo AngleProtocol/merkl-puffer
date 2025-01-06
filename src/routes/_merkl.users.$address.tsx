@@ -133,12 +133,20 @@ export default function Index() {
                 Total Claimable
               </Text>
             </Group>
-            {isAbleToClaim && (
-              <TransactionButton disabled={!claimTransaction} look="hype" size="lg" tx={claimTransaction}>
-                {isSingleChain ? "Claim Now" : `Claim on ${chain?.name}`}
-                <Icon remix="RiHandCoinFill" />
-              </TransactionButton>
-            )}
+            <Group className="flex-col">
+              {isAbleToClaim && (
+                <TransactionButton
+                  name="Claim Rewards"
+                  enableSponsorCheckbox
+                  disabled={!claimTransaction}
+                  look="hype"
+                  size="lg"
+                  tx={claimTransaction}>
+                  {isSingleChain ? "Claim Now" : `Claim on ${chain?.name}`}
+                  <Icon remix="RiHandCoinFill" />
+                </TransactionButton>
+              )}
+            </Group>
           </Group>
 
           <Divider vertical className="m-0 hidden lg:block" look="bold" />
