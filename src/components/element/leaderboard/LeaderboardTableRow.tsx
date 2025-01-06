@@ -20,7 +20,7 @@ export default function LeaderboardTableRow({ row, rank, total, className, ...pr
   const { chains } = useWalletContext();
 
   const share = useMemo(() => {
-    const amount = formatUnits(BigInt(row?.amount), campaign.rewardToken.decimals);
+    const amount = formatUnits(BigInt(row?.amount) + BigInt(row?.pending ?? 0), campaign.rewardToken.decimals);
     const all = formatUnits(total, campaign.rewardToken.decimals);
 
     return Number.parseFloat(amount) / Number.parseFloat(all);
