@@ -1,7 +1,6 @@
 import { useOutletContext } from "@remix-run/react";
 import { Container, Group, Space } from "dappkit";
 import CampaignLibrary from "src/components/element/campaign/CampaignLibrary";
-import Participate from "src/components/element/participate/Participate";
 import { ErrorContent } from "src/components/layout/ErrorContent";
 import type { OutletContextOpportunity } from "./_merkl.opportunities.$chain.$type.$id";
 
