@@ -1,6 +1,6 @@
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { Outlet, json, useLoaderData } from "@remix-run/react";
-import { Button, Dropdown, Group, Hash, Icon, Text, Value } from "dappkit";
+import { Button, Divider, Dropdown, Group, Hash, Icon, Text, Value } from "dappkit";
 import config from "merkl.config";
 import TransactionButton from "packages/dappkit/src/components/dapp/TransactionButton";
 import { useWalletContext } from "packages/dappkit/src/context/Wallet.context";
@@ -119,9 +119,8 @@ export default function Index() {
       ]}
       navigation={{ label: "Back to opportunities", link: "/" }}
       title={
-        <Group className="w-full items-center flex justify-between gap-xl md:gap-xl*4">
-          {/* TODO: Make it dynamic */}
-          <Group className="gap-xl md:gap-xl*4 items-center">
+        <Group className="w-full items-center flex justify-between gap-xl md:gap-x-xl*4">
+          <Group className="flex-1 gap-xl md:gap-x-xl*4 items-center">
             <Group className="flex-col">
               {isAddress(config.rewardsTotalClaimableMode ?? "") && !!token ? (
                 <Token size="xl" token={token} amount={BigInt(rewards.unclaimed)} format="amount_price" showZero />
@@ -134,16 +133,18 @@ export default function Index() {
                 Total Claimable
               </Text>
             </Group>
-            <Group className="flex-col">
-              {isAbleToClaim && (
-                <TransactionButton disabled={!claimTransaction} look="hype" size="lg" tx={claimTransaction}>
-                  {isSingleChain ? "Claim Now" : `Claim on ${chain?.name}`}
-                </TransactionButton>
-              )}
-            </Group>
+            {isAbleToClaim && (
+              <TransactionButton disabled={!claimTransaction} look="hype" size="lg" tx={claimTransaction}>
+                {isSingleChain ? "Claim Now" : `Claim on ${chain?.name}`}
+                <Icon remix="RiHandCoinFill" />
+              </TransactionButton>
+            )}
           </Group>
 
-          <Group className="gap-xl md:gap-xl*4 items-center">
+          <Divider vertical className="m-0 hidden lg:block" look="bold" />
+          <Divider horizontal className="m-0 lg:hidden" look="bold" />
+
+          <Group className="flex-1 gap-xl md:gap-xl*4 items-center lg:justify-end">
             <Group className="flex-col">
               {isAddress(config.rewardsTotalClaimableMode ?? "") && !!token ? (
                 <Token size="xl" token={token} amount={BigInt(rewards.earned)} format="amount_price" showZero />

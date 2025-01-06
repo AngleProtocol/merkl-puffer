@@ -96,8 +96,8 @@ export default function Index() {
           },
         ]}
         title={
-          <Group className="items-center flex-nowrap" size="lg">
-            <span className="flex-1">{styleName}</span>
+          <Group className="items-center md:flex-nowrap" size="lg">
+            <span className="w-full md:w-auto md:flex-1">{styleName}</span>
             {!!visitUrl && (
               <Button to={visitUrl} external className="inline-flex" look="hype" size="md">
                 Supply

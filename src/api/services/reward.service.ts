@@ -48,6 +48,7 @@ export abstract class RewardService {
   static async getForUser(request: Request, address: string, chainId: number) {
     const url = new URL(request.url);
     const chainIds = config.chains?.map(({ id }) => id).join(",");
+    // biome-ignore lint/suspicious/noExplicitAny: TODO
     const query: Record<string, any> = {
       chainId: chainId.toString(),
       test: config.alwaysShowTestTokens ? true : (url.searchParams.get("test") ?? false),

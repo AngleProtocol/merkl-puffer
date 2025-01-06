@@ -45,14 +45,14 @@ export default function OpportunityShortCard({ opportunity, displayLinks }: Oppo
             />
           ))}
       </Group>
-      <Group className="text-xl">
+      <Group className="text-xl flex-nowrap">
         <Icons>{icons}</Icons>
         <Text look="bold" bold>
           {opportunity.name}
         </Text>
       </Group>
-      {displayLinks && (
-        <Group className="py-md">
+      {displayLinks && !!visitUrl && (
+        <Group>
           {visitUrl && (
             <Button external to={visitUrl} disabled={!visitUrl} look="bold">
               Supply on {opportunity.protocol?.name ? opportunity.protocol.name : "the protocol"}
