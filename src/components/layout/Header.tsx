@@ -48,7 +48,7 @@ export default function Header() {
     return Object.assign(
       { home },
       {
-        dashboard: {
+        [!!config.dashboardPageName ? config.dashboardPageName : "dashboard"]: {
           icon: "RiDashboardFill",
           route: user ? `/users/${user}` : "/users",
           key: uuidv4(),
