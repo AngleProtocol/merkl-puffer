@@ -1,5 +1,5 @@
 import type { Reward } from "@merkl/api";
-import { Group } from "dappkit";
+import { Group, Text } from "dappkit";
 import config from "merkl.config";
 import { useMemo } from "react";
 import { ClaimRewardsChainTable } from "./ClaimRewardsChainTable";
@@ -37,5 +37,9 @@ export default function ClaimRewardsLibrary({ from, rewards }: ClaimRewardsLibra
     }
   }, [rewards, flatenedRewards, from]);
 
-  return <Group className="flex-row w-full [&>*]:flex-grow">{renderRewards}</Group>;
+  return (
+    <Group className="flex-row w-full [&>*]:flex-grow">
+      {rewards?.length > 0 ? renderRewards : <Text>No reward detected</Text>}
+    </Group>
+  );
 }

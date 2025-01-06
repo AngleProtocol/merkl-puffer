@@ -11,7 +11,6 @@ const titles: { [S in Searchable]: ReactNode } = {
   chain: "Chains",
   opportunity: "Opportunities",
   protocol: "Protocols",
-  token: "Tokens",
 };
 
 function OpportunityResult({ opportunity }: { opportunity: Opportunity }) {
@@ -20,7 +19,9 @@ function OpportunityResult({ opportunity }: { opportunity: Opportunity }) {
   return (
     <>
       <Button to={link} look="soft">
-        <Icons>{icons}</Icons> {opportunity.name} <Icon remix="RiArrowRightLine" />
+        <Icons>{icons}</Icons>
+        {opportunity.name}
+        <Icon remix="RiArrowRightLine" />
       </Button>
       <Divider look="soft" />
     </>
@@ -65,7 +66,10 @@ export default function SearchBar({ icon = false }: SearchBarProps) {
                       case "chain":
                         return (
                           <>
-                            <Button to={`/chains/${results[i].name}`} look="soft" className="gap-lg">
+                            <Button
+                              to={`/chains/${results[i].name.replace(" ", "-").toLowerCase()}`}
+                              look="soft"
+                              className="gap-lg">
                               <Icon src={results[i].icon} /> {results[i].name}
                               <Icon remix="RiArrowRightLine" />
                             </Button>
@@ -74,15 +78,6 @@ export default function SearchBar({ icon = false }: SearchBarProps) {
                         );
                       case "opportunity":
                         return <OpportunityResult opportunity={results[i]} />;
-                      case "token":
-                        return (
-                          <>
-                            <Button to={`/tokens/${results[i].symbol}`} look="soft">
-                              <Icon src={results[i].icon} /> {results[i].symbol} <Icon remix="RiArrowRightLine" />
-                            </Button>
-                            <Divider look="soft" />
-                          </>
-                        );
                       case "protocol":
                         return (
                           <>
@@ -107,7 +102,6 @@ export default function SearchBar({ icon = false }: SearchBarProps) {
 
   return (
     <Modal
-      size="xl"
       className="h-full p-xl*2 w-[95vw] md:w-[70vw] lg:w-[50vw] xl:w-[40vw] z-20 [&>*]:max-h-full [&>*]:animate-drop [&>*]:origin-top"
       state={[opened, setOpened]}
       modal={

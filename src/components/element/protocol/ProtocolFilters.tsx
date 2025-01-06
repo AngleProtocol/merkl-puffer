@@ -1,6 +1,6 @@
 import type { Chain } from "@merkl/api";
 import { Form } from "@remix-run/react";
-import { Group, Icon, Input } from "dappkit/src";
+import { Icon, Input } from "dappkit/src";
 import { useState } from "react";
 import useSearchParamState from "src/hooks/filtering/useSearchParamState";
 
@@ -28,17 +28,18 @@ export default function ProtocolFilters(_props: OpportunityFilterProps) {
   }
 
   return (
-    <Group>
-      <Form>
-        <Input
-          name="search"
-          value={innerSearch}
-          state={[innerSearch, setInnerSearch]}
-          suffix={<Icon size="sm" remix="RiSearchLine" />}
-          onClick={onSearchSubmit}
-          placeholder="Search"
-        />
-      </Form>
-    </Group>
+    <Form className="w-full">
+      <Input
+        name="search"
+        size="lg"
+        value={innerSearch}
+        state={[innerSearch, v => setInnerSearch(v ?? "")]}
+        suffix={<Icon size="sm" remix="RiSearchLine" />}
+        onClick={onSearchSubmit}
+        placeholder="Search a protocol"
+        className="w-full"
+        look="tint"
+      />
+    </Form>
   );
 }

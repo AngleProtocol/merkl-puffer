@@ -10,7 +10,7 @@ import type { RuleType } from "src/components/element/campaign/rules/Rule";
 import Token from "src/components/element/token/Token";
 import { parseUnits } from "viem";
 
-export default function useCampaign(campaign?: Campaign, opportunity?: Opportunity) {
+export default function useCampaign(campaign: CampaignFromApi, opportunity?: Opportunity) {
   if (!campaign)
     return {
       amount: undefined,

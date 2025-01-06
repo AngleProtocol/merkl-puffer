@@ -1,4 +1,5 @@
 import type { Chain, Explorer, Token } from "@merkl/api";
+import merklConfig from "merkl.config";
 import { Button, Divider, Group, Hash, Icon, Text } from "packages/dappkit/src";
 
 export type TokenTooltipProps = {
@@ -24,26 +25,32 @@ export default function TokenTooltip({ token, size, chain }: TokenTooltipProps) 
             </Hash>
           </Text>
         </Group>
-        <Divider look="soft" horizontal />
-        <Group className="flex-col" size="md">
-          <Button to={`/tokens/${token?.symbol}`} size="xs" look="soft">
-            <Icon remix="RiArrowRightLine" />
-            Check opportunities with {token?.symbol}
-          </Button>
-          {chain?.explorers?.map(explorer => {
-            return (
-              <Button
-                key={`${explorer.url}`}
-                to={`${explorer.url}/token/${token.address}`}
-                external
-                size="xs"
-                look="soft">
-                <Icon remix="RiArrowRightLine" />
-                Visit explorer
-              </Button>
-            );
-          })}
-        </Group>
+        {((merklConfig?.tagsDetails?.token?.visitOpportunities?.enabled ?? false) ||
+          (chain?.explorers?.length ?? 0) > 0) && (
+          <>
+            <Divider look="soft" horizontal />
+            <Group className="flex-col" size="md">
+              {/* Conditionally render the "Check opportunities" link */}
+              {(merklConfig?.tagsDetails?.token?.visitOpportunities?.enabled ?? false) && (
+                <Button to={`/tokens/${token?.symbol}`} size="xs" look="soft">
+                  <Icon remix="RiArrowRightLine" />
+                  Check opportunities with {token?.symbol}
+                </Button>
+              )}
+              {chain?.explorers?.map(explorer => (
+                <Button
+                  key={`${explorer.url}`}
+                  to={`${explorer.url}/token/${token.address}`}
+                  external
+                  size="xs"
+                  look="soft">
+                  <Icon remix="RiArrowRightLine" />
+                  Visit explorer
+                </Button>
+              ))}
+            </Group>
+          </>
+        )}
       </Group>
     </>
   );

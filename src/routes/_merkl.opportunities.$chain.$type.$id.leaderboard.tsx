@@ -1,7 +1,8 @@
 import type { Campaign } from "@merkl/api";
-import type { LoaderFunctionArgs } from "@remix-run/node";
-import { json, useLoaderData } from "@remix-run/react";
+import { type LoaderFunctionArgs, json } from "@remix-run/node";
+import { useLoaderData } from "@remix-run/react";
 import { Box, Container, Group, Icon, OverrideTheme, PrimitiveTag, Select, Space, Title, Value } from "dappkit";
+import config from "merkl.config";
 import moment from "moment";
 import Time from "packages/dappkit/src/components/primitives/Time";
 import { useCallback, useMemo } from "react";
@@ -24,9 +25,10 @@ export type DummyLeaderboard = {
 export async function loader({ params: { id, type, chain: chainId }, request }: LoaderFunctionArgs) {
   if (!chainId || !id || !type) throw "";
 
-  const chain = await ChainService.get({ search: chainId });
+  const chain = await ChainService.get({ name: chainId });
+  const campaignId = new URL(request.url).searchParams.get("campaignId");
 
-  const campaigns = await CampaignService.getByParams({
+  const campaigns = await CampaignService.getByOpportunity(request, {
     chainId: chain.id,
     type: type as Campaign["type"],
     mainParameter: id,
@@ -34,7 +36,7 @@ export async function loader({ params: { id, type, chain: chainId }, request }: 
 
   const { rewards, count, total } = await RewardService.getManyFromRequest(request, {
     chainId: chain.id,
-    campaignId: campaigns?.[0]?.campaignId,
+    campaignId: campaignId ?? campaigns?.[0]?.campaignId,
   });
 
   return json({
@@ -57,7 +59,7 @@ export default function Index() {
   );
 
   const selectedCampaign = useMemo(
-    () => campaigns?.find(campaign => campaign?.campaignId === campaignId),
+    () => campaigns?.find(campaign => campaign?.campaignId === campaignId) ?? campaigns?.[0],
     [campaigns, campaignId],
   );
 
@@ -120,7 +122,7 @@ export default function Index() {
           ],
           [
             "Total Rewards Distributed",
-            <Value value key="users" format="$0a">
+            <Value value key="users" format={config.decimalFormat.dollar}>
               {totalRewardsAllCampaigns}
             </Value>,
           ],

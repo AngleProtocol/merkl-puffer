@@ -1,5 +1,6 @@
 import type { Reward } from "@merkl/api";
 import { Button, type Component, Icon, Space, Value, mergeClass } from "dappkit";
+import config from "merkl.config";
 import TransactionButton from "packages/dappkit/src/components/dapp/TransactionButton";
 import Collapsible from "packages/dappkit/src/components/primitives/Collapsible";
 import EventBlocker from "packages/dappkit/src/components/primitives/EventBlocker";
@@ -92,7 +93,12 @@ export default function ClaimRewardsChainTableRow({
           <EventBlocker>
             {isAbleToClaim &&
               (isOnCorrectChain ? (
-                <TransactionButton disabled={!claimTransaction} className="ml-xl" look="hype" tx={claimTransaction}>
+                <TransactionButton
+                  name="Claim Rewards"
+                  disabled={!claimTransaction}
+                  className="ml-xl"
+                  look="hype"
+                  tx={claimTransaction}>
                   Claim
                 </TransactionButton>
               ) : (
@@ -105,7 +111,7 @@ export default function ClaimRewardsChainTableRow({
       }
       unclaimedColumn={
         unclaimed === 0 ? undefined : (
-          <Value size="lg" format="$0,0.#" look="bold" className="font-title">
+          <Value size="lg" format={config.decimalFormat.dollar} look="bold" className="font-title">
             {unclaimed}
           </Value>
         )

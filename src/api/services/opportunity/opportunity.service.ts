@@ -1,5 +1,6 @@
 import type { Opportunity } from "@merkl/api";
 import config from "merkl.config";
+import { DEFAULT_ITEMS_PER_PAGE } from "src/constants/pagination";
 import { api } from "../../index.server";
 import { fetchWithLogs } from "../../utils";
 
@@ -21,9 +22,29 @@ export abstract class OpportunityService {
         query: Object.assign({ ...query }, config.tags?.[0] ? { tags: config.tags?.[0] } : {}),
       }),
     );
-    const count = await OpportunityService.#fetch(async () => api.v4.opportunities.count.get({ query }));
+    const count = await OpportunityService.#fetch(async () =>
+      api.v4.opportunities.count.get({
+        query: Object.assign({ ...query }, config.tags?.[0] ? { tags: config.tags?.[0] } : {}),
+      }),
+    );
 
     return { opportunities: opportunities.filter(o => o !== null), count };
+  }
+
+  // ─── Get Featured opportunities ──────────────────────────────────────────────
+
+  static async getFeatured(
+    request: Request,
+    overrides?: Parameters<typeof api.v4.opportunities.index.get>[0]["query"],
+  ): Promise<{ opportunities: Opportunity[]; count: number }> {
+    if (config.opportunity.featured.enabled)
+      return await OpportunityService.getMany(
+        Object.assign(OpportunityService.#getQueryFromRequest(request), {
+          items: config.opportunity.featured.length,
+          ...overrides,
+        }),
+      );
+    return { opportunities: [], count: 0 };
   }
 
   // ─── Get Opportunities with campaign ──────────────────────────────────────────────
@@ -35,11 +56,15 @@ export abstract class OpportunityService {
   }) {
     const { chainId, type, identifier } = query;
     const opportunityWithCampaigns = await OpportunityService.#fetch(async () =>
-      api.v4.opportunities({ id: `${chainId}-${type}-${identifier}` }).campaigns.get(),
+      api.v4.opportunities({ id: `${chainId}-${type}-${identifier}` }).campaigns.get({
+        query: {
+          test: config.alwaysShowTestTokens ?? false,
+        },
+      }),
     );
 
-    //TODO: updates tags to take an array
-    if (config.tags && !opportunityWithCampaigns.tags.includes(config.tags?.[0]))
+    // TODO: updates tags to take an array
+    if (config.tags?.length && config.tags && !opportunityWithCampaigns.tags.includes(config.tags?.[0]))
       throw new Response("Opportunity inaccessible", { status: 403 });
 
     return opportunityWithCampaigns;
@@ -92,17 +117,19 @@ export abstract class OpportunityService {
       action: url.searchParams.get("action") ?? undefined,
       chainId: url.searchParams.get("chain") ?? undefined,
       minimumTvl: url.searchParams.get("tvl") ?? undefined,
-      items: url.searchParams.get("items") ? Number(url.searchParams.get("items")) : 50,
+      items: url.searchParams.get("items") ? Number(url.searchParams.get("items")) : DEFAULT_ITEMS_PER_PAGE,
       sort: url.searchParams.get("sort")?.split("-")[0],
       order: url.searchParams.get("sort")?.split("-")[1],
       name: url.searchParams.get("search") ?? undefined,
-      test: url.searchParams.get("test") ?? undefined,
+      test: config.alwaysShowTestTokens ? true : (url.searchParams.get("test") ?? false),
       page: url.searchParams.get("page") ? Math.max(Number(url.searchParams.get("page")) - 1, 0) : undefined,
       ...override,
     };
 
     // Remove null/undefined values
-    const query = Object.fromEntries(Object.entries(filters).filter(([, value]) => value != null));
+    const query = Object.fromEntries(
+      Object.entries(filters).filter(([, value]) => value !== undefined && value !== null),
+    );
 
     return query;
   }

@@ -3,9 +3,9 @@ import type { InteractionTarget } from "@merkl/api/dist/src/modules/v4/interacti
 import { useEffect, useState } from "react";
 import { InteractionService } from "src/api/services/interaction.service";
 
-export default function useInteractionTarget(chainId?: number, protocolId?: string, identifier?: string) {
-  const [loading, setLoading] = useState(true);
-  const [target, setTarget] = useState<InteractionTarget | undefined>();
+export default function useInteractionTargets(chainId?: number, protocolId?: string, identifier?: string) {
+  const [loading, setLoading] = useState(false);
+  const [targets, setTargets] = useState<InteractionTarget[] | undefined>();
 
   useEffect(() => {
     async function fetchTarget() {
@@ -13,14 +13,16 @@ export default function useInteractionTarget(chainId?: number, protocolId?: stri
 
       setLoading(true);
 
-      const _target = await InteractionService.getTarget(chainId, protocolId, identifier);
+      try {
+        const _targets = await InteractionService.getTargets(chainId, protocolId, identifier);
 
-      if (_target) setTarget(_target);
+        if (_targets?.length) setTargets(_targets);
+      } catch {}
       setLoading(false);
     }
 
     fetchTarget();
   }, [chainId, protocolId, identifier]);
 
-  return { target, loading };
+  return { targets, loading };
 }

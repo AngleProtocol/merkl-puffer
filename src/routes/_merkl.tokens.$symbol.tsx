@@ -1,13 +1,10 @@
 import { type LoaderFunctionArgs, type MetaFunction, json } from "@remix-run/node";
 import { Outlet, useLoaderData } from "@remix-run/react";
-import { useMemo } from "react";
 import { Cache } from "src/api/services/cache.service";
 import { ChainService } from "src/api/services/chain.service";
 import { OpportunityService } from "src/api/services/opportunity/opportunity.service";
 import { TokenService } from "src/api/services/token.service";
 import Hero, { defaultHeroSideDatas } from "src/components/composite/Hero";
-import Tag, { type TagType } from "src/components/element/Tag";
-import { chainIdOrder } from "src/constants/chain";
 
 export async function loader({ params: { symbol } }: LoaderFunctionArgs) {
   const tokens = await TokenService.getSymbol(symbol);
@@ -42,27 +39,28 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 };
 
 export default function Index() {
-  const { tokens, chains, dailyRewards, count, maxApr } = useLoaderData<typeof loader>();
+  const { tokens, dailyRewards, count, maxApr } = useLoaderData<typeof loader>();
   const token = tokens?.[0];
 
-  const tags = useMemo(() => {
-    return tokens
-      .sort(({ chainId: a }, { chainId: b }) => {
-        const order = chainIdOrder;
+  // Have been disabled with @Pablo
+  // const tags = useMemo(() => {
+  //   return tokens
+  //     .sort(({ chainId: a }, { chainId: b }) => {
+  //       const order = chainIdOrder;
 
-        if (order.indexOf(b) === -1) return -1;
-        if (order.indexOf(b) === -1 && order.indexOf(a) === -1) return 0;
-        if (order.indexOf(a) === -1) return 1;
-        return order.indexOf(b) - order.indexOf(a);
-      })
-      .map(
-        t =>
-          ({
-            type: "tokenChain",
-            value: { ...t, chain: chains?.find(c => c.id === t.chainId) },
-          }) satisfies TagType<"tokenChain">,
-      );
-  }, [tokens, chains]);
+  //       if (order.indexOf(b) === -1) return -1;
+  //       if (order.indexOf(b) === -1 && order.indexOf(a) === -1) return 0;
+  //       if (order.indexOf(a) === -1) return 1;
+  //       return order.indexOf(b) - order.indexOf(a);
+  //     })
+  //     .map(
+  //       t =>
+  //         ({
+  //           type: "tokenChain",
+  //           value: { ...t, chain: chains?.find(c => c.id === t.chainId) },
+  //         }) satisfies TagType<"tokenChain">,
+  //     );
+  // }, [tokens, chains]);
 
   return (
     <Hero
@@ -78,8 +76,9 @@ export default function Index() {
         </>
       }
       description={`Earn rewards by using ${token.symbol} as liquidity, or directly earn ${token.symbol} as rewards`}
-      sideDatas={defaultHeroSideDatas(count, maxApr, dailyRewards)}
-      tags={tags.map(tag => <Tag key={`${tag.type}_${tag.value?.address ?? tag.value}`} {...tag} size="lg" />)}>
+      sideDatas={defaultHeroSideDatas(count, maxApr, Number.parseFloat(dailyRewards))}
+      // tags={tags.map(tag => <Tag key={`${tag.type}_${tag.value?.address ?? tag.value}`} {...tag} size="lg" />)}
+    >
       <Outlet />
     </Hero>
   );

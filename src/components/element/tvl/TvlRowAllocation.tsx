@@ -1,4 +1,5 @@
 import type { Opportunity } from "@merkl/api";
+import config from "merkl.config";
 import { Divider, Group, Icon, Text, Value } from "packages/dappkit/src";
 
 type IProps = {
@@ -9,7 +10,7 @@ export default function TvlRowAllocation({ opportunity }: IProps) {
   let content: React.ReactNode = null;
   switch (opportunity.type) {
     case "CLAMM": {
-      const tokenTvl = opportunity.tvlRecord.breakdowns.filter(b => b.type === "TOKEN");
+      const tokenTvl = opportunity.tvlRecord?.breakdowns.filter(b => b.type === "TOKEN");
       const token0 = opportunity.tokens[0];
       const token1 = opportunity.tokens[1];
       const tvlBreakdownToken0 = tokenTvl?.find(b => b.identifier === opportunity?.tokens[0]?.address);
@@ -30,7 +31,7 @@ export default function TvlRowAllocation({ opportunity }: IProps) {
 
             {!!tvlBreakdownToken0?.value && !!token0?.price && (
               <Text size="sm">
-                <Value value format="$0.0a">
+                <Value value format={config.decimalFormat.dollar}>
                   {tvlBreakdownToken0.value * token0.price}
                 </Value>
                 {" ~ "}
@@ -54,7 +55,7 @@ export default function TvlRowAllocation({ opportunity }: IProps) {
 
             {!!tvlBreakdownToken1?.value && !!token1?.price && (
               <Text size="sm">
-                <Value value format="$0.0a">
+                <Value value format={config.decimalFormat.dollar}>
                   {tvlBreakdownToken1.value * token1.price}
                 </Value>
                 {" ~ "}

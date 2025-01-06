@@ -8,7 +8,7 @@ type AprSectionProps = {
 
 export default function AprSection({ opportunity }: AprSectionProps) {
   const breakdowns = useMemo(() => {
-    return opportunity.aprRecord.breakdowns.filter(aprBreakdown => aprBreakdown.type !== "PROTOCOL");
+    return opportunity.aprRecord?.breakdowns.filter(aprBreakdown => aprBreakdown.type !== "PROTOCOL");
   }, [opportunity]);
 
   const getAprName = (breakdown: Opportunity["aprRecord"]["breakdowns"][number]) => {
@@ -46,6 +46,8 @@ export default function AprSection({ opportunity }: AprSectionProps) {
     }
   };
 
+  if (!breakdowns?.length) return null;
+
   return (
     <Group className="flex-col mt-md">
       <Group className="items-center" size="sm">
@@ -57,7 +59,7 @@ export default function AprSection({ opportunity }: AprSectionProps) {
 
       <Divider />
       <Group className="flex-col">
-        {breakdowns.map(breakdown => (
+        {breakdowns?.map(breakdown => (
           <Group key={breakdown.id} className="items-center justify-between" size="sm">
             <Text size="sm" look="bold">
               {getAprName(breakdown)}

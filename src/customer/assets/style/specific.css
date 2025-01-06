@@ -1,5 +1,5 @@
 [data-radix-popper-content-wrapper] {
-  z-index: 20;
+  z-index: calc(var(--modal-zIndex, 50) + 20);
 }
 
 .gradient-text {

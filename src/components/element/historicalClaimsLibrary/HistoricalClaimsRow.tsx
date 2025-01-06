@@ -3,6 +3,7 @@ import Time from "packages/dappkit/src/components/primitives/Time";
 import { useWalletContext } from "packages/dappkit/src/context/Wallet.context";
 import { useMemo } from "react";
 import type { ClaimsService } from "src/api/services/claims.service";
+import { parseUnits } from "viem";
 import Chain from "../chain/Chain";
 import Token from "../token/Token";
 import { HistoricalClaimsRow } from "./HistoricalClaimsTable";
@@ -14,13 +15,9 @@ export type HistoricalClaimsRowProps = Component<{
 export default function HistoricalClaimsTableRow({ claim, className, ...props }: HistoricalClaimsRowProps) {
   const { chains } = useWalletContext();
 
-  const chain = useMemo(() => {
-    return chains?.find(c => c.id === claim.token.chainId);
-  }, [chains, claim]);
+  const chain = useMemo(() => chains?.find(c => c.id === claim?.token?.chainId), [chains, claim]);
 
-  const value = useMemo(() => {
-    return Number(claim.amount) * (claim.token.price ?? 0);
-  }, [claim]);
+  const claimedAmount = useMemo(() => parseUnits(claim?.amount ?? 0, claim.token.decimals), [claim]);
 
   return (
     <HistoricalClaimsRow
@@ -28,12 +25,9 @@ export default function HistoricalClaimsTableRow({ claim, className, ...props }:
       className={mergeClass("cursor-pointer", className)}
       chainColumn={<Chain chain={chain} size="md" />}
       tokenColumn={
-        <Token
-          token={claim.token}
-          format="amount_price"
-          amount={BigInt(Number(claim.amount) * 10 ** claim.token.decimals)}
-          chain={chain}
-        />
+        !!claim?.token && (
+          <Token token={claim?.token} format="amount_price" amount={BigInt(claimedAmount)} chain={chain} />
+        )
       }
       dateColumn={<Time timestamp={claim.timestamp * 1000} />}
       transactionColumn={

@@ -1,5 +1,6 @@
 import { useNavigate } from "@remix-run/react";
 import { Button, Connected, Container, Group, Icon, Input, Space, Text } from "dappkit";
+import config from "merkl.config";
 import { useWalletContext } from "packages/dappkit/src/context/Wallet.context";
 import { Fmt } from "packages/dappkit/src/utils/formatter.service";
 import { useState } from "react";
@@ -12,11 +13,11 @@ export default function Index() {
 
   return (
     <Container>
-      {Array(10).fill(<Space size="xl" />)}
+      {Array(3).fill(<Space size="xl" />)}
       <Group className="w-full items-center flex-col">
         <Group className="w-min justify-center">
           <Space size="xl" />
-          <Connected>
+          <Connected hideSpyMode={config.hideSpyMode}>
             <Button onClick={() => navigate(`/users/${address}`)} look="hype">
               Open {Fmt.address(address, "short")}
             </Button>
@@ -25,7 +26,7 @@ export default function Index() {
         <Group className="w-min justify-center">
           <Text>Or</Text>
           <Group className="flex-nowrap">
-            <Input placeholder="Enter an address" state={[inputAddress, setInputAddress]} look="soft" />
+            <Input placeholder="Enter an address" state={[inputAddress, setInputAddress]} look="tint" />
             <Button onClick={() => inputAddress && navigate(`/users/${inputAddress}`)} size="xl" look="soft">
               <Icon remix="RiSendPlane2Fill" />
             </Button>
