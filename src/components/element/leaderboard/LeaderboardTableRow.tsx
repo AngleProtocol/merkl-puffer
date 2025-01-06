@@ -45,7 +45,9 @@ export default function LeaderboardTableRow({ row, rank, total, className, ...pr
         </Group>
       }
       addressColumn={<User chain={chain} address={row.recipient} />}
-      rewardsColumn={<Token token={campaign.rewardToken} format="amount_price" amount={parseUnits(row?.amount, 0)} />}
+      rewardsColumn={
+        <Token token={campaign.rewardToken} format="amount_price" amount={parseUnits(row?.amount + row?.pending, 0)} />
+      }
       protocolColumn={<Text>{row?.reason?.split("_")[0]}</Text>}
     />
   );
