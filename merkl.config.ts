@@ -49,11 +49,11 @@ export default createConfig({
   defaultTheme: "puffer",
   deposit: false,
   tags: ["puffer"],
-  opportunityNavigationMode: "supply",
+  opportunityNavigationMode: "direct",
   tokenSymbolPriority: ["ZK", "USDC", "USDC.e", "ETH", "WETH", "WBTC", "wstETH", "USDT", "USDe", "weETH", "DAI"],
   opportunityCellHideTags: ["token", "action"],
-  rewardsNavigationMode: "chain",
-  opportunityLibraryDefaultView: "cells",
+  rewardsNavigationMode: "opportunity",
+  opportunityLibraryDefaultView: "table",
   // opportunityLibraryExcludeFilters: ["protocol","action"],
   opprtunityPercentage: true,
   hideLayerMenuHomePage: false,
@@ -181,7 +181,7 @@ export default createConfig({
       enabled: false,
     },
     bridge: {
-      enabled: true,
+      enabled: false,
     },
   },
   socials: {
