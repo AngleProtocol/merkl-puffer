@@ -148,12 +148,7 @@ export default createConfig({
     protocols: {
       icon: "RiVipCrown2Fill",
       route: "/protocols",
-      key: crypto.randomUUID(),
-    },
-    bridge: {
-      icon: "RiCompassesLine",
-      route: "/bridge",
-      key: crypto.randomUUID(),
+      key: uuidv4(),
     },
     docs: {
       icon: "RiFile4Fill",
@@ -195,6 +190,7 @@ export default createConfig({
     github: "https://github.com/PufferFinance",
   },
   links: {
+    docs: "https://docs.merkl.xyz/",
     merkl: "https://merkl.xyz/",
     merklTermsConditions: "https://app.merkl.xyz/merklTerms.pdf",
     merklPrivacy: "https://privacy.angle.money",
