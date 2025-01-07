@@ -10,6 +10,8 @@
     "lint": "biome check --fix ./src ./*.ts",
     "lint:ci": "biome check --diagnostic-level error ./src ./*.ts",
     "serve": "remix-serve ./build/server/index.js",
+    "upstream:fetch": "git remote add merkl-lite https://github.com/AngleProtocol/merkl-lite && git fetch merkl-lite",
+    "upstream:sync": "git fetch merkl-lite && git rebase merkl-lite/main",
     "typecheck": "tsc"
   },
   "workspaces": ["packages/*"],
