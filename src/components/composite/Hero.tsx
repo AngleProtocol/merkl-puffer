@@ -49,18 +49,6 @@ export default function Hero({
   const location = useLocation();
   const { mode } = useTheme();
 
-export default function Hero({
-  navigation,
-  breadcrumbs,
-  icons,
-  title,
-  description,
-  tags,
-  sideDatas,
-  tabs,
-  children,
-}: HeroProps) {
-  const location = useLocation();
   return (
     <>
       <OverrideTheme mode={!!config.hero.invertColors ? (mode === "dark" ? "light" : "dark") : mode}>
@@ -147,7 +135,6 @@ export default function Hero({
                     ))}
                   </Group>
                 )}
-                {!!tags && <Group className="mb-lg">{tags}</Group>}
               </Group>
             </Group>
           </Container>
