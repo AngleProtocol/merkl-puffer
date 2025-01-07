@@ -143,22 +143,6 @@ export default createConfig({
       route: "/opportunities",
       key: uuidv4(),
     },
-    protocols: {
-      icon: "RiVipCrown2Fill",
-      route: "/protocols",
-      key: crypto.randomUUID(),
-    },
-    docs: {
-      icon: "RiFile4Fill",
-      external: true,
-      route: "https://docs.merkl.xyz/",
-      key: crypto.randomUUID(),
-    },
-    faq: {
-      icon: "RiQuestionFill",
-      route: "/faq",
-      key: crypto.randomUUID(),
-    },
     // terms: {
     //   icon: "RiCompassesLine",
     //   route: "/terms",
