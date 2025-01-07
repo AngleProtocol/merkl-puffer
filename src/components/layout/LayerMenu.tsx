@@ -1,5 +1,6 @@
 import { NavLink } from "@remix-run/react";
-import { Divider, Group, Text, WalletButton } from "dappkit";
+import { Divider, Group, Text } from "dappkit";
+import config from "merkl.config";
 import { Icon } from "packages/dappkit/src";
 import type { FC } from "react";
 import type { routesType } from "src/config/type";
@@ -45,16 +46,9 @@ export const LayerMenu: FC<{
         </ul>
       </main>
       <footer className="mt-lg">
-        <Group className="flex-col items-stretch">
-          <Group className="items-center">
-            <SearchBar />
-            <SwitchMode />
-          </Group>
-
-          <Group className="md:hidden">
-            <Divider look="base" />
-            <WalletButton />
-          </Group>
+        <Group className="items-center">
+          {config.header.searchbar.enabled && <SearchBar />}
+          <SwitchMode />
         </Group>
       </footer>
     </div>

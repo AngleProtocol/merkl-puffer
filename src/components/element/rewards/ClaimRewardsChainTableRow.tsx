@@ -1,5 +1,6 @@
 import type { Reward } from "@merkl/api";
 import { Button, type Component, Icon, Space, Value, mergeClass } from "dappkit";
+import config from "merkl.config";
 import TransactionButton from "packages/dappkit/src/components/dapp/TransactionButton";
 import Collapsible from "packages/dappkit/src/components/primitives/Collapsible";
 import EventBlocker from "packages/dappkit/src/components/primitives/EventBlocker";
@@ -26,7 +27,7 @@ export default function ClaimRewardsChainTableRow({
   const [open, setOpen] = useState(false);
   const [selectedTokens, setSelectedTokens] = useState<Set<string>>(new Set<string>());
 
-  const { address: user, chainId, switchChain } = useWalletContext();
+  const { address: user, chainId, switchChain, sponsorTransactions, setSponsorTransactions } = useWalletContext();
   const isUserRewards = useMemo(() => user === from, [user, from]);
   const isAbleToClaim = useMemo(
     () => isUserRewards && !reward.rewards.every(({ amount, claimed }) => amount === claimed),
@@ -92,7 +93,13 @@ export default function ClaimRewardsChainTableRow({
           <EventBlocker>
             {isAbleToClaim &&
               (isOnCorrectChain ? (
-                <TransactionButton disabled={!claimTransaction} className="ml-xl" look="hype" tx={claimTransaction}>
+                <TransactionButton
+                  enableSponsorCheckbox
+                  name="Claim Rewards"
+                  disabled={!claimTransaction}
+                  className="ml-xl"
+                  look="hype"
+                  tx={claimTransaction}>
                   Claim
                 </TransactionButton>
               ) : (
@@ -105,7 +112,7 @@ export default function ClaimRewardsChainTableRow({
       }
       unclaimedColumn={
         unclaimed === 0 ? undefined : (
-          <Value size="lg" format="$0,0.#" look="bold" className="font-title">
+          <Value size="lg" format={config.decimalFormat.dollar} look="bold" className="font-title">
             {unclaimed}
           </Value>
         )

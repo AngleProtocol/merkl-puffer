@@ -3,7 +3,7 @@ import { Outlet } from "@remix-run/react";
 import Hero from "src/components/composite/Hero";
 
 export const meta: MetaFunction = () => {
-  return [{ title: "Tokens on Merkl" }];
+  return [{ title: "Merkl | Tokens" }];
 };
 
 export default function Index() {

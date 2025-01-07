@@ -1,28 +1,29 @@
 import type { Protocol } from "@merkl/api";
 import { Group } from "dappkit";
 import { useMemo } from "react";
-import OpportunityPagination from "../opportunity/OpportunityPagination";
+import Pagination from "../opportunity/Pagination";
+import ProtocolCell from "./ProtocolCell";
 import ProtocolFilters from "./ProtocolFilters";
-import { ProtocolTable } from "./ProtocolTable";
-import ProtocolTableRow from "./ProtocolTableRow";
 
 export type ProtocolLibraryProps = {
   protocols: Protocol[];
-  count?: number;
+  count: number;
 };
 
 export default function ProtocolLibrary({ protocols, count }: ProtocolLibraryProps) {
-  const rows = useMemo(() => protocols?.map(p => <ProtocolTableRow key={`${p.name}`} protocol={p} />), [protocols]);
+  const cells = useMemo(() => protocols?.map(p => <ProtocolCell key={`${p.name}`} protocol={p} />), [protocols]);
 
   return (
-    <ProtocolTable
-      footer={count !== undefined && <OpportunityPagination count={count} />}
-      header={
-        <Group className="justify-between w-full">
-          <ProtocolFilters />
+    <Group className="flex-col lg:my-xl">
+      <Group className="w-full mb-xl">
+        <ProtocolFilters />
+      </Group>
+      <div className="w-full overflow-x-scroll lg:overflow-x-auto">
+        <Group className="flex md:grid grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-xl mb-xl w-full justify-center">
+          {cells}
         </Group>
-      }>
-      {rows}
-    </ProtocolTable>
+        {count !== undefined && <Pagination count={count} />}
+      </div>
+    </Group>
   );
 }

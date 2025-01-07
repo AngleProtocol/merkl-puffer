@@ -2,7 +2,7 @@ import type { Token } from "@merkl/api";
 //TODO: export from api index
 import type { InteractionTarget } from "@merkl/api/dist/src/modules/v4/interaction/interaction.model";
 import { useWalletContext } from "packages/dappkit/src/context/Wallet.context";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import type { api as clientApi } from "src/api/index.client";
 import { InteractionService } from "src/api/services/interaction.service";
 
@@ -17,10 +17,11 @@ export default function useInteractionTransaction(
   amount?: bigint,
   userAddress?: string,
 ) {
-  const { address: connectedAddress } = useWalletContext();
+  const { address: connectedAddress, sponsorTransactions } = useWalletContext();
   const address = useMemo(() => userAddress ?? connectedAddress, [userAddress, connectedAddress]);
 
-  const [transaction, setTransaction] = useState<Transaction>();
+  const [loading, setLoading] = useState(false);
+  const [transactions, setTransactions] = useState<{ [payload: string]: Transaction }>();
   const payload: Payload | undefined = useMemo(() => {
     if (!chainId || !protocolId || !address || !amount || !tokenIn || !target?.identifier) return;
     return {
@@ -33,17 +34,31 @@ export default function useInteractionTransaction(
     };
   }, [chainId, protocolId, target, address, tokenIn, amount]);
 
-  useEffect(() => {
+  const transaction = useMemo(() => {
+    if (!payload) return;
+    return transactions?.[JSON.stringify(payload)];
+  }, [transactions, payload]);
+
+  const reload = useCallback(
     async function fetchTransaction() {
       if (!payload) return;
 
-      const tx = await InteractionService.getTransaction(payload);
+      setLoading(true);
+      try {
+        const tx = await InteractionService.get("supply", payload, { sponsor: sponsorTransactions && chainId === 324 });
 
-      setTransaction(tx);
-    }
+        setTransactions(txns => {
+          return { ...txns, [JSON.stringify(payload)]: tx };
+        });
+      } catch {}
+      setLoading(false);
+    },
+    [payload, sponsorTransactions, chainId],
+  );
 
-    fetchTransaction();
-  }, [payload]);
+  useEffect(() => {
+    reload();
+  }, [reload]);
 
-  return { transaction };
+  return { transaction, reload, loading };
 }

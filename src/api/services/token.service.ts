@@ -62,7 +62,7 @@ export abstract class TokenService {
   static async getSymbol(symbol: string | undefined): Promise<Token[]> {
     if (!symbol) throw new Response("Token not found");
 
-    const tokens = await TokenService.#fetch(async () => api.v4.tokens.index.get({ query: { symbol } }));
+    const tokens = await TokenService.#fetch(async () => api.v4.tokens.index.get({ query: { displaySymbol: symbol } }));
 
     if (tokens.length === 0) throw new Response("Token not found", { status: 404 });
     return tokens;

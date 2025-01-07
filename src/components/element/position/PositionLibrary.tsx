@@ -1,7 +1,7 @@
 import type { PositionT } from "@merkl/api/dist/src/modules/v4/liquidity";
 import { Text, Title } from "dappkit";
 import { useMemo } from "react";
-import OpportunityPagination from "../opportunity/OpportunityPagination";
+import Pagination from "../opportunity/Pagination";
 import { PositionTable } from "./PositionTable";
 import PositionTableRow from "./PositionTableRow";
 
@@ -25,8 +25,8 @@ export default function PositionLibrary(props: IProps) {
           Your Liquidity
         </Title>
       }
-      footer={count !== undefined && <OpportunityPagination count={count} />}>
-      {!!rows.length ? rows : <Text>No positions detected</Text>}
+      footer={count !== undefined && <Pagination count={count} />}>
+      {!!rows.length ? rows : <Text className="p-xl">No position detected</Text>}
     </PositionTable>
   );
 }

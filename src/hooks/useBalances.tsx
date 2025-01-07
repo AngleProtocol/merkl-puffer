@@ -1,56 +1,67 @@
 import { useWalletContext } from "packages/dappkit/src/context/Wallet.context";
-import { Fmt } from "packages/dappkit/src/utils/formatter.service";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { api as clientApi } from "src/api/index.client";
 import { InteractionService } from "src/api/services/interaction.service";
+import { create } from "zustand";
 
 type TokenBalances = Awaited<ReturnType<typeof clientApi.v4.tokens.balances.get>>["data"];
+type BalanceStore = {
+  balance: { [chainId: number]: { [address: string]: TokenBalances } };
+  update: (chainId: number, address: string, balances: TokenBalances) => void;
+  balanceOf: (
+    chainId: number,
+    address: string,
+    token: { address?: string; symbol?: string },
+  ) => NonNullable<TokenBalances>[number] | undefined;
+  balances: (chainId: number, address: string) => TokenBalances | undefined;
+};
+
+const useBalanceStore = create<BalanceStore>((set, get) => ({
+  balance: {},
+  balances(chainId, address) {
+    if (!chainId || !address) return;
+    return get()?.balance?.[chainId]?.[address];
+  },
+  balanceOf: (chainId: number, address: string, token: { address?: string; symbol?: string }) =>
+    get().balance?.[chainId]?.[address]?.find(({ address, symbol }) => {
+      if (token.address && address?.toLowerCase?.() === token?.address?.toLowerCase?.()) return true;
+      if (token.symbol && symbol?.toLowerCase?.() === token?.symbol?.toLowerCase?.()) return true;
+    }),
+  update: (chainId: number, address: string, balances: TokenBalances) => {
+    set(state => ({ balance: { ...state.balance, [chainId]: { [address]: balances } } }));
+  },
+}));
 
 export default function useBalances(chainId?: number, userAddress?: string) {
   const { chainId: connectedChainId, address: connectedAddress } = useWalletContext();
 
   const address = useMemo(() => userAddress ?? connectedAddress, [userAddress, connectedAddress]);
   const chain = useMemo(() => chainId ?? connectedChainId, [chainId, connectedChainId]);
+  const { update } = useBalanceStore();
+  const balance = useBalanceStore(state => state.balance);
 
-  const [chainBalances, setChainBalances] = useState<{
-    [chainId: number]: { [address: string]: TokenBalances };
-  }>();
+  const [loading, setLoading] = useState(false);
 
   const balances = useMemo(() => {
     if (!chainId || !address) return;
-    return chainBalances?.[chainId]?.[address];
-  }, [chainId, address, chainBalances]);
+    return balance?.[chainId]?.[address];
+  }, [chainId, address, balance]);
+
+  const reload = useCallback(async () => {
+    if (!chain || !address) return;
+
+    setLoading(true);
+    try {
+      const tokens = await InteractionService.getBalances(chain, address);
+
+      update(chain, address, tokens);
+    } catch {}
+    setLoading(false);
+  }, [chain, address, update]);
 
   useEffect(() => {
-    async function fetchTokenBalances() {
-      if (!chain || !address) return;
+    reload();
+  }, [reload]);
 
-      try {
-        const tokens = await InteractionService.getBalances(chain, address);
-
-        setChainBalances(b =>
-          Object.assign(b ? { ...b } : {}, {
-            [chain]: Object.assign(b?.[chain] ?? {}, {
-              [address]: tokens.sort((a, b) => Fmt.toPrice(b.balance, b) - Fmt.toPrice(a.balance, a)),
-            }),
-          }),
-        );
-      } catch (_err) {
-        console.log("ERROR");
-      }
-    }
-
-    fetchTokenBalances();
-  }, [chain, address]);
-
-  const balanceOf = useCallback(
-    (token: { address?: string; symbol?: string }) =>
-      balances?.find(({ address, symbol }) => {
-        if (token.address && address?.toLowerCase?.() === token?.address?.toLowerCase?.()) return true;
-        if (token.symbol && symbol?.toLowerCase?.() === token?.symbol?.toLowerCase?.()) return true;
-      }),
-    [balances],
-  );
-
-  return { balanceOf, balances };
+  return { balances, loading, reload };
 }

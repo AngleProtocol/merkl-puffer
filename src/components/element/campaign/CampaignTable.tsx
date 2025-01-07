@@ -9,7 +9,7 @@ export const [CampaignTable, CampaignRow, CampaignColumns] = createTable({
     main: true,
   },
   chain: {
-    name: "Chain",
+    name: "Distribution chain",
     size: "minmax(30px,150px)",
     compactSize: "minmax(20px,1fr)",
     className: "justify-center",

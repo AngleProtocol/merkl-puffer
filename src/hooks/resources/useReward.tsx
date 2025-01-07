@@ -1,28 +1,46 @@
 import type { Reward } from "@merkl/api";
-import { useMemo } from "react";
-import { encodeFunctionData, parseAbi } from "viem";
+import { useWalletContext } from "packages/dappkit/src/context/Wallet.context";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { InteractionService } from "src/api/services/interaction.service";
 
 export default function useReward(reward?: Reward, userAddress?: string, tokenAddresses?: Set<string>) {
-  const claimTransaction = useMemo(() => {
-    if (!userAddress || !reward) return;
+  const [claimTransaction, setClaimTransaction] = useState();
+  const { sponsorTransactions, chainId } = useWalletContext();
+  const [loading, setLoading] = useState();
 
-    const abi = parseAbi(["function claim(address[],address[],uint256[],bytes32[][]) view returns (uint256)"]);
+  const payload = useMemo(() => {
+    if (!userAddress || !reward) return;
 
     const rewards = reward.rewards.filter(({ token: { address } }) => !tokenAddresses || tokenAddresses?.has(address));
     const addresses = rewards.map(({ token }) => token.address as `0x${string}`);
-    const accumulatedRewards = rewards.map(({ amount }) => amount);
+    const accumulatedRewards = rewards.map(({ amount }) => amount.toString());
     const proofs = rewards.map(({ proofs }) => proofs as `0x${string}`[]);
 
-    if (!reward) return;
     return {
-      to: reward.distributor,
-      data: encodeFunctionData({
-        abi,
-        functionName: "claim",
-        args: [addresses.map(() => userAddress as `0x${string}`), addresses, accumulatedRewards, proofs],
-      }),
+      userAddress,
+      distributor: reward.distributor,
+      args: [addresses.map(() => userAddress as `0x${string}`), addresses, accumulatedRewards, proofs],
     };
   }, [reward, userAddress, tokenAddresses]);
 
-  return { claimTransaction };
+  const reload = useCallback(
+    async function fetchTransaction() {
+      if (!payload) return;
+
+      setLoading(true);
+      try {
+        const tx = await InteractionService.get("claim", payload, { sponsor: sponsorTransactions && chainId === 324 });
+
+        setClaimTransaction({ ...tx });
+      } catch {}
+      setLoading(false);
+    },
+    [payload, sponsorTransactions, chainId],
+  );
+
+  useEffect(() => {
+    reload();
+  }, [reload]);
+
+  return { claimTransaction, loading, reload };
 }

@@ -1,5 +1,5 @@
 import type { Reward } from "@merkl/api";
-import { Button, type Component, Divider, type GetSet, Group } from "dappkit";
+import { type Component, Divider, type GetSet } from "dappkit";
 import OpportuntiyButton from "../../opportunity/OpportunityButton";
 import Token from "../../token/Token";
 import { ClaimRewardsByOpportunityRow } from "./ClaimRewardsTableByOpportunity";
@@ -33,21 +33,14 @@ export default function ClaimRewardsTokenTableRowByOpportunity({
         // actionColumn={
         //   !!breakdown.opportunity?.action && <Tag type="action" value={breakdown.opportunity?.action} size="xs" />
         // }
-        claimedColumn={<Token token={token} amount={breakdown.claimed} format="amount_price" size="xs" />}
-        unclaimedColumn={
-          !!unclaimed && (
-            <Token token={token} amount={breakdown.amount - breakdown.claimed} format="amount_price" size="xs" />
-          )
+        claimedColumn={
+          breakdown.claimed > 0n && <Token token={token} amount={breakdown.claimed} format="symbol" showZero={true} />
         }
-        buttonColumn={
-          <Group size="sm">
-            <Button look="hype" size="sm">
-              Supply
-            </Button>
-            <Button look="base" size="sm">
-              Withdraw
-            </Button>
-          </Group>
+        pendingColumn={
+          breakdown.pending > 0n && <Token token={token} amount={breakdown.pending} format="symbol" showZero={true} />
+        }
+        unclaimedColumn={
+          unclaimed > 0n && <Token token={token} amount={breakdown.amount - breakdown.claimed} format="symbol" />
         }
       />
     </>

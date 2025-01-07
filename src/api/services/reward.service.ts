@@ -1,3 +1,5 @@
+import config from "merkl.config";
+import { DEFAULT_ITEMS_PER_PAGE } from "src/constants/pagination";
 import { api } from "../index.server";
 import { fetchWithLogs } from "../utils";
 
@@ -28,7 +30,7 @@ export abstract class RewardService {
     const filters = Object.assign(
       {
         campaignId,
-        items: items ?? 50,
+        items: items ?? DEFAULT_ITEMS_PER_PAGE,
         page,
       },
       override ?? {},
@@ -43,10 +45,18 @@ export abstract class RewardService {
     return query;
   }
 
-  static async getForUser(address: string, chainId: number) {
+  static async getForUser(request: Request, address: string, chainId: number) {
+    const url = new URL(request.url);
+    const chainIds = config.chains?.map(({ id }) => id).join(",");
+    // biome-ignore lint/suspicious/noExplicitAny: TODO
+    const query: Record<string, any> = {
+      chainId: chainId.toString(),
+      test: config.alwaysShowTestTokens ? true : (url.searchParams.get("test") ?? false),
+    };
+    if (chainIds) query.chainIds = chainIds;
     return await RewardService.#fetch(async () =>
       api.v4.users({ address }).rewards.breakdowns.get({
-        query: { chainId },
+        query,
       }),
     );
   }

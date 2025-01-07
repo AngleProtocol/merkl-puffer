@@ -3,7 +3,6 @@ import { createConfig } from "src/config/type";
 import hero from "src/customer/assets/images/hero.jpg?url";
 import { v4 as uuidv4 } from "uuid";
 import { http, createClient, custom } from "viem";
-
 import {
   arbitrum,
   astar,
@@ -41,16 +40,54 @@ import {
   zksync,
 } from "viem/chains";
 import { eip712WalletActions } from "viem/zksync";
-import { coinbaseWallet, walletConnect } from "wagmi/connectors";
+import { walletConnect } from "wagmi/connectors";
 
 export default createConfig({
   appName: "Merkl",
   modes: ["dark", "light"],
   defaultTheme: "ignite",
-  tags: [],
   opportunityNavigationMode: "direct",
   rewardsNavigationMode: "chain",
+  tokenSymbolPriority: ["ZK", "USDC", "USDC.e", "ETH", "WETH", "WBTC", "wstETH", "USDT", "USDe", "weETH", "DAI"],
+  opportunityCellHideTags: ["token", "action"],
+  opportunityLibraryDefaultView: "table",
+  // opportunityLibraryExcludeFilters: ["protocol","action"],
+  opprtunityPercentage: true,
+  hideLayerMenuHomePage: false,
+  supplyCredits: [],
   deposit: true,
+  walletOptions: {
+    hideInjectedWallets: ["phantom", "coinbase wallet"],
+    sponsorTransactions: true,
+    client(c) {
+      if (c.chain?.id === zksync.id) return c.extend(eip712WalletActions());
+    },
+  },
+  chains: [],
+  opportunity: {
+    featured: {
+      enabled: false,
+      length: 6,
+    },
+  },
+  bridge: {
+    helperLink: "",
+  },
+  dashboard: {
+    liquidityTab: {
+      enabled: false,
+    },
+  },
+  tagsDetails: {
+    token: {
+      visitOpportunities: {
+        enabled: true,
+      },
+    },
+  },
+  decimalFormat: {
+    dollar: "$0,0.##a",
+  },
   themes: {
     ignite: {
       base: createColoring(["#1755F4", "#FF7900", "#0D1530"], ["#1755F4", "#FF7900", "#FFFFFF"]),
@@ -86,6 +123,8 @@ export default createConfig({
     spacing: { xs: 2, sm: 4, md: 8, lg: 12, xl: 16 },
     radius: { xs: 3, sm: 6, md: 9, lg: 12, xl: 15 },
   },
+  alwaysShowTestTokens: true,
+  showCopyOpportunityIdToClipboard: true,
   images: {
     hero: hero,
   },
@@ -100,16 +139,16 @@ export default createConfig({
       route: "/opportunities",
       key: uuidv4(),
     },
-    // protocols: {
-    //   icon: "RiVipCrown2Fill",
-    //   route: "/protocols",
-    //   key: uuidv4(),
-    // },
-    // bridge: {
-    //   icon: "RiCompassesLine",
-    //   route: "/bridge",
-    //   key: uuidv4(),
-    // },
+    protocols: {
+      icon: "RiVipCrown2Fill",
+      route: "/protocols",
+      key: uuidv4(),
+    },
+    bridge: {
+      icon: "RiCompassesLine",
+      route: "/bridge",
+      key: uuidv4(),
+    },
     docs: {
       icon: "RiFile4Fill",
       external: true,
@@ -120,6 +159,27 @@ export default createConfig({
       icon: "RiQuestionFill",
       route: "/faq",
       key: uuidv4(),
+    },
+    // terms: {
+    //   icon: "RiCompassesLine",
+    //   route: "/terms",
+    //   key: uuidv4(),
+    // },
+    // privacy: {
+    //   icon: "RiInformationFill",
+    //   route: "/privacy",
+    //   key: uuidv4(),
+    // },
+  },
+  header: {
+    searchbar: {
+      enabled: true,
+    },
+    opportunities: {
+      enabled: false,
+    },
+    bridge: {
+      enabled: false,
     },
     // terms: {
     //   icon: "RiCompassesLine",
@@ -192,14 +252,13 @@ export default createConfig({
     },
     ssr: true,
     connectors: [
-      coinbaseWallet(),
       walletConnect({
         customStoragePrefix: "wagmi",
         projectId: "26c912aadd2132cd869a5edc00aeea0f",
         metadata: {
           name: "Merkl Lite",
           description: "Merkl Lite",
-          url: "https://app.merkl.xyz.com",
+          url: "https://app.merkl.xyz",
           icons: [],
         },
       }),

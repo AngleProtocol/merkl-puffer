@@ -1,7 +1,11 @@
 import type * as RemixIcon from "@remixicon/react";
 import type { Mode, Themes, sizeScale } from "dappkit";
+import type { WalletOptions } from "packages/dappkit/src/hooks/useWalletState";
+import type { TagTypes } from "src/components/element/Tag";
+import type { OpportunityFilter } from "src/components/element/opportunity/OpportunityFilters";
+import type { Chain } from "viem";
 import { createConfig as createWagmiConfig } from "wagmi";
-import type { OpportunityNavigationMode } from "./opportunity";
+import type { OpportunityNavigationMode, OpportunityView } from "./opportunity";
 import type { RewardsNavigationMode } from "./rewards";
 
 export type routesType = {
@@ -13,6 +17,7 @@ export type routesType = {
   };
 };
 
+// TODO: groups by entity
 export type MerklConfig<T extends Themes> = {
   themes: T;
   sizing: {
@@ -23,13 +28,69 @@ export type MerklConfig<T extends Themes> = {
   tags?: string[];
   defaultTheme: keyof T;
   deposit?: boolean;
+  chains?: Chain[];
+  alwaysShowTestTokens?: boolean;
+  showCopyOpportunityIdToClipboard?: boolean;
+  walletOptions?: WalletOptions;
+  tokenSymbolPriority: string[];
   opportunityNavigationMode?: OpportunityNavigationMode;
+  opportunityLibraryDefaultView?: OpportunityView;
+  opportunityCellHideTags?: (keyof TagTypes)[];
   rewardsNavigationMode?: RewardsNavigationMode;
+  rewardsTotalClaimableMode?: string; // Address of the token you want to display the totals of
+  dashboardPageName?: string; // Name of the dashboard page
+  opprtunityPercentage: boolean;
+  hideLayerMenuHomePage: boolean;
+  hideInteractor?: boolean; // Whether the interactor with a given opportunity must be displayed or not
+  hideBridgePage?: boolean; // Whether the bridge page should be added or not
+  opportunityLibraryExcludeFilters?: OpportunityFilter[]; // Which filters to systematically exclude from the OpportunityLibrary
+  hideSpyMode?: boolean;
+  supplyCredits: {
+    id: string;
+    name: string;
+    image: string;
+    url: string;
+  }[];
   modes: Mode[];
   wagmi: Parameters<typeof createWagmiConfig>["0"];
   appName: string;
   fonts?: { title: string[]; text: string[]; mono: string[] };
   routes: routesType;
+  opportunity: {
+    featured: {
+      enabled: boolean;
+      length: number;
+    };
+  };
+  bridge: {
+    helperLink?: string;
+  };
+  dashboard: {
+    liquidityTab: {
+      enabled: boolean;
+    };
+  };
+  tagsDetails: {
+    token: {
+      visitOpportunities: {
+        enabled: boolean;
+      };
+    };
+  };
+  decimalFormat: {
+    dollar: string;
+  };
+  header: {
+    searchbar: {
+      enabled: boolean;
+    };
+    opportunities: {
+      enabled: boolean;
+    };
+    bridge: {
+      enabled: boolean;
+    };
+  };
   images: {
     [name: string]: string;
   };

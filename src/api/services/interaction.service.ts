@@ -1,5 +1,6 @@
 import { api as clientApi } from "src/api/index.client";
 import { fetchWithLogs } from "../utils";
+import { ZyfiService } from "./zyfi.service";
 
 export abstract class InteractionService {
   static async #fetch<R, T extends { data: R; status: number; response: Response }>(
@@ -14,13 +15,32 @@ export abstract class InteractionService {
     return data;
   }
 
+  static async get(
+    //TODO: template type the transaction
+    name: "supply",
+    payload: Parameters<typeof clientApi.v4.interaction.transaction.get>[0]["query"],
+    options?: { sponsor?: boolean },
+  ) {
+    const response = await fetch(`/transaction/${name}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ ...payload, ...options }),
+    });
+
+    //TODO: use template type to get correct response type
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+    return (await response.json()) as any;
+  }
+
   /**
    * Client side
    * @param chainId
    * @param protocolId
    * @param identifier
    */
-  static async getTarget(chainId: number, protocolId: string, identifier: string) {
+  static async getTargets(chainId: number, protocolId: string, identifier: string) {
     const targets = await InteractionService.#fetch(() =>
       clientApi.v4.interaction.targets.get({
         query: { chainId, protocolId, identifier },
@@ -28,18 +48,30 @@ export abstract class InteractionService {
     );
 
     //TODO: opportunity/:id/target instead of taking the first result and expecting unique
-    return targets?.[0];
+    return targets;
   }
 
   /**
    * Client side
    */
-  static async getTransaction(payload: Parameters<typeof clientApi.v4.interaction.transaction.get>[0]["query"]) {
+  static async getTransaction(
+    payload: Parameters<typeof clientApi.v4.interaction.transaction.get>[0]["query"],
+    sponsor?: boolean,
+  ) {
     const transaction = await InteractionService.#fetch(() =>
       clientApi.v4.interaction.transaction.get({
         query: payload,
       }),
     );
+
+    if (sponsor && !transaction.approved) {
+      transaction.approval = await ZyfiService.wrapAndPrepareTx({ ...transaction.approval, from: payload.userAddress });
+    } else if (sponsor) {
+      transaction.transaction = await ZyfiService.wrapAndPrepareTx({
+        ...transaction.transaction,
+        from: payload.userAddress,
+      });
+    }
 
     return transaction;
   }

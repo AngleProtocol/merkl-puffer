@@ -1,23 +1,34 @@
 import type { Chain, Protocol } from "@merkl/api";
 import { Form, useLocation, useNavigate, useNavigation, useSearchParams } from "@remix-run/react";
-import { Button, Group, Icon, Input, Select } from "dappkit/src";
+import { Button, Group, Icon, Input, Select } from "dappkit";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { actions } from "src/config/actions";
+import type { OpportunityView } from "src/config/opportunity";
 import useSearchParamState from "src/hooks/filtering/useSearchParamState";
+import useChains from "src/hooks/resources/useChains";
+import useProtocols from "src/hooks/resources/useProtocols";
 
 const filters = ["search", "action", "status", "chain", "protocol", "tvl"] as const;
-type OpportunityFilter = (typeof filters)[number];
+export type OpportunityFilter = (typeof filters)[number];
 
 export type OpportunityFilterProps = {
   only?: OpportunityFilter[];
   chains?: Chain[];
-  // TODO: Type this
+  view?: OpportunityView;
+  setView?: (v: OpportunityView) => void;
   protocols?: Protocol[];
   exclude?: OpportunityFilter[];
 };
 
 //TODO: burn this to the ground and rebuild it with a deeper comprehension of search param states
-export default function OpportunityFilters({ only, protocols, exclude, chains }: OpportunityFilterProps) {
+export default function OpportunityFilters({
+  only,
+  protocols,
+  exclude,
+  chains,
+  view,
+  setView,
+}: OpportunityFilterProps) {
   const [_, setSearchParams] = useSearchParams();
   const navigation = useNavigation();
   const navigate = useNavigate();
@@ -57,33 +68,9 @@ export default function OpportunityFilters({ only, protocols, exclude, chains }:
       </>
     ),
   };
-  const chainOptions =
-    chains?.reduce(
-      (obj, chain) =>
-        Object.assign(obj, {
-          [chain.id]: (
-            <>
-              <Icon size="sm" src={chain?.icon} />
-              {chain.name}
-            </>
-          ),
-        }),
-      {},
-    ) ?? [];
 
-  const protocolOptions =
-    protocols?.reduce(
-      (obj, protocol) =>
-        Object.assign(obj, {
-          [protocol.id]: (
-            <>
-              <Icon size="sm" src={protocol?.icon} />
-              {protocol.name}
-            </>
-          ),
-        }),
-      {},
-    ) ?? [];
+  const { options: protocolOptions } = useProtocols(protocols);
+  const { options: chainOptions, isSingleChain } = useChains(chains);
 
   const [actionsFilter] = useSearchParamState<string[]>(
     "action",
@@ -220,92 +207,104 @@ export default function OpportunityFilters({ only, protocols, exclude, chains }:
   }, [navigation]);
 
   return (
-    <Group className="items-center flex-nowrap">
-      {fields.includes("search") && (
-        <Form>
-          <Input
-            look="soft"
-            name="search"
-            value={innerSearch}
-            className="min-w-[12ch]"
-            state={[innerSearch, v => setInnerSearch(v)]}
-            suffix={<Icon remix="RiSearchLine" />}
-            onClick={onSearchSubmit}
-            size="sm"
-            placeholder="Search"
+    <Group className="justify-between flex-nowrap">
+      <Group className="items-center flex-nowrap">
+        {fields.includes("search") && (
+          <Form>
+            <Input
+              look="base"
+              name="search"
+              value={innerSearch}
+              className="min-w-[12ch]"
+              state={[innerSearch, v => setInnerSearch(v ?? "")]}
+              suffix={<Icon remix="RiSearchLine" />}
+              onClick={onSearchSubmit}
+              size="sm"
+              placeholder="Search"
+            />
+          </Form>
+        )}
+        {fields.includes("action") && (
+          <Select
+            state={[actionsInput, setActionsInput]}
+            allOption={"All actions"}
+            multiple
+            options={actionOptions}
+            look="tint"
+            placeholder="Actions"
           />
-        </Form>
-      )}
-      {fields.includes("action") && (
-        <Select
-          state={[actionsInput, setActionsInput]}
-          allOption={"All actions"}
-          multiple
-          options={actionOptions}
-          look="tint"
-          placeholder="Actions"
-        />
-      )}
-      {fields.includes("status") && (
-        <Select
-          state={[statusInput, setStatusInput]}
-          allOption={"All status"}
-          multiple
-          options={statusOptions}
-          look="tint"
-          placeholder="Status"
-        />
-      )}
-      {fields.includes("chain") && (
-        <Select
-          state={[chainIdsInput, n => setChainIdsInput(n)]}
-          allOption={"All chains"}
-          multiple
-          search
-          options={chainOptions}
-          look="tint"
-          placeholder="Chains"
-        />
-      )}
-      {fields.includes("protocol") && (
-        <Select
-          state={[protocolInput, n => setProtocolInput(n)]}
-          allOption={"All protocols"}
-          multiple
-          search
-          options={protocolOptions}
-          look="tint"
-          placeholder="Protocols"
-        />
-      )}
-      {fields.includes("tvl") && (
-        <Form>
-          <Input
-            state={[tvlInput, n => (/^\d+$/.test(n) || !n) && setTvlInput(n)]}
-            look="soft"
-            name="tvl"
-            value={tvlInput}
-            className="min-w-[4ch]"
-            suffix={<Icon remix="RiFilter2Line" />}
-            placeholder="Minimum TVL"
+        )}
+        {fields.includes("status") && (
+          <Select
+            state={[statusInput, setStatusInput]}
+            allOption={"All status"}
+            multiple
+            options={statusOptions}
+            look="tint"
+            placeholder="Status"
           />
-        </Form>
-      )}
-      {((canApply && !clearing && navigation.state === "idle") ||
-        (applying && !clearing && navigation.state === "loading")) && (
-        <Button onClick={onApplyFilters} look="bold">
-          Apply
-          {navigation.state === "loading" ? (
-            <Icon className="animate-spin" remix="RiLoader2Line" />
-          ) : (
-            <Icon remix="RiArrowRightLine" />
-          )}
+        )}
+        {fields.includes("chain") && !isSingleChain && (
+          <Select
+            state={[chainIdsInput, n => setChainIdsInput(n)]}
+            allOption={"All chains"}
+            multiple
+            search
+            options={chainOptions}
+            look="tint"
+            placeholder="Chains"
+          />
+        )}
+        {fields.includes("protocol") && (
+          <Select
+            state={[protocolInput, n => setProtocolInput(n)]}
+            allOption={"All protocols"}
+            multiple
+            search
+            options={protocolOptions}
+            look="tint"
+            placeholder="Protocols"
+          />
+        )}
+        {fields.includes("tvl") && (
+          <Form>
+            <Input
+              state={[tvlInput, n => (/^\d+$/.test(n ?? "") || !n) && setTvlInput(n ?? "")]}
+              look="base"
+              name="tvl"
+              value={tvlInput}
+              className="min-w-[4ch]"
+              suffix={<Icon remix="RiFilter2Line" />}
+              placeholder="Minimum TVL"
+            />
+          </Form>
+        )}
+        {((canApply && !clearing && navigation.state === "idle") ||
+          (applying && !clearing && navigation.state === "loading")) && (
+          <Button onClick={onApplyFilters} look="bold">
+            Apply
+            {navigation.state === "loading" ? (
+              <Icon className="animate-spin" remix="RiLoader2Line" />
+            ) : (
+              <Icon remix="RiArrowRightLine" />
+            )}
+          </Button>
+        )}
+        <Button onClick={onClearFilters} look="soft">
+          <Icon remix="RiCloseLine" />
+          Clear filters
         </Button>
+      </Group>
+      {view && (
+        <Group className="flex-nowrap">
+          <Button disabled={view === "cells"} look="soft" onClick={() => setView?.("cells")}>
+            <Icon remix="RiDashboardFill" />
+          </Button>
+          <Button disabled={view === "table"} look="soft" onClick={() => setView?.("table")}>
+            <Icon remix="RiSortDesc" />
+          </Button>
+        </Group>
       )}
-      <Button onClick={onClearFilters} look="soft">
-        <Icon remix="RiCloseLine" />
-        Clear filters
-      </Button>
     </Group>
   );
 }

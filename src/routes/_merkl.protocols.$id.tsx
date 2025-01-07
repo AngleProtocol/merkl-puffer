@@ -8,7 +8,9 @@ import { ProtocolService } from "src/api/services/protocol.service";
 import Hero, { defaultHeroSideDatas } from "src/components/composite/Hero";
 
 export async function loader({ params: { id }, request }: LoaderFunctionArgs) {
-  const protocol = (await ProtocolService.get({ id: id ?? undefined }))?.[0];
+  if (!id) throw new Error("Protocol not found");
+  const protocol = await ProtocolService.getById(id);
+
   const { opportunities, count } = await OpportunityService.getManyFromRequest(request, { mainProtocolId: id });
 
   const { opportunities: opportunitiesByApr, count: liveCount } = await OpportunityService.getMany({
@@ -52,7 +54,7 @@ export default function Index() {
         (protocol?.description !== "" && protocol?.description) ||
         `Earn rewards by supplying liquidity on ${protocol?.name}`
       }
-      sideDatas={defaultHeroSideDatas(liveOpportunityCount, maxApr, dailyRewards)}>
+      sideDatas={defaultHeroSideDatas(liveOpportunityCount, maxApr, Number.parseFloat(dailyRewards))}>
       <Outlet context={{ opportunities, count }} />
     </Hero>
   );

@@ -1,7 +1,7 @@
 import type { Token } from "@merkl/api";
 import { Group } from "dappkit";
 import { useMemo } from "react";
-import OpportunityPagination from "../opportunity/OpportunityPagination";
+import Pagination from "../opportunity/Pagination";
 import ProtocolFilters from "./TokenFilters";
 import { TokenTable } from "./TokenTable";
 import TokenTableRow from "./TokenTableRow";
@@ -19,7 +19,7 @@ export default function TokenLibrary({ tokens, count }: TokenLibraryProps) {
 
   return (
     <TokenTable
-      footer={count !== undefined && <OpportunityPagination count={count} />}
+      footer={count !== undefined && <Pagination count={count} />}
       header={
         <Group className="justify-between w-full">
           <ProtocolFilters />
