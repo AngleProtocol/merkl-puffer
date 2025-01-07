@@ -12,18 +12,7 @@ export default function Index() {
       icons={[{ remix: "RiCoinFill" }]}
       title={"Tokens"}
       breadcrumbs={[{ link: "/tokens", name: "Tokens" }]}
-      description={"Tokens indexed by Merkl"}
-      // TODO: Make this dynamic
-      // sideDatas={[
-      //   {
-      //     data: "25",
-      //     label: "Live opportunities",
-      //     key: uuidv4(),
-      //   },
-      //   { data: "400%", label: "APR", key: uuidv4() },
-      //   { data: "$4k", label: "Daily rewards", key: uuidv4() },
-      // ]}
-    >
+      description={"Tokens indexed by Merkl"}>
       <Outlet />
     </Hero>
   );

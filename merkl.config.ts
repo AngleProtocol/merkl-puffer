@@ -3,6 +3,7 @@ import { createConfig } from "src/config/type";
 import hero from "src/customer/assets/images/hero.jpg?url";
 import { v4 as uuidv4 } from "uuid";
 import { http, createClient, custom } from "viem";
+
 import {
   arbitrum,
   astar,
@@ -55,8 +56,26 @@ export default createConfig({
   opportunityLibraryDefaultView: "table",
   // opportunityLibraryExcludeFilters: ["protocol","action"],
   opprtunityPercentage: true,
+  opportunityLibrary: {
+    defaultView: "cells",
+    // views: ["table"], // If you want only one view, this is where you can specify it.
+    cells: {
+      hideTags: ["token", "action"],
+    },
+    excludeFilters: ["protocol", "tvl"],
+  },
+  opportunityPercentage: true,
   hideLayerMenuHomePage: false,
   supplyCredits: [],
+  hero: {
+    bannerOnAllPages: false, // show banner on all pages
+    invertColors: false, // Light mode: light text on dark background (instead of dark text on light background)
+  },
+  opportunityFilters: {
+    minimumTVL: false,
+    protocols: false,
+    displaySelector: false,
+  },
   walletOptions: {
     hideInjectedWallets: ["phantom", "coinbase wallet"],
     sponsorTransactions: true,
@@ -69,6 +88,13 @@ export default createConfig({
     featured: {
       enabled: false,
       length: 6,
+    },
+    library: {
+      columns: {
+        action: {
+          enabled: false,
+        },
+      },
     },
   },
   bridge: {
@@ -90,27 +116,6 @@ export default createConfig({
     dollar: "$0,0.##a",
   },
   themes: {
-    ignite: {
-      base: createColoring(["#2A35BD", "#BFFF37", "#FFFFFF"], ["#2A35BD", "#BFFF37", "#FFFFFF"]),
-      info: createColoring(["#2ABDFF", "#2ABDFF", "#131620"], ["#FFFFFF", "#40B66B", "white"]),
-      good: createColoring(["#40B66B", "#40B66B", "#131620"], ["#FFFFFF", "#40B66B", "white"]),
-      warn: createColoring(["#ff9600", "#ff9600", "#131620"], ["#FFFFFF", "#40B66B", "white"]),
-      harm: createColoring(["#d22e14", "#d22e14", "#131620"], ["#FFFFFF", "#40B66B", "white"]),
-    },
-    merkl: {
-      base: createColoring(["#1755F4", "#FF7900", "#0D1530"], ["#1755F4", "#FF7900", "#FFFFFF"]),
-      info: createColoring(["#2ABDFF", "#2ABDFF", "#131620"], ["#FFFFFF", "#40B66B", "white"]),
-      good: createColoring(["#40B66B", "#40B66B", "#131620"], ["#FFFFFF", "#40B66B", "white"]),
-      warn: createColoring(["#ff9600", "#ff9600", "#131620"], ["#FFFFFF", "#40B66B", "white"]),
-      harm: createColoring(["#d22e14", "#d22e14", "#131620"], ["#FFFFFF", "#40B66B", "white"]),
-    },
-    backoffice: {
-      base: createColoring(["#8B8D98", "#9984D2", "#000000"], ["#8B8D98", "#9984D2", "#FFFFFF"]),
-      info: createColoring(["#2ABDFF", "#2ABDFF", "#131620"], ["#FFFFFF", "#40B66B", "white"]),
-      good: createColoring(["#40B66B", "#40B66B", "#131620"], ["#FFFFFF", "#40B66B", "white"]),
-      warn: createColoring(["#ff9600", "#ff9600", "#131620"], ["#FFFFFF", "#40B66B", "white"]),
-      harm: createColoring(["#d22e14", "#d22e14", "#131620"], ["#FFFFFF", "#40B66B", "white"]),
-    },
     puffer: {
       base: createColoring(["#2A35BD", "#BFFF37", "#FFFFFF"], ["#2A35BD", "#BFFF37", "#FFFFFF"]),
       info: createColoring(["#2ABDFF", "#2ABDFF", "#131620"], ["#FFFFFF", "#40B66B", "white"]),
@@ -180,7 +185,7 @@ export default createConfig({
       enabled: false,
     },
     bridge: {
-      enabled: false,
+      enabled: true,
     },
   },
   socials: {

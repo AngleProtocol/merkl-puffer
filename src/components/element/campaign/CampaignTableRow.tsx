@@ -8,6 +8,7 @@ import {
   Group,
   Hash,
   Icon,
+  Image,
   OverrideTheme,
   PrimitiveTag,
   Space,
@@ -20,6 +21,7 @@ import Time from "packages/dappkit/src/components/primitives/Time";
 import Tooltip from "packages/dappkit/src/components/primitives/Tooltip";
 import { type ReactNode, useCallback, useMemo, useState } from "react";
 import type { Opportunity } from "src/api/services/opportunity/opportunity.model";
+import EtherScan from "src/assets/images/etherscan.svg";
 import useCampaign from "src/hooks/resources/useCampaign";
 import { v4 as uuidv4 } from "uuid";
 import Tag from "../Tag";
@@ -78,7 +80,7 @@ export default function CampaignTableRow({
             {campaign.creatorAddress}
           </Hash>
           <Button to={`${chain.explorers?.[0]?.url}/address/${campaign.creatorAddress}`} external size="xs" look="soft">
-            <Icon remix="RiArrowRightUpLine" />
+            <Image className="w-3" alt="Merkl Footer logo" src={EtherScan} />
           </Button>
         </Group>,
       ],

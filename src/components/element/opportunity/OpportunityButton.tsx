@@ -1,6 +1,6 @@
+import type { Opportunity } from "@merkl/api";
 import { Button, Icon, Icons } from "dappkit";
 import { blockEvent } from "packages/dappkit/src/utils/event";
-import type { Opportunity } from "src/api/services/opportunity/opportunity.model";
 import useOpportunity from "src/hooks/resources/useOpportunity";
 
 export type OpportuntiyButtonProps = {

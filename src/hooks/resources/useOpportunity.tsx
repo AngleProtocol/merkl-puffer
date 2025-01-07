@@ -147,7 +147,7 @@ export default function useOpportunity(opportunity: Opportunity) {
     rewardsBreakdown,
     opportunity: {
       ...opportunity,
-      name: config.opprtunityPercentage ? opportunity.name : opportunity.name.replace(/\s*\d+(\.\d+)?%$/, "").trim(),
+      name: config.opportunityPercentage ? opportunity.name : opportunity.name.replace(/\s*\d+(\.\d+)?%$/, "").trim(),
     },
     tags,
     herosData,
