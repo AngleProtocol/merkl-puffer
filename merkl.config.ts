@@ -172,13 +172,13 @@ export default createConfig({
   },
   header: {
     searchbar: {
-      enabled: true,
+      enabled: false,
     },
     opportunities: {
       enabled: false,
     },
     bridge: {
-      enabled: true,
+      enabled: false,
     },
   },
   socials: {
