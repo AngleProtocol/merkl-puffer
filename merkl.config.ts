@@ -57,19 +57,17 @@ export default createConfig({
   // opportunityLibraryExcludeFilters: ["protocol","action"],
   opprtunityPercentage: true,
   opportunityLibrary: {
-    defaultView: "cells",
-    // views: ["table"], // If you want only one view, this is where you can specify it.
+    defaultView: "table",
+    views: ["table"], // If you want only one view, this is where you can specify it.
     cells: {
       hideTags: ["token", "action"],
     },
     excludeFilters: ["protocol", "tvl"],
   },
-  opportunityPercentage: true,
-  hideLayerMenuHomePage: false,
   supplyCredits: [],
   hero: {
     bannerOnAllPages: false, // show banner on all pages
-    invertColors: false, // Light mode: light text on dark background (instead of dark text on light background)
+    invertColors: true, // Light mode: light text on dark background (instead of dark text on light background)
   },
   opportunityFilters: {
     minimumTVL: false,
@@ -148,7 +146,7 @@ export default createConfig({
     protocols: {
       icon: "RiVipCrown2Fill",
       route: "/protocols",
-      key: uuidv4(),
+      key: crypto.randomUUID(),
     },
     docs: {
       icon: "RiFile4Fill",
