@@ -128,7 +128,7 @@ export default function OpportunityTableRow({
                   className={mergeClass(
                     overflowing && "hover:overflow-visible hover:animate-textScroll hover:text-clip",
                   )}>
-                  {config.opprtunityPercentage
+                  {config.opportunityPercentage
                     ? opportunity.name
                     : opportunity.name.replace(/\s*\d+(\.\d+)?%$/, "").trim()}
                 </Title>

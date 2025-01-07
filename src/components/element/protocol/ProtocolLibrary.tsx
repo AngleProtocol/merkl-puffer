@@ -19,7 +19,7 @@ export default function ProtocolLibrary({ protocols, count }: ProtocolLibraryPro
         <ProtocolFilters />
       </Group>
       <div className="w-full overflow-x-scroll lg:overflow-x-auto">
-        <Group className="flex md:grid grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-xl mb-xl w-full justify-center">
+        <Group className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-lg md:gap-xl mb-xl w-full justify-center">
           {cells}
         </Group>
         {count !== undefined && <Pagination count={count} />}

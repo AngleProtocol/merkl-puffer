@@ -2,6 +2,7 @@ import { Title, createTable } from "dappkit";
 
 import config from "merkl.config";
 
+// biome-ignore lint/suspicious/noExplicitAny: TODO
 export function filterColumns<T extends Record<string, any>>(columns: T): T {
   const libraryColumnsConfig = config.opportunity?.library?.columns;
   if (!libraryColumnsConfig) return columns;

@@ -49,13 +49,27 @@ export default createConfig({
   defaultTheme: "ignite",
   opportunityNavigationMode: "supply",
   tokenSymbolPriority: ["ZK", "USDC", "USDC.e", "ETH", "WETH", "WBTC", "wstETH", "USDT", "USDe", "weETH", "DAI"],
-  opportunityCellHideTags: ["token", "action"],
   rewardsNavigationMode: "chain",
-  opportunityLibraryDefaultView: "cells",
-  // opportunityLibraryExcludeFilters: ["protocol","action"],
-  opprtunityPercentage: true,
+  opportunityLibrary: {
+    defaultView: "cells",
+    // views: ["table"], // If you want only one view, this is where you can specify it.
+    cells: {
+      hideTags: ["token", "action"],
+    },
+    excludeFilters: ["protocol", "tvl"],
+  },
+  opportunityPercentage: true,
   hideLayerMenuHomePage: false,
   supplyCredits: [],
+  hero: {
+    bannerOnAllPages: false, // show banner on all pages
+    invertColors: false, // Light mode: light text on dark background (instead of dark text on light background)
+  },
+  opportunityFilters: {
+    minimumTVL: false,
+    protocols: false,
+    displaySelector: false,
+  },
   deposit: true,
   walletOptions: {
     hideInjectedWallets: ["phantom", "coinbase wallet"],
