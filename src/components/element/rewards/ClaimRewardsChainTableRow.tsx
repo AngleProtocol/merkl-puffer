@@ -27,7 +27,7 @@ export default function ClaimRewardsChainTableRow({
   const [open, setOpen] = useState(false);
   const [selectedTokens, setSelectedTokens] = useState<Set<string>>(new Set<string>());
 
-  const { address: user, chainId, switchChain } = useWalletContext();
+  const { address: user, chainId, switchChain, sponsorTransactions, setSponsorTransactions } = useWalletContext();
   const isUserRewards = useMemo(() => user === from, [user, from]);
   const isAbleToClaim = useMemo(
     () => isUserRewards && !reward.rewards.every(({ amount, claimed }) => amount === claimed),
@@ -94,6 +94,7 @@ export default function ClaimRewardsChainTableRow({
             {isAbleToClaim &&
               (isOnCorrectChain ? (
                 <TransactionButton
+                  enableSponsorCheckbox
                   name="Claim Rewards"
                   disabled={!claimTransaction}
                   className="ml-xl"

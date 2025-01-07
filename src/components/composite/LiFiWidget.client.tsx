@@ -58,5 +58,5 @@ const LiFiWidgetLazy = lazy(async () => {
 });
 
 export function LiFiWidget() {
-  return <LiFiWidgetLazy config={LifiConfig} integrator="Merkl" />;
+  return <LiFiWidgetLazy config={LifiConfig} integrator="merkl-jumper-ignite" />;
 }

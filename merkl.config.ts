@@ -3,7 +3,6 @@ import { createConfig } from "src/config/type";
 import hero from "src/customer/assets/images/hero.jpg?url";
 import { v4 as uuidv4 } from "uuid";
 import { http, createClient, custom } from "viem";
-
 import {
   arbitrum,
   astar,

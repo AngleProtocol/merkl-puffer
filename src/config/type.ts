@@ -38,6 +38,7 @@ export type MerklConfig<T extends Themes> = {
   opportunityCellHideTags?: (keyof TagTypes)[];
   rewardsNavigationMode?: RewardsNavigationMode;
   rewardsTotalClaimableMode?: string; // Address of the token you want to display the totals of
+  dashboardPageName?: string; // Name of the dashboard page
   opprtunityPercentage: boolean;
   hideLayerMenuHomePage: boolean;
   hideInteractor?: boolean; // Whether the interactor with a given opportunity must be displayed or not
