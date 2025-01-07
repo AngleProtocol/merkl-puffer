@@ -66,7 +66,7 @@ export default createConfig({
   },
   supplyCredits: [],
   hero: {
-    bannerOnAllPages: false, // show banner on all pages
+    bannerOnAllPages: true, // show banner on all pages
     invertColors: true, // Light mode: light text on dark background (instead of dark text on light background)
   },
   opportunityFilters: {
