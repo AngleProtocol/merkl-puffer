@@ -36,7 +36,7 @@ export default function OpportunityLibrary({
   // Merge global and local exclusions
   const mergedExclusions = useMemo(() => {
     // Get global exclusions from config
-    const globalExclusions = merklConfig?.opportunityLibraryExcludeFilters || [];
+    const globalExclusions = merklConfig?.opportunityLibrary.excludeFilters || [];
     // Combine global and local exclusions
     const combinedExclusions = [...globalExclusions, ...exclude];
     // Remove duplicates
@@ -58,7 +58,7 @@ export default function OpportunityLibrary({
     [sortable, setSortIdAndOrder],
   );
 
-  const [view, setView] = useState<OpportunityView>(forceView ?? merklConfig.opportunityLibraryDefaultView ?? "table");
+  const [view, setView] = useState<OpportunityView>(forceView ?? merklConfig.opportunityLibrary.defaultView ?? "table");
 
   const display = useMemo(() => {
     switch (view) {
@@ -78,7 +78,7 @@ export default function OpportunityLibrary({
             footer={count !== undefined && <Pagination count={count} />}>
             {opportunities?.map(o => (
               <OpportunityTableRow
-                hideTags={merklConfig.opportunityCellHideTags}
+                hideTags={merklConfig.opportunityLibrary.cells.hideTags}
                 navigationMode={merklConfig.opportunityNavigationMode}
                 key={`${o.chainId}_${o.type}_${o.identifier}`}
                 opportunity={o}
@@ -93,7 +93,7 @@ export default function OpportunityLibrary({
               {opportunities?.map(o => (
                 <OpportunityCell
                   navigationMode={merklConfig.opportunityNavigationMode}
-                  hideTags={merklConfig.opportunityCellHideTags}
+                  hideTags={merklConfig.opportunityLibrary.cells.hideTags}
                   key={`${o.chainId}_${o.type}_${o.identifier}`}
                   opportunity={o}
                 />

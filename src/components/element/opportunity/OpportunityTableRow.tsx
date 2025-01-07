@@ -7,6 +7,7 @@ import EventBlocker from "packages/dappkit/src/components/primitives/EventBlocke
 import { useOverflowingRef } from "packages/dappkit/src/hooks/events/useOverflowing";
 import { useMemo } from "react";
 import type { Opportunity } from "src/api/services/opportunity/opportunity.model";
+import { actions } from "src/config/actions";
 import type { OpportunityNavigationMode } from "src/config/opportunity";
 import useOpportunity from "src/hooks/resources/useOpportunity";
 import Tag, { type TagTypes } from "../Tag";
@@ -107,6 +108,12 @@ export default function OpportunityTableRow({
         aprColumn={aprColumn}
         tvlColumn={tvlColumn}
         rewardsColumn={rewardsColumn}
+        actionColumn={
+          <Group>
+            <Icon remix={actions[opportunity.action].icon.remix} />
+            {actions[opportunity.action].label}
+          </Group>
+        }
         opportunityColumn={
           <Group className="flex-col w-full">
             <Group className="min-w-0 flex-nowrap overflow-hidden max-w-full">
@@ -121,7 +128,7 @@ export default function OpportunityTableRow({
                   className={mergeClass(
                     overflowing && "hover:overflow-visible hover:animate-textScroll hover:text-clip",
                   )}>
-                  {config.opprtunityPercentage
+                  {config.opportunityPercentage
                     ? opportunity.name
                     : opportunity.name.replace(/\s*\d+(\.\d+)?%$/, "").trim()}
                 </Title>

@@ -102,9 +102,11 @@ export abstract class ZyfiService {
       value,
     });
 
+    if (!check.txData) return null;
+
     return {
       account: from,
-      to: check.txData.to,
+      to: check.txData?.to,
       value: BigInt(check.txData.value!),
       chain: zksync,
       gas: BigInt(check.txData.gasLimit),

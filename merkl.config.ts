@@ -3,6 +3,7 @@ import { createConfig } from "src/config/type";
 import hero from "src/customer/assets/images/hero.jpg?url";
 import { v4 as uuidv4 } from "uuid";
 import { http, createClient, custom } from "viem";
+
 import {
   arbitrum,
   astar,
@@ -46,15 +47,29 @@ export default createConfig({
   appName: "Merkl",
   modes: ["dark", "light"],
   defaultTheme: "ignite",
-  opportunityNavigationMode: "direct",
-  rewardsNavigationMode: "chain",
+  opportunityNavigationMode: "supply",
   tokenSymbolPriority: ["ZK", "USDC", "USDC.e", "ETH", "WETH", "WBTC", "wstETH", "USDT", "USDe", "weETH", "DAI"],
-  opportunityCellHideTags: ["token", "action"],
-  opportunityLibraryDefaultView: "table",
-  // opportunityLibraryExcludeFilters: ["protocol","action"],
-  opprtunityPercentage: true,
+  rewardsNavigationMode: "chain",
+  opportunityLibrary: {
+    defaultView: "cells",
+    // views: ["table"], // If you want only one view, this is where you can specify it.
+    cells: {
+      hideTags: ["token", "action"],
+    },
+    excludeFilters: ["protocol", "tvl"],
+  },
+  opportunityPercentage: true,
   hideLayerMenuHomePage: false,
   supplyCredits: [],
+  hero: {
+    bannerOnAllPages: false, // show banner on all pages
+    invertColors: false, // Light mode: light text on dark background (instead of dark text on light background)
+  },
+  opportunityFilters: {
+    minimumTVL: false,
+    protocols: false,
+    displaySelector: false,
+  },
   deposit: true,
   walletOptions: {
     hideInjectedWallets: ["phantom", "coinbase wallet"],
@@ -68,6 +83,13 @@ export default createConfig({
     featured: {
       enabled: false,
       length: 6,
+    },
+    library: {
+      columns: {
+        action: {
+          enabled: false,
+        },
+      },
     },
   },
   bridge: {
@@ -179,18 +201,8 @@ export default createConfig({
       enabled: false,
     },
     bridge: {
-      enabled: false,
+      enabled: true,
     },
-    // terms: {
-    //   icon: "RiCompassesLine",
-    //   route: "/terms",
-    //   key: uuidv4(),
-    // },
-    // privacy: {
-    //   icon: "RiInformationFill",
-    //   route: "/privacy",
-    //   key: uuidv4(),
-    // },
   },
   socials: {
     discord: "",
