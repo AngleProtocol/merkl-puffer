@@ -57,8 +57,8 @@ export default createConfig({
   hideLayerMenuHomePage: false,
   rewardsNavigationMode: "opportunity",
   opportunityLibrary: {
-    defaultView: "cells",
-    // views: ["table"], // If you want only one view, this is where you can specify it.
+    defaultView: "table",
+    views: ["table"], // If you want only one view, this is where you can specify it.
     cells: {
       hideTags: ["token", "action"],
     },
@@ -68,7 +68,7 @@ export default createConfig({
   supplyCredits: [],
   hero: {
     bannerOnAllPages: false, // show banner on all pages
-    invertColors: false, // Light mode: light text on dark background (instead of dark text on light background)
+    invertColors: true, // Light mode: light text on dark background (instead of dark text on light background)
   },
   opportunityFilters: {
     minimumTVL: false,
@@ -91,7 +91,7 @@ export default createConfig({
     library: {
       columns: {
         action: {
-          enabled: false,
+          enabled: true,
         },
       },
     },
