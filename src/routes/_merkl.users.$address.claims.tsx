@@ -19,6 +19,7 @@ export default function Index() {
     <Container>
       <Space size="md" />
       <HistoricalClaimsLibrary claims={claimWiped} />
+      <Space size="md" />
     </Container>
   );
 }
