@@ -16,7 +16,7 @@ import { ErrorHeading } from "src/components/layout/ErrorHeading";
 import useOpportunity from "src/hooks/resources/useOpportunity";
 import { v4 as uuidv4 } from "uuid";
 
-export async function loader({ params: { id, type, chain: chainId }, request }: LoaderFunctionArgs) {
+export async function loader({ params: { id, type, chain: chainId } }: LoaderFunctionArgs) {
   if (!chainId || !id || !type) throw "";
 
   const chain = await ChainService.get({ name: chainId });
