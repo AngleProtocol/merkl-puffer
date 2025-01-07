@@ -55,7 +55,7 @@ export default function Index() {
     <Hero
       breadcrumbs={[]}
       navigation={{ label: "Back to opportunities", link: "/" }}
-      title={"Claims"}
+      title={!!config.dashboardPageName ? config.dashboardPageName : "Claims"}
       description={"Claim and monitor the rewards awarded through Merkl"}
       tabs={tabs}>
       <Outlet />

@@ -94,6 +94,7 @@ export default function ClaimRewardsChainTableRow({
             {isAbleToClaim &&
               (isOnCorrectChain ? (
                 <TransactionButton
+                  enableSponsorCheckbox
                   name="Claim Rewards"
                   disabled={!claimTransaction}
                   className="ml-xl"

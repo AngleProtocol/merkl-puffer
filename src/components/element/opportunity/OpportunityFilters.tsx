@@ -1,13 +1,13 @@
 import type { Chain, Protocol } from "@merkl/api";
 import { Form, useLocation, useNavigate, useNavigation, useSearchParams } from "@remix-run/react";
 import { Button, Group, Icon, Input, Select } from "dappkit";
+import config from "merkl.config";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { actions } from "src/config/actions";
 import type { OpportunityView } from "src/config/opportunity";
 import useSearchParamState from "src/hooks/filtering/useSearchParamState";
 import useChains from "src/hooks/resources/useChains";
 import useProtocols from "src/hooks/resources/useProtocols";
-
 const filters = ["search", "action", "status", "chain", "protocol", "tvl"] as const;
 export type OpportunityFilter = (typeof filters)[number];
 
@@ -208,7 +208,8 @@ export default function OpportunityFilters({
 
   return (
     <Group className="justify-between flex-nowrap">
-      <Group className="items-center flex-nowrap">
+      <Group
+        className={`items-center flex-nowrap w-full ${config.opportunityLibrary?.views?.length === 1 ? "justify-between" : ""}`}>
         {fields.includes("search") && (
           <Form>
             <Input
@@ -224,78 +225,87 @@ export default function OpportunityFilters({
             />
           </Form>
         )}
-        {fields.includes("action") && (
-          <Select
-            state={[actionsInput, setActionsInput]}
-            allOption={"All actions"}
-            multiple
-            options={actionOptions}
-            look="tint"
-            placeholder="Actions"
-          />
-        )}
-        {fields.includes("status") && (
-          <Select
-            state={[statusInput, setStatusInput]}
-            allOption={"All status"}
-            multiple
-            options={statusOptions}
-            look="tint"
-            placeholder="Status"
-          />
-        )}
-        {fields.includes("chain") && !isSingleChain && (
-          <Select
-            state={[chainIdsInput, n => setChainIdsInput(n)]}
-            allOption={"All chains"}
-            multiple
-            search
-            options={chainOptions}
-            look="tint"
-            placeholder="Chains"
-          />
-        )}
-        {fields.includes("protocol") && (
-          <Select
-            state={[protocolInput, n => setProtocolInput(n)]}
-            allOption={"All protocols"}
-            multiple
-            search
-            options={protocolOptions}
-            look="tint"
-            placeholder="Protocols"
-          />
-        )}
-        {fields.includes("tvl") && (
-          <Form>
-            <Input
-              state={[tvlInput, n => (/^\d+$/.test(n ?? "") || !n) && setTvlInput(n ?? "")]}
-              look="base"
-              name="tvl"
-              value={tvlInput}
-              className="min-w-[4ch]"
-              suffix={<Icon remix="RiFilter2Line" />}
-              placeholder="Minimum TVL"
-            />
-          </Form>
-        )}
-        {((canApply && !clearing && navigation.state === "idle") ||
-          (applying && !clearing && navigation.state === "loading")) && (
-          <Button onClick={onApplyFilters} look="bold">
-            Apply
-            {navigation.state === "loading" ? (
-              <Icon className="animate-spin" remix="RiLoader2Line" />
-            ) : (
-              <Icon remix="RiArrowRightLine" />
+        <Group
+          className={`items-center ${config.opportunityLibrary?.views?.length === 1 ? "flex-wrap flex-row-reverse" : ""}`}>
+          <Group className="items-center">
+            {fields.includes("action") && (
+              <Select
+                state={[actionsInput, setActionsInput]}
+                allOption={"All actions"}
+                multiple
+                options={actionOptions}
+                look="tint"
+                placeholder="Actions"
+              />
             )}
-          </Button>
-        )}
-        <Button onClick={onClearFilters} look="soft">
-          <Icon remix="RiCloseLine" />
-          Clear filters
-        </Button>
+            {fields.includes("status") && (
+              <Select
+                state={[statusInput, setStatusInput]}
+                allOption={"All status"}
+                multiple
+                options={statusOptions}
+                look="tint"
+                placeholder="Status"
+              />
+            )}
+            {fields.includes("chain") && !isSingleChain && (
+              <Select
+                state={[chainIdsInput, n => setChainIdsInput(n)]}
+                allOption={"All chains"}
+                multiple
+                search
+                options={chainOptions}
+                look="tint"
+                placeholder="Chains"
+              />
+            )}
+            {fields.includes("protocol") && (
+              <Select
+                state={[protocolInput, n => setProtocolInput(n)]}
+                allOption={"All protocols"}
+                multiple
+                search
+                options={protocolOptions}
+                look="tint"
+                placeholder="Protocols"
+              />
+            )}
+            {fields.includes("tvl") && (
+              <Form>
+                <Input
+                  state={[tvlInput, n => (/^\d+$/.test(n ?? "") || !n) && setTvlInput(n ?? "")]}
+                  look="base"
+                  name="tvl"
+                  value={tvlInput}
+                  className="min-w-[4ch]"
+                  suffix={<Icon remix="RiFilter2Line" />}
+                  placeholder="Minimum TVL"
+                />
+              </Form>
+            )}
+          </Group>
+          <Group
+            className={`${config.opportunityLibrary?.views?.length === 1 ? "flex-row-reverse flex-wrap" : ""} items-center`}>
+            {((canApply && !clearing && navigation.state === "idle") ||
+              (applying && !clearing && navigation.state === "loading")) && (
+              <Button onClick={onApplyFilters} look="bold">
+                Apply
+                {navigation.state === "loading" ? (
+                  <Icon className="animate-spin" remix="RiLoader2Line" />
+                ) : (
+                  <Icon remix="RiArrowRightLine" />
+                )}
+              </Button>
+            )}
+            <Button onClick={onClearFilters} look="soft">
+              {config.opportunityLibrary?.views?.length !== 1 && <Icon remix="RiCloseLine" />}
+              Clear filters
+              {config.opportunityLibrary?.views?.length === 1 && <Icon remix="RiCloseLine" />}
+            </Button>
+          </Group>
+        </Group>
       </Group>
-      {view && (
+      {(config.opportunityLibrary?.views == null || config.opportunityLibrary?.views?.length > 1) && view && (
         <Group className="flex-nowrap">
           <Button disabled={view === "cells"} look="soft" onClick={() => setView?.("cells")}>
             <Icon remix="RiDashboardFill" />

@@ -52,12 +52,29 @@ export default createConfig({
   opportunityNavigationMode: "direct",
   tokenSymbolPriority: ["ZK", "USDC", "USDC.e", "ETH", "WETH", "WBTC", "wstETH", "USDT", "USDe", "weETH", "DAI"],
   opportunityCellHideTags: ["token", "action"],
-  rewardsNavigationMode: "opportunity",
-  opportunityLibraryDefaultView: "table",
   // opportunityLibraryExcludeFilters: ["protocol","action"],
   opprtunityPercentage: true,
   hideLayerMenuHomePage: false,
+  rewardsNavigationMode: "opportunity",
+  opportunityLibrary: {
+    defaultView: "cells",
+    // views: ["table"], // If you want only one view, this is where you can specify it.
+    cells: {
+      hideTags: ["token", "action"],
+    },
+    excludeFilters: ["protocol", "tvl"],
+  },
+  opportunityPercentage: true,
   supplyCredits: [],
+  hero: {
+    bannerOnAllPages: false, // show banner on all pages
+    invertColors: false, // Light mode: light text on dark background (instead of dark text on light background)
+  },
+  opportunityFilters: {
+    minimumTVL: false,
+    protocols: false,
+    displaySelector: false,
+  },
   walletOptions: {
     hideInjectedWallets: ["phantom", "coinbase wallet"],
     sponsorTransactions: true,
@@ -70,6 +87,13 @@ export default createConfig({
     featured: {
       enabled: false,
       length: 6,
+    },
+    library: {
+      columns: {
+        action: {
+          enabled: false,
+        },
+      },
     },
   },
   bridge: {
@@ -92,7 +116,7 @@ export default createConfig({
   },
   themes: {
     ignite: {
-      base: createColoring(["#2A35BD", "#BFFF37", "#FFFFFF"], ["#2A35BD", "#BFFF37", "#FFFFFF"]),
+      base: createColoring(["#1755F4", "#FF7900", "#0D1530"], ["#1755F4", "#FF7900", "#FFFFFF"]),
       info: createColoring(["#2ABDFF", "#2ABDFF", "#131620"], ["#FFFFFF", "#40B66B", "white"]),
       good: createColoring(["#40B66B", "#40B66B", "#131620"], ["#FFFFFF", "#40B66B", "white"]),
       warn: createColoring(["#ff9600", "#ff9600", "#131620"], ["#FFFFFF", "#40B66B", "white"]),

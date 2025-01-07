@@ -34,15 +34,13 @@ export type MerklConfig<T extends Themes> = {
   walletOptions?: WalletOptions;
   tokenSymbolPriority: string[];
   opportunityNavigationMode?: OpportunityNavigationMode;
-  opportunityLibraryDefaultView?: OpportunityView;
-  opportunityCellHideTags?: (keyof TagTypes)[];
   rewardsNavigationMode?: RewardsNavigationMode;
   rewardsTotalClaimableMode?: string; // Address of the token you want to display the totals of
-  opprtunityPercentage: boolean;
+  dashboardPageName?: string; // Name of the dashboard page
+  opportunityPercentage: boolean;
   hideLayerMenuHomePage: boolean;
   hideInteractor?: boolean; // Whether the interactor with a given opportunity must be displayed or not
   hideBridgePage?: boolean; // Whether the bridge page should be added or not
-  opportunityLibraryExcludeFilters?: OpportunityFilter[]; // Which filters to systematically exclude from the OpportunityLibrary
   hideSpyMode?: boolean;
   supplyCredits: {
     id: string;
@@ -60,6 +58,21 @@ export type MerklConfig<T extends Themes> = {
       enabled: boolean;
       length: number;
     };
+    library: {
+      columns: {
+        action: {
+          enabled: boolean;
+        };
+      };
+    };
+  };
+  opportunityLibrary: {
+    defaultView?: OpportunityView;
+    views?: OpportunityView[];
+    cells?: {
+      hideTags?: (keyof TagTypes)[];
+    };
+    excludeFilters?: OpportunityFilter[];
   };
   bridge: {
     helperLink?: string;
@@ -78,6 +91,10 @@ export type MerklConfig<T extends Themes> = {
   };
   decimalFormat: {
     dollar: string;
+  };
+  hero: {
+    bannerOnAllPages: boolean; // show banner on all pages
+    invertColors: boolean; // Light mode: light text on dark background (instead of dark text on light background)
   };
   header: {
     searchbar: {

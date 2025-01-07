@@ -63,12 +63,10 @@ export default function Index() {
     [campaigns, campaignId],
   );
 
-  const totalRewardsAllCampaigns = useMemo(() => {
-    if (!selectedCampaign) return "0";
-
-    const amountUSD = formatUnits(BigInt(selectedCampaign?.amount ?? "0n"), selectedCampaign?.rewardToken.decimals);
+  const totalRewardsInUsd = useMemo(() => {
+    const amountUSD = formatUnits(total, selectedCampaign?.rewardToken.decimals);
     return Number.parseFloat(amountUSD) * (selectedCampaign?.rewardToken?.price ?? 0);
-  }, [selectedCampaign]);
+  }, [total, selectedCampaign]);
 
   // --------------- Campaign utils ---------------
 
@@ -123,7 +121,7 @@ export default function Index() {
           [
             "Total Rewards Distributed",
             <Value value key="users" format={config.decimalFormat.dollar}>
-              {totalRewardsAllCampaigns}
+              {totalRewardsInUsd}
             </Value>,
           ],
         ] as const
@@ -141,7 +139,7 @@ export default function Index() {
           <Title h={3}>{value}</Title>
         </Box>
       )),
-    [totalRewardsAllCampaigns, count],
+    [totalRewardsInUsd, count],
   );
 
   return (

@@ -6,7 +6,6 @@ import config from "merkl.config";
 import { useWalletContext } from "packages/dappkit/src/context/Wallet.context";
 import { useCallback, useMemo, useState } from "react";
 import { useMediaQuery } from "react-responsive";
-import type { routesType } from "src/config/type";
 import customerDarkLogo from "src/customer/assets/images/customer-dark-logo.svg";
 import customerLogo from "src/customer/assets/images/customer-logo.svg";
 import useChains from "src/hooks/resources/useChains";
@@ -43,13 +42,13 @@ export default function Header() {
   }, [chains, chainId]);
 
   // Dynamically filter routes based on the config
-  const routes: routesType = useMemo(() => {
+  const routes = useMemo(() => {
     const { home, opportunities, protocols, bridge, ...rest } = config.routes;
 
     return Object.assign(
       { home },
       {
-        dashboard: {
+        [!!config.dashboardPageName ? config.dashboardPageName : "dashboard"]: {
           icon: "RiDashboardFill",
           route: user ? `/users/${user}` : "/users",
           key: uuidv4(),
@@ -124,14 +123,14 @@ export default function Header() {
               <Group className="hidden lg:flex items-center" size="xl">
                 {Object.entries(routes)
                   .filter(([key]) => !["home", "faq", "docs"].includes(key))
-                  .map(([key, route]) => {
+                  .map(([key, { route }]) => {
                     return (
                       <Button
                         className={`${["faq"].includes(key) ? "uppercase" : "capitalize"}`}
                         look="soft"
                         size="lg"
                         key={`${key}-link`}
-                        to={route?.route}>
+                        to={route}>
                         {key}
                       </Button>
                     );

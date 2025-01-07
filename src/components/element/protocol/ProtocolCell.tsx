@@ -8,7 +8,11 @@ export type ProtocolCellProps = {
 
 export default function ProtocolCell({ protocol }: ProtocolCellProps) {
   return (
-    <Button key={protocol.name} to={`/protocols/${protocol.id}`} look="soft" className="min-w-[12rem] aspect-square">
+    <Button
+      key={protocol.name}
+      to={`/protocols/${protocol.id}`}
+      look="soft"
+      className="min-w-[8rem] md:min-w-[12rem] aspect-square">
       <Box
         size="xl"
         content="xs"

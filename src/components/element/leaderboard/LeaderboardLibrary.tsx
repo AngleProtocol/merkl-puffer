@@ -11,7 +11,7 @@ import LeaderboardTableRow from "./LeaderboardTableRow";
 export type IProps = {
   leaderboard: Awaited<ReturnType<(typeof RewardService)["getManyFromRequest"]>>["rewards"];
   count?: number;
-  total?: number;
+  total?: bigint;
   campaign: Campaign;
 };
 

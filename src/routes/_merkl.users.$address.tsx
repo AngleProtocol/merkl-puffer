@@ -1,6 +1,6 @@
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
-import { Outlet, json, useLoaderData } from "@remix-run/react";
-import { Button, Dropdown, Group, Hash, Icon, Text, Value } from "dappkit";
+import { Outlet, json, useFetcher, useLoaderData } from "@remix-run/react";
+import { Button, Divider, Dropdown, Group, Hash, Icon, Text, Value } from "dappkit";
 import config from "merkl.config";
 import TransactionButton from "packages/dappkit/src/components/dapp/TransactionButton";
 import { useWalletContext } from "packages/dappkit/src/context/Wallet.context";
@@ -17,7 +17,7 @@ import { isAddress } from "viem";
 export async function loader({ params: { address }, request }: LoaderFunctionArgs) {
   if (!address || !isAddress(address)) throw "";
 
-  const rewards = await RewardService.getForUser(request, address, 1);
+  const rewards = await RewardService.getForUser(request, address);
   const token = !!config.rewardsTotalClaimableMode
     ? (
         await TokenService.getMany({
@@ -41,8 +41,17 @@ export const meta: MetaFunction<typeof loader> = ({ data, error }) => {
 export type OutletContextRewards = ReturnType<typeof useRewards>;
 
 export default function Index() {
-  const { rewards: raw, address, token } = useLoaderData<typeof loader>();
-  const rewards = useRewards(raw);
+  const { rewards: raw, address, token: rawToken } = useLoaderData<typeof loader>();
+  const fetcher = useFetcher<typeof loader>();
+
+  const handleRefreshData = async () => {
+    await fetcher.submit(null, { method: "post", action: `/claim/${address}?chainId=${chainId}` });
+  };
+
+  const rawRewards = useMemo(() => fetcher?.data?.rewards ?? raw, [raw, fetcher?.data?.rewards]);
+  const token = useMemo(() => fetcher?.data?.token ?? rawToken, [rawToken, fetcher?.data?.token]);
+
+  const rewards = useRewards(rawRewards);
 
   const isSingleChain = config?.chains?.length === 1;
 
@@ -119,9 +128,8 @@ export default function Index() {
       ]}
       navigation={{ label: "Back to opportunities", link: "/" }}
       title={
-        <Group className="w-full items-center flex justify-between gap-xl md:gap-xl*4">
-          {/* TODO: Make it dynamic */}
-          <Group className="gap-xl md:gap-xl*4 items-center">
+        <Group className="w-full items-center flex justify-between gap-xl md:gap-x-xl*4">
+          <Group className="flex-1 gap-xl md:gap-x-xl*4 items-center">
             <Group className="flex-col">
               {isAddress(config.rewardsTotalClaimableMode ?? "") && !!token ? (
                 <Token size="xl" token={token} amount={BigInt(rewards.unclaimed)} format="amount_price" showZero />
@@ -136,14 +144,25 @@ export default function Index() {
             </Group>
             <Group className="flex-col">
               {isAbleToClaim && (
-                <TransactionButton disabled={!claimTransaction} look="hype" size="lg" tx={claimTransaction}>
+                <TransactionButton
+                  name="Claim Rewards"
+                  enableSponsorCheckbox
+                  disabled={!claimTransaction}
+                  look="hype"
+                  size="lg"
+                  tx={claimTransaction}
+                  onSuccess={_hash => handleRefreshData()}>
                   {isSingleChain ? "Claim Now" : `Claim on ${chain?.name}`}
+                  <Icon remix="RiHandCoinFill" />
                 </TransactionButton>
               )}
             </Group>
           </Group>
 
-          <Group className="gap-xl md:gap-xl*4 items-center">
+          <Divider vertical className="m-0 hidden lg:block" look="bold" />
+          <Divider horizontal className="m-0 lg:hidden" look="bold" />
+
+          <Group className="flex-1 gap-xl md:gap-xl*4 items-center lg:justify-end">
             <Group className="flex-col">
               {isAddress(config.rewardsTotalClaimableMode ?? "") && !!token ? (
                 <Token size="xl" token={token} amount={BigInt(rewards.earned)} format="amount_price" showZero />

@@ -58,11 +58,6 @@ export default function Participate({
   //   }
   // }, [mode]);
 
-  const visitUrl = useMemo(() => {
-    if (!!opportunity.depositUrl) return opportunity.depositUrl;
-    if (!!opportunity.protocol?.url) return opportunity.protocol?.url;
-  }, [opportunity]);
-
   const interactor = useMemo(() => {
     if (loading)
       return (
@@ -137,12 +132,10 @@ export default function Participate({
       {displayOpportunity && <OpportunityShortCard opportunity={opportunity} displayLinks={displayLinks} />}
 
       {displayLinks && (
-        <Group className="w-full p-md justify-between">
-          <Group className="flex-col justify-center">
-            <Button to={link} look="soft" size="sm">
-              Opportunity overview <Icon remix="RiArrowRightLine" />
-            </Button>
-          </Group>
+        <Group className="w-full py-md">
+          <Button to={link} look="soft" size="sm">
+            Opportunity overview <Icon remix="RiArrowRightLine" />
+          </Button>
         </Group>
       )}
       {!!I18n.trad.get.pages.home.depositInformation && (
