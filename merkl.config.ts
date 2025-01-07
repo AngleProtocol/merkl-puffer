@@ -70,6 +70,13 @@ export default createConfig({
       enabled: false,
       length: 6,
     },
+    library: {
+      columns: {
+        action: {
+          enabled: false,
+        },
+      },
+    },
   },
   bridge: {
     helperLink: "",

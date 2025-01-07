@@ -61,6 +61,13 @@ export type MerklConfig<T extends Themes> = {
       enabled: boolean;
       length: number;
     };
+    library: {
+      columns: {
+        action: {
+          enabled: boolean;
+        };
+      };
+    };
   };
   bridge: {
     helperLink?: string;
