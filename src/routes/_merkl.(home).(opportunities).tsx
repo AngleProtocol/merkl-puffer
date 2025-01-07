@@ -1,6 +1,6 @@
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json, useLoaderData } from "@remix-run/react";
-import { Container, Group, Space, Title } from "dappkit";
+import { Container, Group, OverrideTheme, Space, Title } from "dappkit";
 import config from "merkl.config";
 import { Cache } from "src/api/services/cache.service";
 import { ChainService } from "src/api/services/chain.service";
@@ -26,24 +26,27 @@ export default function Index() {
   const { opportunities, chains, count, protocols, featuredOpportunities } = useLoaderData<typeof loader>();
 
   return (
-    <Container>
-      <Space size="xl" />
-      <Group size="xl" className="py-xl">
-        {config.opportunity.featured.enabled && (
-          <>
-            <Title className="!text-main-11" h={3}>
-              BEST OPPORTUNITIES
-            </Title>
-            <OpportunityLibrary forceView={"cells"} hideFilters opportunities={featuredOpportunities} />
-            <Space size="xl" />
-            <Title className="!text-main-11" h={3}>
-              ALL OPPORTUNITIES
-            </Title>
-          </>
-        )}
-        <OpportunityLibrary opportunities={opportunities} chains={chains} count={count} protocols={protocols} />
-      </Group>
-    </Container>
+    // <OverrideTheme mode={"dark"}>
+      <Container>
+        <Space size="xl" />
+        <Group size="xl" className="py-xl">
+          {config.opportunity.featured.enabled && (
+            <>
+              <Title className="!text-main-11" h={3}>
+                BEST OPPORTUNITIES
+              </Title>
+              <OpportunityLibrary forceView={"cells"} hideFilters opportunities={featuredOpportunities} />
+              <Space size="xl" />
+              <Title className="!text-main-11" h={3}>
+                ALL OPPORTUNITIES
+              </Title>
+            </>
+          )}
+
+          <OpportunityLibrary opportunities={opportunities} chains={chains} count={count} protocols={protocols} />
+        </Group>
+      </Container>
+    // </OverrideTheme>
   );
 }
 
