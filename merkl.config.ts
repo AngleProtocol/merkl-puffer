@@ -94,7 +94,7 @@ export default {
   images: {
     hero,
     logoLight,
-    logoDark
+    logoDark,
   },
   routes: {
     home: {
@@ -121,7 +121,7 @@ export default {
   },
   header: {
     searchbar: {
-      enabled: true,
+      enabled: false,
     },
     opportunities: {
       enabled: false,
