@@ -1,5 +1,7 @@
 import { type Themes, createColoring } from "dappkit";
 import type { MerklConfig } from "merkl-app-core";
+import logoDark from "src/assets/images/customer-dark-logo.svg?url";
+import logoLight from "src/assets/images/customer-logo.svg?url";
 import hero from "src/assets/images/hero.jpg?url";
 import { v4 as uuidv4 } from "uuid";
 import { http, createClient, custom } from "viem";
@@ -63,7 +65,7 @@ export default {
     excludeFilters: ["protocol", "tvl"],
   },
   hero: {
-    bannerOnAllPages: false, // show banner on all pages
+    bannerOnAllPages: true, // show banner on all pages
     invertColors: true, // Light mode: light text on dark background (instead of dark text on light background)
   },
   opportunity: {
@@ -90,7 +92,9 @@ export default {
     },
   },
   images: {
-    hero: hero,
+    hero,
+    logoLight,
+    logoDark
   },
   routes: {
     home: {
