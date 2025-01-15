@@ -4,27 +4,28 @@ import {
   Meta,
   Outlet,
   Scripts,
-  ScrollRestoration,
-  isRouteErrorResponse,
-  json,
-  useLoaderData,
-  useNavigate,
-  useRouteError,
+  ScrollRestoration, json,
+  useLoaderData
 } from "@remix-run/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { DAppProvider, Group, Icon, Text, Title } from "dappkit";
-import { useEffect } from "react";
-import config from "../merkl.config";
-import dappkitStyles from "../packages/dappkit/src/style.css?url";
-import { Cache } from "./api/services/cache.service";
-import { ChainService } from "./api/services/chain.service";
-import LoadingIndicator from "./components/layout/LoadingIndicator";
-import styles from "./index.css?url";
+import { DAppProvider } from "dappkit";
+import dappkitStyles from "dappkit/src/style.css?url";
+import LoadingIndicator from "merkl-app-core/src/components/layout/LoadingIndicator";
+import merklConfig from "merkl-app-core/src/config";
+import styles from "merkl-app-core/src/index.css?url";
+import { Cache } from "merkl-app-core/src/modules/cache/cache.service";
+import { ChainService } from "merkl-app-core/src/modules/chain/chain.service";
+import clientStyles from "./index.css?url";
 
 export const links: LinksFunction = () => [
   {
     rel: "stylesheet",
     href: dappkitStyles,
+    as: "style",
+  },
+  {
+    rel: "stylesheet",
+    href: clientStyles,
     as: "style",
   },
   {
@@ -39,7 +40,7 @@ export async function loader(_args: LoaderFunctionArgs) {
 
   if (!chains) throw new Response("Unable to fetch chains", { status: 500 });
 
-  return json({ ENV: { API_URL: process.env.API_URL, ZYFI_API_KEY: process.env.ZYFI_API_KEY }, chains });
+  return json({ ENV: { API_URL: process.env.API_URL }, chains });
 }
 
 export const clientLoader = Cache.wrap("root", 300);
@@ -51,12 +52,12 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <DAppProvider
-        walletOptions={config.walletOptions}
+        walletOptions={merklConfig.walletOptions}
         chains={data.chains}
-        modes={config.modes}
-        themes={config.themes}
-        sizing={config.sizing}
-        config={config.wagmi}>
+        modes={merklConfig.modes}
+        themes={merklConfig.themes}
+        sizing={merklConfig.sizing}
+        config={merklConfig.wagmi}>
         <LoadingIndicator />
         <Outlet />
         <script
@@ -85,54 +86,5 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Scripts />
       </body>
     </html>
-  );
-}
-
-export function ErrorBoundary() {
-  const error = useRouteError();
-  const navigate = useNavigate();
-  const notARoute = isRouteErrorResponse(error) && error.status === 404;
-  console.error(error);
-
-  useEffect(() => {
-    if (isRouteErrorResponse(error) && error.status === 404) return navigate("/");
-  }, [error, navigate]);
-
-  if (notARoute)
-    return (
-      <QueryClientProvider client={queryClient}>
-        <DAppProvider
-          chains={[]}
-          modes={config.modes}
-          themes={config.themes}
-          sizing={config.sizing}
-          config={config.wagmi}>
-          <Group className="h-[100vh] flex-col justify-center m-auto w-min">
-            <Title h={1} className="flex flex-nowrap flex-col">
-              <Icon size="xl" className="!w-[100px] h-[100px]" remix="RiAlertFill" />
-              Invalid Url
-            </Title>
-            <Text className="text-center w-full">Redirecting...</Text>
-          </Group>
-        </DAppProvider>
-      </QueryClientProvider>
-    );
-  return (
-    <QueryClientProvider client={queryClient}>
-      <DAppProvider
-        chains={[]}
-        modes={config.modes}
-        themes={config.themes}
-        sizing={config.sizing}
-        config={config.wagmi}>
-        <Group className="h-[100vh] flex-col justify-center m-auto w-min">
-          <Title h={1} className="flex flex-nowrap flex-col">
-            <Icon size="xl" className="!w-[100px] h-[100px]" remix="RiAlertFill" />
-            An Error occured
-          </Title>
-          <Text className="text-center">Please wait until the issue is resolved</Text>
-        </Group>
-      </DAppProvider>
-    </QueryClientProvider>
   );
 }

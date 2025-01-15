@@ -1,6 +1,6 @@
-import { createColoring } from "dappkit";
-import { createConfig } from "src/config/type";
-import hero from "src/customer/assets/images/hero.jpg?url";
+import { type Themes, createColoring } from "dappkit";
+import type { MerklConfig } from "merkl-app-core";
+import hero from "src/assets/images/hero.jpg?url";
 import { v4 as uuidv4 } from "uuid";
 import { http, createClient, custom } from "viem";
 
@@ -43,19 +43,17 @@ import {
 import { eip712WalletActions } from "viem/zksync";
 import { walletConnect } from "wagmi/connectors";
 
-export default createConfig({
+export default {
   appName: "Puffer",
   modes: ["light"],
   defaultTheme: "puffer",
   deposit: false,
   tags: ["puffer"],
   opportunityNavigationMode: "direct",
-  tokenSymbolPriority: ["ZK", "USDC", "USDC.e", "ETH", "WETH", "WBTC", "wstETH", "USDT", "USDe", "weETH", "DAI"],
   opportunityCellHideTags: ["token", "action"],
   rewardsNavigationMode: "opportunity",
   opportunityLibraryDefaultView: "table",
-  // opportunityLibraryExcludeFilters: ["protocol","action"],
-  opprtunityPercentage: true,
+  alwaysShowTestTokens: false,
   opportunityLibrary: {
     defaultView: "table",
     views: ["table"], // If you want only one view, this is where you can specify it.
@@ -64,54 +62,23 @@ export default createConfig({
     },
     excludeFilters: ["protocol", "tvl"],
   },
-  supplyCredits: [],
   hero: {
     bannerOnAllPages: false, // show banner on all pages
     invertColors: true, // Light mode: light text on dark background (instead of dark text on light background)
   },
-  opportunityFilters: {
-    minimumTVL: false,
-    protocols: false,
-    displaySelector: false,
-  },
-  walletOptions: {
-    hideInjectedWallets: ["phantom", "coinbase wallet"],
-    sponsorTransactions: true,
-    client(c) {
-      if (c.chain?.id === zksync.id) return c.extend(eip712WalletActions());
-    },
-  },
-  chains: [],
   opportunity: {
     featured: {
       enabled: false,
       length: 6,
     },
     library: {
+      sortedBy: "apr",
       columns: {
         action: {
           enabled: true,
         },
       },
     },
-  },
-  bridge: {
-    helperLink: "",
-  },
-  dashboard: {
-    liquidityTab: {
-      enabled: false,
-    },
-  },
-  tagsDetails: {
-    token: {
-      visitOpportunities: {
-        enabled: true,
-      },
-    },
-  },
-  decimalFormat: {
-    dollar: "$0,0.##a",
   },
   themes: {
     puffer: {
@@ -122,13 +89,6 @@ export default createConfig({
       harm: createColoring(["#d22e14", "#d22e14", "#131620"], ["#FFFFFF", "#40B66B", "white"]),
     },
   },
-  sizing: {
-    width: { xs: 14, sm: 16, md: 18, lg: 20, xl: 24 },
-    spacing: { xs: 2, sm: 4, md: 8, lg: 12, xl: 16 },
-    radius: { xs: 3, sm: 6, md: 9, lg: 12, xl: 15 },
-  },
-  alwaysShowTestTokens: true,
-  showCopyOpportunityIdToClipboard: true,
   images: {
     hero: hero,
   },
@@ -146,29 +106,14 @@ export default createConfig({
     protocols: {
       icon: "RiVipCrown2Fill",
       route: "/protocols",
-      key: crypto.randomUUID(),
+      key: uuidv4(),
     },
     docs: {
       icon: "RiFile4Fill",
       external: true,
       route: "https://docs.merkl.xyz/",
-      key: crypto.randomUUID(),
+      key: uuidv4(),
     },
-    faq: {
-      icon: "RiQuestionFill",
-      route: "/faq",
-      key: crypto.randomUUID(),
-    },
-    // terms: {
-    //   icon: "RiCompassesLine",
-    //   route: "/terms",
-    //   key: crypto.randomUUID(),
-    // },
-    // privacy: {
-    //   icon: "RiInformationFill",
-    //   route: "/privacy",
-    //   key: crypto.randomUUID(),
-    // },
   },
   header: {
     searchbar: {
@@ -193,7 +138,6 @@ export default createConfig({
     merklTermsConditions: "https://app.merkl.xyz/merklTerms.pdf",
     merklPrivacy: "https://privacy.angle.money",
   },
-  footerLinks: [],
   wagmi: {
     chains: [
       mainnet,
@@ -253,4 +197,4 @@ export default createConfig({
       }),
     ],
   },
-});
+} satisfies Partial<MerklConfig<Themes>>;
